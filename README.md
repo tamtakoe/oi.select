@@ -1,0 +1,4 @@
+oi.multiselect
+==============
+
+angular multiselect
