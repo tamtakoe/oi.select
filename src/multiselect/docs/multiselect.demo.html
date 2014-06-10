@@ -1,0 +1,138 @@
+<style>
+    oi-multiselect {
+        margin-bottom: 20px;
+    }
+</style>
+
+<h2>Multiple</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArr track by item.id"
+    ng-model="bundle1"
+    multiple
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArr track by item.id"
+ng-model="bundle1"
+multiple
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle1}}
+</pre>
+</div>
+
+<h2>Single</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item for (key, item) in shopObjShort"
+    ng-model="bundle2"
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item for (key, item) in shopObjShort"
+ng-model="bundle2"
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle2}}
+</pre>
+</div>
+
+<h2>Grouping</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name group by item.category for (key, item) in shopObj"
+    ng-model="bundle3"
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name group by item.category for (key, item) in shopObj"
+ng-model="bundle3"
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle3}}
+</pre>
+</div>
+
+
+<h2>Filtered</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item for item in shopArrShort | limitTo: 3"
+    ng-model="bundle4"
+    multiple
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item for item in shopArrShort | limitTo: 3"
+ng-model="bundle4"
+multiple
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle4}}
+</pre>
+</div>
+
+<h2>Lazy loading</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArrFn($query)"
+    ng-model="bundle5"
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArrFn($query)"
+ng-model="bundle5"
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle5}}
+</pre>
+</div>
+
+<h2>All</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
+    ng-model="bundle6"
+    multiple
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
+ng-model="bundle6"
+multiple
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle6}}
+</pre>
+</div>

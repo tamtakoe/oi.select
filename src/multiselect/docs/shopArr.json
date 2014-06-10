@@ -1,0 +1,45 @@
+[
+    {
+        "id": 1,
+        "name": "sneakers",
+        "category": "shoes"
+    },{
+        "id": 2,
+        "name": "shoes",
+        "category": "shoes"
+    },{
+        "id": 3,
+        "name": "slippers",
+        "category": "shoes"
+    },{
+        "id": 4,
+        "name": "boots",
+        "category": "shoes"
+    },{
+        "id": 5,
+        "name": "shirt",
+        "category": "clothes"
+    },{
+        "id": 6,
+        "name": "jacket",
+        "category": "clothes"
+    },{
+        "id": 7,
+        "name": "T-shirt",
+        "category": "clothes"
+    },{
+        "id": 8,
+        "name": "pants",
+        "category": "clothes"
+    },{
+        "id": 9,
+        "name": "jeans",
+        "category": "clothes"
+    },{
+        "id": 10,
+        "name": "cap"
+    },{
+        "id": 11,
+        "name": "belt"
+    }
+]
