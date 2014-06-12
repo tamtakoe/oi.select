@@ -1,6 +1,4 @@
-oi.multiselect — AngularJS directive of select element
-
-==============
+#oi.multiselect — AngularJS directive of select element
 
 ## Features
 

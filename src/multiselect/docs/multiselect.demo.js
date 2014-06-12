@@ -1,7 +1,7 @@
 angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
 
     .controller('MainCtrl', function ($scope, $http, $timeout, $q) {
-        var url = '/src/multiselect/docs/';
+        var url = 'src/multiselect/docs/';
 
         $q.all([
             $http.get(url + 'shopArr.json').success(function(data) {
