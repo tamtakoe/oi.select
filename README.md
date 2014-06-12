@@ -2,10 +2,10 @@
 
 ## Features
 
-* API compatible with [Angular select](https://docs.angularjs.org/api/ng/directive/select)
+* API compatible with [Angular select](http://docs.angularjs.org/api/ng/directive/select)
 * without jQuery and other dependencies
 * search options by substring (including the search query to the server)
-* use [Bootstrap](getbootstrap.com) styles (but you can use own styles)
+* use [Bootstrap](http://getbootstrap.com) styles (but you can use own styles)
 * 14 KB minified
 
 ## Demo
