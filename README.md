@@ -14,7 +14,14 @@ Do you want to see module in action? Visit http://tamtakoe.github.io/oi.multisel
 
 ## Installation
 
-You can make build:
+You can download files through Bower:
+
+```
+npm install -g bower
+bower install oi.bootstrap
+```
+
+or make build:
 
 ```
 npm install
@@ -22,12 +29,6 @@ npm install -g grunt-cli
 grunt build
 ```
 
-or download files through Bower:
-
-```
-npm install -g bower
-bower install oi.bootstrap
-```
 
 Then you need to include into index.html:
 
