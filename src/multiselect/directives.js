@@ -1,6 +1,7 @@
 angular.module('oi.multiselect')
 .directive('oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, miltiselectUtils) {
-    var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/;
+    var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
+        VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
 
     return {
         restrict: 'AE',
@@ -19,7 +20,7 @@ angular.module('oi.multiselect')
                 valueName          = match[4] || match[6],
                 groupByName        = match[3] || '',
                 trackByName        = match[8] || displayName,
-                valueMatches       = match[7].match(/([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/);
+                valueMatches       = match[7].match(VALUES_REGEXP);
 
             var valuesName         = valueMatches[1],
                 filteredValuesName = valuesName + (valueMatches[3] || ''),
@@ -86,12 +87,15 @@ angular.module('oi.multiselect')
                 scope.$watch('groups', function(groups) {
                     if (miltiselectUtils.groupsIsEmpty(groups)) {
                         scope.isOpen = false;
-                        $document.off('click', closeHandler);
 
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
-                        $document.on('click', closeHandler);
                         miltiselectUtils.copyWidth(element, listElement);
+
+                        if (!scope.isFocused) {
+                            $document.on('click', blurHandler);
+                            scope.isFocused = true;
+                        }
                     }
                 });
 
@@ -230,9 +234,11 @@ angular.module('oi.multiselect')
 
                 resetMatches();
 
-                function closeHandler(event) {
+                function blurHandler(event) {
                     if (event.target.ownerDocument.activeElement !== inputElement[0]) {
                         resetMatches();
+                        $document.off('click', blurHandler);
+                        scope.isFocused = false;
                         scope.$digest();
                     }
                 }

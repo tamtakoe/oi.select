@@ -44,7 +44,13 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
 
             $scope.bundle5 = undefined;
 
-            $scope.bundle6 = [{
+            $scope.bundle6 = ["slippers", "shirt", "pants"];
+
+            $scope.bundle7 = $scope.shopObjShort[8];
+
+            $scope.bundle8 = undefined;
+
+            $scope.bundle9 = [{
                 "id": 9,
                 "name": "jeans",
                 "category": "clothes"

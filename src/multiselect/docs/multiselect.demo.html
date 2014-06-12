@@ -69,7 +69,6 @@ placeholder="Select"
 </pre>
 </div>
 
-
 <h2>Filtered</h2>
 <div class="row">
 <div class="col-md-6">
@@ -114,12 +113,83 @@ placeholder="Select"
 </pre>
 </div>
 
+<h2>Disabled <button class="btn btn-default" ng-init="disabled = true" ng-click="disabled = !disabled">{{disabled ? 'on' : 'off'}}</button></h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item for item in shopArrShort"
+    ng-model="bundle6"
+    ng-disabled="disabled"
+    multiple
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item for item in shopArrShort"
+ng-model="bundle6"
+ng-disabled="disabled"
+multiple
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle6}}
+</pre>
+</div>
+
+<h2>Read only</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item for item in shopArrShort"
+    ng-model="bundle7"
+    readonly
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item for item in shopArrShort"
+ng-model="bundle7"
+readonly
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle7}}
+</pre>
+</div>
+
+<h2>Not empty</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArr"
+    ng-model="bundle8"
+    notempty
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArr"
+ng-model="bundle8"
+notempty
+placeholder="Select"
+</div>
+<pre class="col-md-6">
+{{bundle8}}
+</pre>
+</div>
+
 <h2>All</h2>
 <div class="row">
 <div class="col-md-6">
 <oi-multiselect
     ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
-    ng-model="bundle6"
+    ng-model="bundle9"
     multiple
     placeholder="Select"
     ></oi-multiselect>
@@ -128,11 +198,11 @@ placeholder="Select"
 <div class="row">
 <div hljs class="col-md-6">
 ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
-ng-model="bundle6"
+ng-model="bundle9"
 multiple
 placeholder="Select"
 </div>
 <pre class="col-md-6">
-{{bundle6}}
+{{bundle9}}
 </pre>
 </div>
