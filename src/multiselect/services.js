@@ -1,5 +1,5 @@
 angular.module('oi.multiselect')
-.factory('miltiselectUtils', function($document) {
+.factory('miltiselectUtils', ['$document', function($document) {
     /**
      * Measures the width of a string within a
      * parent element (in pixels).
@@ -211,4 +211,4 @@ angular.module('oi.multiselect')
         groupsIsEmpty: groupsIsEmpty,
         objToArr: objToArr
     }
-});
+}]);
