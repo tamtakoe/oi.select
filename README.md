@@ -16,20 +16,23 @@ Do you want to see module in action? Visit http://tamtakoe.github.io/oi.multisel
 
 You can make build:
 
-```npm install
+```
+npm install
 npm install -g grunt-cli
 grunt build
 ```
 
 or download files through Bower:
 
-```npm install -g bower
+```
+npm install -g bower
 bower install oi.bootstrap
 ```
 
 Then you need to include into index.html:
 
-```multiselect.min.css
+```
+multiselect.min.css
 multiselect.min.js or multiselect-tpls.min.js
 ```
 
