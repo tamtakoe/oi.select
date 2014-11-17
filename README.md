@@ -42,3 +42,30 @@ When you are done downloading all the dependencies and project files the only re
 ```javascript
 angular.module('myModule', ['oi.multiselect']);
 ```
+
+Use `oi-multiselect` directive:
+
+```html
+<oi-multiselect
+    ng-options="item.name for item in shopArr track by item.id"
+    ng-model="bundle"
+    multiple
+    placeholder="Select"
+    ></oi-multiselect>
+```
+
+## Attributes
+* `ng-options` — see: [Angular select](http://docs.angularjs.org/api/ng/directive/select)
+  * `ng-options="item for item in shopArrShort | limitTo: 3"` — filter input list
+  * `ng-options="item for item in shopArrFn($query)"` — generate input list (expects array/object or promise)
+* `ng-model` — chosen item/items
+* `ng-disabled` — specifies that a drop-down list should be disabled
+* `multiple` — specifies that multiple options can be selected at once
+* `multiple-limit` — maximum number of options that can be selected at once
+* `readonly` — specifies that an input field is read-only
+* `notempty` — specifies that an input field can't be empty
+* `autofocus` — specifies that an input field should automatically get focus when the page loads
+* `oi-multiselect-options` — object with options. You can override them in `oiMultiselectProvider.options`
+  * `debounce` — timeout of debounced input field (default: 500). Set only if `value` is function which return promise
+  * `searchFilter` — filter name for items in search field
+  * `dropdownFilter` — filter name for items in dropdown

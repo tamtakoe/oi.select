@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
         connect: {
             options: {
-                hostname: 'multiselect.local',
+                hostname: 'localhost',
                 middleware: function(connect, options) {
                     return [
                         require('connect-livereload')(),

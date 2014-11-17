@@ -1,6 +1,6 @@
 angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
 
-    .controller('MainCtrl', function ($scope, $http, $timeout, $q) {
+    .controller('MainCtrl', function ($scope, $http, $timeout, $q, $location, $anchorScroll) {
         var url = 'src/multiselect/docs/';
 
         $q.all([
@@ -50,7 +50,11 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
 
             $scope.bundle8 = undefined;
 
-            $scope.bundle9 = [{
+            $scope.bundle9 = ["slippers", "shirt", "pants"];
+
+            $scope.bundle10 = null;
+
+            $scope.bundle11 = [{
                 "id": 9,
                 "name": "jeans",
                 "category": "clothes"
@@ -58,5 +62,38 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
                 "id": 10,
                 "name": "cap"
             }];
-        })
-    });
+
+            $scope.bundle12 = [{
+                "id": 9,
+                "name": "jeans",
+                "category": "clothes"
+            },{
+                "id": 2,
+                "name": "shoes",
+                "category": "shoes"
+            }];
+        });
+
+        $scope.scrollTo = function(id) {
+            $location.hash(id);
+            $anchorScroll();
+        }
+    })
+
+    .filter('mySearchFilter', ['$sce', function($sce) {
+        return function(label) {
+
+            var html = '<i>' + label + '</i>';
+
+            return $sce.trustAsHtml(html);
+        };
+    }])
+
+    .filter('myDropdownFilter', ['$sce', function($sce) {
+        return function(label, query, option) {
+
+            var html = '<kbd>#' + option.id + '</kbd> ' + label;
+
+            return $sce.trustAsHtml(html);
+        };
+    }]);

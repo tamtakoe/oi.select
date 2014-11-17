@@ -1,5 +1,21 @@
 angular.module('oi.multiselect')
-.factory('miltiselectUtils', ['$document', function($document) {
+
+.provider('oiMultiselect', function() {
+    return {
+        options: {
+            debounce: 500,
+            searchFilter: 'oiMultiselectCloseIcon',
+            dropdownFilter: 'oiMultiselectHighlight'
+        },
+        $get: function() {
+            return {
+                options: this.options
+            };
+        }
+    };
+})
+
+.factory('oiUtils', ['$document', function($document) {
     /**
      * Measures the width of a string within a
      * parent element (in pixels).

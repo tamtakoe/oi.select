@@ -1,13 +1,23 @@
 angular.module('oi.multiselect')
-.filter('multiselectHighlight', ['$sce', function($sce) {
-    return function(text, query) {
+
+.filter('oiMultiselectCloseIcon', ['$sce', function($sce) {
+    return function(label) {
+        var closeIcon = '<span class="close multiselect-search-list-item_selection-remove">×</span>';
+
+        return $sce.trustAsHtml(label + closeIcon);
+    };
+}])
+
+.filter('oiMultiselectHighlight', ['$sce', function($sce) {
+    return function(label, query) {
+
         var html;
         if (query.length > 0 || angular.isNumber(query)) {
-            text = text.toString();
+            label = label.toString();
             query = query.toString();
-            html = text.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
+            html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
-            html = text;
+            html = label;
         }
 
         return $sce.trustAsHtml(html);

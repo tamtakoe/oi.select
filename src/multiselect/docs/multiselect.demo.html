@@ -3,8 +3,7 @@
         margin-bottom: 20px;
     }
 </style>
-
-<h1>oi.multiselect demo</h1>
+<h1 id="top">oi.multiselect demo</h1>
 <p><a href="https://github.com/tamtakoe/oi.multiselect">GitHub project</a></p>
 <hr/>
 
@@ -24,7 +23,6 @@
 ng-options="item.name for item in shopArr track by item.id"
 ng-model="bundle1"
 multiple
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle1}}
@@ -45,7 +43,6 @@ placeholder="Select"
 <div hljs class="col-md-6">
 ng-options="item for (key, item) in shopObjShort"
 ng-model="bundle2"
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle2}}
@@ -66,7 +63,6 @@ placeholder="Select"
 <div hljs class="col-md-6">
 ng-options="item.name group by item.category for (key, item) in shopObj"
 ng-model="bundle3"
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle3}}
@@ -89,7 +85,6 @@ placeholder="Select"
 ng-options="item for item in shopArrShort | limitTo: 3"
 ng-model="bundle4"
 multiple
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle4}}
@@ -110,7 +105,6 @@ placeholder="Select"
 <div hljs class="col-md-6">
 ng-options="item.name for item in shopArrFn($query)"
 ng-model="bundle5"
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle5}}
@@ -135,7 +129,6 @@ ng-options="item for item in shopArrShort"
 ng-model="bundle6"
 ng-disabled="disabled"
 multiple
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle6}}
@@ -158,7 +151,6 @@ placeholder="Select"
 ng-options="item for item in shopArrShort"
 ng-model="bundle7"
 readonly
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle7}}
@@ -181,10 +173,110 @@ placeholder="Select"
 ng-options="item.name for item in shopArr"
 ng-model="bundle8"
 notempty
-placeholder="Select"
 </div>
 <pre class="col-md-6">
 {{bundle8}}
+</pre>
+</div>
+
+<h2>Multiple limit</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item for item in shopArrShort"
+    ng-model="bundle9"
+    multiple
+    multiple-limit="3"
+    placeholder="Select"
+></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item for item in shopArrShort"
+ng-model="bundle9"
+multiple
+multiple-limit="3"
+</div>
+<pre class="col-md-6">
+{{bundle9}}
+</pre>
+</div>
+
+<h2>Autofocus</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArr"
+    ng-model="bundle10"
+    autofocus
+    placeholder="Select"
+></oi-multiselect>
+</div>
+<a href="" ng-click="scrollTo('top')">↑ go to top</a>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArr"
+ng-model="bundle10"
+autofocus
+</div>
+<pre class="col-md-6">
+{{bundle10}}
+</pre>
+</div>
+
+<h2>Customization</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArrFn($query) track by item.id"
+    ng-model="bundle11"
+    multiple
+    oi-multiselect-options="{
+        debounce: 200,
+        searchFilter: 'mySearchFilter',
+        dropdownFilter: 'myDropdownFilter'
+    }"
+    placeholder="Select"
+></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div hljs>
+ng-options="item.name for item in shopArrFn($query) track by item.id"
+ng-model="bundle11"
+multiple
+oi-multiselect-options="{
+    debounce: 200,
+    searchFilter: 'mySearchFilter',
+    dropdownFilter: 'myDropdownFilter'
+}"
+</div>
+<div hljs>
+.filter('mySearchFilter', ['$sce', function($sce) {
+    return function(label) {
+
+    var html = '<i>' + label + '</i>';
+
+    return $sce.trustAsHtml(html);
+    };
+}])
+</div>
+<div hljs>
+.filter('myDropdownFilter', ['$sce', function($sce) {
+    return function(label, query, option) {
+
+    var html = '<kbd>#' + option.id + '</kbd> ' + label;
+
+    return $sce.trustAsHtml(html);
+    };
+}]);
+</div>
+</div>
+<pre class="col-md-6">
+{{bundle11}}
 </pre>
 </div>
 
@@ -193,20 +285,19 @@ placeholder="Select"
 <div class="col-md-6">
 <oi-multiselect
     ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
-    ng-model="bundle9"
+    ng-model="bundle12"
     multiple
     placeholder="Select"
-    ></oi-multiselect>
+></oi-multiselect>
 </div>
 </div>
 <div class="row">
 <div hljs class="col-md-6">
 ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
-ng-model="bundle9"
+ng-model="bundle12"
 multiple
-placeholder="Select"
 </div>
 <pre class="col-md-6">
-{{bundle9}}
+{{bundle12}}
 </pre>
 </div>

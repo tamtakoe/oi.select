@@ -1,5 +1,6 @@
 angular.module('oi.multiselect')
-.directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', 'miltiselectUtils', function($document, $q, $timeout, $parse, $interpolate, miltiselectUtils) {
+    
+.directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$filter', 'oiUtils', 'oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, $filter, oiUtils, oiMultiselect) {
     var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
         VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
 
@@ -33,20 +34,26 @@ angular.module('oi.multiselect')
                 trackByFn          = $parse(trackByName);
 
             var locals             = {},
-                asyncWaitTime      = Number(attrs.asyncTimeout) || 100,
                 timeoutPromise;
 
             var multiple             = angular.isDefined(attrs.multiple),
-                notempty             = angular.isDefined(attrs.notempty),
                 multipleLimit        = Number(attrs.multipleLimit),
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
+                optionsFn            = $parse(attrs.oiMultiselectOptions),
                 keyUpDownWerePressed = false,
                 matchesWereReset     = false;
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement = element.find('input'),
                     listElement  = angular.element(element[0].querySelector('.multiselect-dropdown')),
-                    placeholder  = placeholderFn(scope);
+                    placeholder  = placeholderFn(scope),
+                    options      = angular.extend({}, oiMultiselect.options, optionsFn(scope));
+
+                if (angular.isDefined(attrs.autofocus)) {
+                    $timeout(function() {
+                        inputElement[0].focus();
+                    });
+                }
 
                 if (angular.isDefined(attrs.readonly)) {
                     inputElement.attr('readonly', true)
@@ -85,12 +92,12 @@ angular.module('oi.multiselect')
                 });
 
                 scope.$watch('groups', function(groups) {
-                    if (miltiselectUtils.groupsIsEmpty(groups)) {
+                    if (oiUtils.groupsIsEmpty(groups)) {
                         scope.isOpen = false;
 
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
-                        miltiselectUtils.copyWidth(element, listElement);
+                        oiUtils.copyWidth(element, listElement);
 
                         if (!scope.isFocused) {
                             $document.on('click', blurHandler);
@@ -131,7 +138,7 @@ angular.module('oi.multiselect')
                         resetMatches();
                     }
 
-                    if (miltiselectUtils.groupsIsEmpty(scope.groups)) {
+                    if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
                     }
 
@@ -148,7 +155,8 @@ angular.module('oi.multiselect')
                     if (multiple) {
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
-                    } else if (!notempty) {
+
+                    } else if (!angular.isDefined(attrs.notempty)) {
                         ctrl.$setViewValue(undefined);
                     }
 
@@ -193,7 +201,7 @@ angular.module('oi.multiselect')
 
                         case 13: /* enter */
                         //case 9: /* tab */
-                            if (!miltiselectUtils.groupsIsEmpty(scope.groups)) {
+                            if (!oiUtils.groupsIsEmpty(scope.groups)) {
                                 scope.addItem(scope.order[scope.selectorPosition]);
                                 if (scope.selectorPosition === bottom) {
                                     setOption(listElement, 0);
@@ -223,7 +231,23 @@ angular.module('oi.multiselect')
                     }
                 };
 
-                scope.getLabel = getLabel;
+                scope.getSearchLabel = function(option) {
+                    var label = getLabel(option);
+
+                    if (options.searchFilter) {
+                        label = $filter(options.searchFilter)(label, scope.oldQuery || scope.query, option)
+                    }
+                    return label;
+                };
+
+                scope.getDropdownLabel = function(option) {
+                    var label = getLabel(option);
+
+                    if (options.dropdownFilter) {
+                        label = $filter(options.dropdownFilter)(label, scope.oldQuery || scope.query, option)
+                    }
+                    return label;
+                };
 
                 if (multiple) {
                     // Override the standard $isEmpty because an empty array means the input is empty.
@@ -247,7 +271,7 @@ angular.module('oi.multiselect')
                     var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length ? '' : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                     // expand input box width based on content
-                    scope.inputWidth = miltiselectUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;
+                    scope.inputWidth = oiUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;
                 }
 
                 function trackBy(item) {
@@ -287,10 +311,9 @@ angular.module('oi.multiselect')
                         scope.oldQuery = null;
                     }
 
-                    //TODO: Use ngModelOptions.debounce from Angular 1.3 instead of timeout
                     if (timeoutPromise && angular.isFunction(values.then)) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
-                        waitTime = asyncWaitTime;
+                        waitTime = options.debounce;
                     }
 
                     timeoutPromise = $timeout(function() {
@@ -343,7 +366,7 @@ angular.module('oi.multiselect')
 
                 function setOption(listElement, position) {
                     scope.selectorPosition = position;
-                    miltiselectUtils.scrollActiveOption(listElement[0], listElement.find('li')[position]);
+                    oiUtils.scrollActiveOption(listElement[0], listElement.find('li')[position]);
                 }
 
                 function group(input) {
@@ -366,7 +389,7 @@ angular.module('oi.multiselect')
                 function ascSort(list, query) {
                     var i, output, output1 = [], output2 = [], output3 = [];
 
-                    var input = angular.isArray(list) ? list : miltiselectUtils.objToArr(list);
+                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
 
                     if (query) {
                         for (i = 0; i < input.length; i++) {
