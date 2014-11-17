@@ -6,7 +6,7 @@
 * without jQuery and other dependencies
 * search options by substring (including the search query to the server)
 * use [Bootstrap](http://getbootstrap.com) styles (but you can use own styles)
-* 14 KB minified
+* 16 KB minified
 
 ## Demo
 
