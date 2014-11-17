@@ -96,4 +96,31 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
 
             return $sce.trustAsHtml(html);
         };
-    }]);
+    }])
+
+    .filter('myListFilter', function(oiUtils) {
+        function removeChoosenFromList(input, trackBy, outputArr) {
+            var i, j, chosen = [].concat(outputArr);
+
+            for (i = 0; i < input.length; i++) {
+                for (j = 0; j < chosen.length; j++) {
+                    if (trackBy(input[i]) === trackBy(chosen[j])) {
+                        input.splice(i, 1);
+                        chosen.splice(j, 1);
+                        i--;
+                        break;
+                    }
+                }
+            }
+        }
+        function clean(list, query, getLabel, trackBy, outputArr) {
+            var input = angular.isArray(list) ? list : oiUtils.objToArr(list),
+                output = [].concat(input);
+
+            removeChoosenFromList(output, trackBy, outputArr);
+
+            return output;
+        }
+
+        return clean;
+    });
