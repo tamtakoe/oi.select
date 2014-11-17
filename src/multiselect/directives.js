@@ -319,13 +319,36 @@ angular.module('oi.multiselect')
                     timeoutPromise = $timeout(function() {
                         scope.showLoader = true;
                         $q.when(values).then(function(values) {
-                            scope.groups = group(filter($filter(options.listFilter)(values, query, getLabel, trackBy, scope.output)));
+                            scope.groups = group(filter(removeChoosenFromList($filter(options.listFilter)(toArr(values), query, getLabel))));
                             updateGroupPos();
 
                         }).finally(function(){
                             scope.showLoader = false;
                         });
                     }, waitTime);
+                }
+
+                function toArr(list) {
+                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
+
+                    return [].concat(input);
+                }
+
+                function removeChoosenFromList(input) {
+                    var i, j, chosen = [].concat(scope.output);
+
+                    for (i = 0; i < input.length; i++) {
+                        for (j = 0; j < chosen.length; j++) {
+                            if (trackBy(input[i]) === trackBy(chosen[j])) {
+                                input.splice(i, 1);
+                                chosen.splice(j, 1);
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+
+                    return input;
                 }
 
                 function updateGroupPos() {

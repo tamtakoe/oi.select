@@ -1,3 +1,12 @@
+<a name="0.1.2"></a>
+# 0.1.2
+
+## Features
+
+- **oi-multiselect-options:**
+    - listFilter
+
+
 <a name="0.1.1"></a>
 # 0.1.1
 

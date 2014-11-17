@@ -276,6 +276,13 @@ oi-multiselect-options="{
     };
 }]);
 </div>
+<div hljs>
+.filter('myListFilter', function() {
+    return function (list, query, getLabel) {
+        return list;
+    }
+});
+</div>
 </div>
 <pre class="col-md-6">
 {{bundle11}}

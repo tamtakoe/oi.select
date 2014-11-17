@@ -6,7 +6,8 @@ angular.module('oi.multiselect')
         options: {
             debounce: 500,
             searchFilter: 'oiMultiselectCloseIcon',
-            dropdownFilter: 'oiMultiselectHighlight'
+            dropdownFilter: 'oiMultiselectHighlight',
+            listFilter: 'oiMultiselectAscSort'
         },
         $get: function() {
             return {
@@ -550,12 +551,36 @@ angular.module('oi.multiselect')
                     timeoutPromise = $timeout(function() {
                         scope.showLoader = true;
                         $q.when(values).then(function(values) {
-                            scope.groups = group(filter(ascSort(values, query)));
+                            scope.groups = group(filter(removeChoosenFromList($filter(options.listFilter)(toArr(values), query, getLabel))));
                             updateGroupPos();
+
                         }).finally(function(){
                             scope.showLoader = false;
                         });
                     }, waitTime);
+                }
+
+                function toArr(list) {
+                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
+
+                    return [].concat(input);
+                }
+
+                function removeChoosenFromList(input) {
+                    var i, j, chosen = [].concat(scope.output);
+
+                    for (i = 0; i < input.length; i++) {
+                        for (j = 0; j < chosen.length; j++) {
+                            if (trackBy(input[i]) === trackBy(chosen[j])) {
+                                input.splice(i, 1);
+                                chosen.splice(j, 1);
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+
+                    return input;
                 }
 
                 function updateGroupPos() {
@@ -616,49 +641,6 @@ angular.module('oi.multiselect')
 
                     return optionGroups;
                 }
-
-                function ascSort(list, query) {
-                    var i, output, output1 = [], output2 = [], output3 = [];
-
-                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
-
-                    if (query) {
-                        for (i = 0; i < input.length; i++) {
-                            if (getLabel(input[i]).match(new RegExp(query, "i"))) {
-                                output1.push(input[i]);
-                            }
-                        }
-                        for (i = 0; i < output1.length; i++) {
-                            if (getLabel(output1[i]).match(new RegExp('^' + query, "i"))) {
-                                output2.push(output1[i]);
-                            } else {
-                                output3.push(output1[i]);
-                            }
-                        }
-                        output = output2.concat(output3);
-                    } else {
-                        output = [].concat(input);
-                    }
-
-                    removeChoosenFromList(output);
-
-                    return output;
-                }
-
-                function removeChoosenFromList(input) {
-                    var i, j, chosen = [].concat(scope.output);
-
-                    for (i = 0; i < input.length; i++) {
-                        for (j = 0; j < chosen.length; j++) {
-                            if (trackBy(input[i]) === trackBy(chosen[j])) {
-                                input.splice(i, 1);
-                                chosen.splice(j, 1);
-                                i--;
-                                break;
-                            }
-                        }
-                    }
-                }
             }
         }
     }
@@ -674,7 +656,7 @@ angular.module('oi.multiselect')
 }])
 
 .filter('oiMultiselectHighlight', ['$sce', function($sce) {
-    return function(label, query, option) {
+    return function(label, query) {
 
         var html;
         if (query.length > 0 || angular.isNumber(query)) {
@@ -687,4 +669,32 @@ angular.module('oi.multiselect')
 
         return $sce.trustAsHtml(html);
     };
-}]);
+}])
+
+.filter('oiMultiselectAscSort', function() {
+    function ascSort(input, query, getLabel) {
+        var i, output, output1 = [], output2 = [], output3 = [];
+
+        if (query) {
+            for (i = 0; i < input.length; i++) {
+                if (getLabel(input[i]).match(new RegExp(query, "i"))) {
+                    output1.push(input[i]);
+                }
+            }
+            for (i = 0; i < output1.length; i++) {
+                if (getLabel(output1[i]).match(new RegExp('^' + query, "i"))) {
+                    output2.push(output1[i]);
+                } else {
+                    output3.push(output1[i]);
+                }
+            }
+            output = output2.concat(output3);
+        } else {
+            output = [].concat(input);
+        }
+
+        return output;
+    }
+
+    return ascSort;
+});

@@ -69,3 +69,4 @@ Use `oi-multiselect` directive:
   * `debounce` — timeout of debounced input field (default: 500). Set only if `value` is function which return promise
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
+  * `listFilter` — filter name for items order in dropdown

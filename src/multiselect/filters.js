@@ -25,24 +25,8 @@ angular.module('oi.multiselect')
 }])
 
 .filter('oiMultiselectAscSort', function() {
-    function removeChoosenFromList(input, trackBy, outputArr) {
-        var i, j, chosen = [].concat(outputArr);
-
-        for (i = 0; i < input.length; i++) {
-            for (j = 0; j < chosen.length; j++) {
-                if (trackBy(input[i]) === trackBy(chosen[j])) {
-                    input.splice(i, 1);
-                    chosen.splice(j, 1);
-                    i--;
-                    break;
-                }
-            }
-        }
-    }
-    function ascSort(list, query, getLabel, trackBy, outputArr) {
+    function ascSort(input, query, getLabel) {
         var i, output, output1 = [], output2 = [], output3 = [];
-
-        var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
 
         if (query) {
             for (i = 0; i < input.length; i++) {
@@ -61,8 +45,6 @@ angular.module('oi.multiselect')
         } else {
             output = [].concat(input);
         }
-
-        removeChoosenFromList(output, trackBy, outputArr);
 
         return output;
     }
