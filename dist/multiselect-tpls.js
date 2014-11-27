@@ -2,7 +2,7 @@ angular.module('oi.multiselect', ['template/multiselect/template.html']);
 
 angular.module("template/multiselect/template.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("template/multiselect/template.html",
-    "<div class=\"multiselect-search\" ng-class=\"{open: isOpen, focused: isFocused}\" ng-click=\"setFocus($event)\">\n" +
+    "<div class=\"multiselect-search\" ng-class=\"{open: isOpen, focused: isFocused, loading: showLoader}\" ng-click=\"setFocus($event)\">\n" +
     "    <ul class=\"multiselect-search-list\">\n" +
     "        <li class=\"btn btn-default btn-xs multiselect-search-list-item multiselect-search-list-item_selection\"\n" +
     "            ng-repeat=\"item in output track by $index\"\n" +
@@ -39,7 +39,8 @@ angular.module('oi.multiselect')
             debounce: 500,
             searchFilter: 'oiMultiselectCloseIcon',
             dropdownFilter: 'oiMultiselectHighlight',
-            listFilter: 'oiMultiselectAscSort'
+            listFilter: 'oiMultiselectAscSort',
+            saveLastQuery: null
         },
         $get: function() {
             return {
@@ -264,7 +265,7 @@ angular.module('oi.multiselect')
 }]);
 angular.module('oi.multiselect')
     
-.directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$filter', 'oiUtils', 'oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, $filter, oiUtils, oiMultiselect) {
+.directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', 'oiUtils', 'oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, oiUtils, oiMultiselect) {
     var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
         VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
 
@@ -298,7 +299,8 @@ angular.module('oi.multiselect')
                 trackByFn          = $parse(trackByName);
 
             var locals             = {},
-                timeoutPromise;
+                timeoutPromise,
+                lastQuery;
 
             var multiple             = angular.isDefined(attrs.multiple),
                 multipleLimit        = Number(attrs.multipleLimit),
@@ -388,6 +390,8 @@ angular.module('oi.multiselect')
                 };
 
                 scope.addItem = function addItem(option) {
+                    lastQuery = scope.query;
+
                     if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
 
                     var optionGroup = scope.groups[getGroupName(option)];
@@ -414,17 +418,22 @@ angular.module('oi.multiselect')
                 };
 
                 scope.removeItem = function removeItem(position) {
+
+                    var removedValue;
+
                     if (attrs.disabled) return;
 
                     if (multiple) {
+                        removedValue = ctrl.$modelValue[position];
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                     } else if (!angular.isDefined(attrs.notempty)) {
+                        removedValue = ctrl.$modelValue;
                         ctrl.$setViewValue(undefined);
                     }
 
-                    scope.query = '';
+                    scope.query = options.saveLastQuery ? $injector.get(options.saveLastQuery)(removedValue, lastQuery) : '';
 
                     if (scope.isOpen || scope.oldQuery || !multiple) {
                         getMatches(scope.oldQuery); //stay old list

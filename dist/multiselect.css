@@ -126,8 +126,34 @@ oi-multiselect:not([multiple]) .multiselect-search-list-item_selection {
   text-align: left;
 }
 
+oi-multiselect:not([multiple]) .multiselect-search-list-item_selection-remove {
+  display: none;
+}
+
 oi-multiselect:not([multiple]) .multiselect-search-list-item_selection:not(:active) {
   background: none;
+}
+
+oi-multiselect:not([multiple]) .multiselect-search.loading:after {
+  border-width: 0;
+}
+
+oi-multiselect:not([multiple]) .multiselect-search:after {
+  content: "";
+  position: absolute;
+  display: block;
+  right: 24px;
+  width: 0;
+  height: 0;
+  margin-top: -19px;
+  border-color: #000 transparent transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+}
+
+oi-multiselect:not([multiple]) .multiselect-search.open:after {
+  border-color: transparent transparent #000 transparent;
+  border-width: 0 5px 5px 5px;
 }
 
 oi-multiselect[disabled="disabled"] .multiselect-search {
@@ -149,26 +175,4 @@ oi-multiselect[disabled="disabled"] .multiselect-search-list-item_selection-remo
 
 oi-multiselect[disabled="disabled"] .multiselect-search-list-item_input input:disabled {
   background: none;
-}
-
-oi-multiselect[readonly]:not([multiple]) .multiselect-search-list-item_selection-remove {
-  display: none;
-}
-
-oi-multiselect[readonly]:not([multiple]) .multiselect-search:after {
-  content: "";
-  position: absolute;
-  display: block;
-  right: 24px;
-  width: 0;
-  height: 0;
-  margin-top: -19px;
-  border-color: #000 transparent transparent transparent;
-  border-style: solid;
-  border-width: 5px 5px 0 5px;
-}
-
-oi-multiselect[readonly]:not([multiple]) .multiselect-search.open:after {
-  border-color: transparent transparent #000 transparent;
-  border-width: 0 5px 5px 5px;
 }

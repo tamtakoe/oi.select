@@ -1,3 +1,15 @@
+<a name="0.1.3"></a>
+# 0.1.3
+
+## Features
+
+- **oi-multiselect-options:**
+    - saveLastQuery
+
+- **styles**
+    - add loading class
+    - add arrow icon in all types of single select
+
 <a name="0.1.2"></a>
 # 0.1.2
 

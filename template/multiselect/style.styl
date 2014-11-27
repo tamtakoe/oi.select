@@ -112,8 +112,32 @@ oi-multiselect
               border-color #fff
               text-align left
 
+              &-remove
+                display none
+
               &:not(:active)
                 background none
+
+        &.loading
+          &:after
+            border-width 0
+
+        &:after
+          content ""
+          position absolute
+          display block
+          right 24px
+          width 0
+          height 0
+          margin-top -19px;
+          border-color #000 transparent transparent transparent
+          border-style solid;
+          border-width 5px 5px 0 5px
+
+        &.open:after
+          border-color transparent transparent #000 transparent
+          border-width 0 5px 5px 5px
+
 
   &[disabled="disabled"]
     .multiselect
@@ -136,28 +160,3 @@ oi-multiselect
             &_input
               input:disabled
                 background  none
-
-  &[readonly]:not([multiple])
-    .multiselect
-      &-search
-        &-list
-          &-item
-            &_selection
-              &-remove
-                display none
-
-        &:after
-          content ""
-          position absolute
-          display block
-          right 24px
-          width 0
-          height 0
-          margin-top -19px;
-          border-color #000 transparent transparent transparent
-          border-style solid;
-          border-width 5px 5px 0 5px
-
-        &.open:after
-          border-color transparent transparent #000 transparent
-          border-width 0 5px 5px 5px

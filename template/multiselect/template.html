@@ -1,4 +1,4 @@
-<div class="multiselect-search" ng-class="{open: isOpen, focused: isFocused}" ng-click="setFocus($event)">
+<div class="multiselect-search" ng-class="{open: isOpen, focused: isFocused, loading: showLoader}" ng-click="setFocus($event)">
     <ul class="multiselect-search-list">
         <li class="btn btn-default btn-xs multiselect-search-list-item multiselect-search-list-item_selection"
             ng-repeat="item in output track by $index"

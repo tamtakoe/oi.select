@@ -7,6 +7,29 @@
 <p><a href="https://github.com/tamtakoe/oi.multiselect">GitHub project</a></p>
 <hr/>
 
+<h2>Autofocus</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for item in shopArr"
+    ng-model="bundle10"
+    autofocus
+    placeholder="Select"
+    ></oi-multiselect>
+</div>
+<!--<a href="" ng-click="scrollTo('top')">↑ go to top</a>-->
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArr"
+ng-model="bundle10"
+autofocus
+</div>
+<pre class="col-md-6">
+{{bundle10}}
+</pre>
+</div>
+
 <h2>Multiple</h2>
 <div class="row">
 <div class="col-md-6">
@@ -203,26 +226,26 @@ multiple-limit="3"
 </pre>
 </div>
 
-<h2>Autofocus</h2>
+<h2>Single demo</h2>
 <div class="row">
-<div class="col-md-6">
-<oi-multiselect
-    ng-options="item.name for item in shopArr"
-    ng-model="bundle10"
-    autofocus
-    placeholder="Select"
-></oi-multiselect>
-</div>
-<a href="" ng-click="scrollTo('top')">↑ go to top</a>
+    <div class="col-md-6">
+        <oi-multiselect
+                ng-options="item for (key, item) in shopObjShort"
+                ng-model="bundle2"
+                placeholder="Select"
+                oi-multiselect-options="{
+                    saveLastQuery: 'saveLastQuery'
+                }"
+                ></oi-multiselect>
+    </div>
 </div>
 <div class="row">
-<div hljs class="col-md-6">
-ng-options="item.name for item in shopArr"
-ng-model="bundle10"
-autofocus
-</div>
+    <div hljs class="col-md-6">
+        ng-options="item for (key, item) in shopObjShort"
+        ng-model="bundle2"
+    </div>
 <pre class="col-md-6">
-{{bundle10}}
+{{bundle2}}
 </pre>
 </div>
 
@@ -237,7 +260,8 @@ autofocus
         debounce: 200,
         searchFilter: 'mySearchFilter',
         dropdownFilter: 'myDropdownFilter',
-        listFilter: 'myListFilter'
+        listFilter: 'myListFilter',
+        saveLastQuery: 'mySaveLastQuery'
     }"
     placeholder="Select"
 ></oi-multiselect>
@@ -254,6 +278,7 @@ oi-multiselect-options="{
     searchFilter: 'mySearchFilter',
     dropdownFilter: 'myDropdownFilter',
     listFilter: 'myListFilter'
+    saveLastQuery: 'mySaveLastQuery'
 }"
 </div>
 <div hljs>
@@ -282,6 +307,13 @@ oi-multiselect-options="{
         return list;
     }
 });
+</div>
+<div hljs>
+.factory('mySaveLastQuery', function() {
+    return function(removedValue, lastQuery) {
+        return removedValue.name;
+    };
+})
 </div>
 </div>
 <pre class="col-md-6">

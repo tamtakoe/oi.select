@@ -70,3 +70,4 @@ Use `oi-multiselect` directive:
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
   * `listFilter` — filter name for items order in dropdown
+  * `saveLastQuery` — function which get `lastQuery` and `removedValue` and return string for input after element was removed (default: '').

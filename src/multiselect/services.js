@@ -6,7 +6,8 @@ angular.module('oi.multiselect')
             debounce: 500,
             searchFilter: 'oiMultiselectCloseIcon',
             dropdownFilter: 'oiMultiselectHighlight',
-            listFilter: 'oiMultiselectAscSort'
+            listFilter: 'oiMultiselectAscSort',
+            saveLastQuery: null
         },
         $get: function() {
             return {

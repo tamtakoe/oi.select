@@ -102,4 +102,10 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
         return function (list, query, getLabel) {
             return list;
         }
+    })
+
+    .factory('mySaveLastQuery', function() {
+        return function(removedValue, lastQuery) {
+            return removedValue.name;
+        };
     });
