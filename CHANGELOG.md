@@ -1,3 +1,16 @@
+<a name="0.1.4"></a>
+# 0.1.4
+
+## Bug Fixes
+
+- **dropdown:** stay opened on click if query not empty
+- **demo:** remove broken example
+
+## Performance Improvements
+
+- **oi-multiselect-options:**
+    - saveLastQuery
+
 <a name="0.1.3"></a>
 # 0.1.3
 

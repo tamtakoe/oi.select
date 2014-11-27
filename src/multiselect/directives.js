@@ -48,7 +48,8 @@ angular.module('oi.multiselect')
                 var inputElement = element.find('input'),
                     listElement  = angular.element(element[0].querySelector('.multiselect-dropdown')),
                     placeholder  = placeholderFn(scope),
-                    options      = angular.extend({}, oiMultiselect.options, optionsFn(scope));
+                    options      = angular.extend({}, oiMultiselect.options, optionsFn(scope)),
+                    lastQueryFn  = options.saveLastQuery ? $injector.get(options.saveLastQuery) : function() {return ''};
 
                 if (angular.isDefined(attrs.autofocus)) {
                     $timeout(function() {
@@ -111,7 +112,7 @@ angular.module('oi.multiselect')
                     if (attrs.disabled) return;
 
                     if (angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                        if (scope.isOpen) {
+                        if (scope.isOpen && !scope.query) {
                             resetMatches()
                         } else {
                             getMatches(scope.query)
@@ -153,7 +154,6 @@ angular.module('oi.multiselect')
                 };
 
                 scope.removeItem = function removeItem(position) {
-
                     var removedValue;
 
                     if (attrs.disabled) return;
@@ -168,7 +168,7 @@ angular.module('oi.multiselect')
                         ctrl.$setViewValue(undefined);
                     }
 
-                    scope.query = options.saveLastQuery ? $injector.get(options.saveLastQuery)(removedValue, lastQuery) : '';
+                    scope.query = lastQueryFn(removedValue, lastQuery);
 
                     if (scope.isOpen || scope.oldQuery || !multiple) {
                         getMatches(scope.oldQuery); //stay old list
