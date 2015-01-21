@@ -3,7 +3,7 @@
         "name": "https://github.com/tamtakoe"
     },
     "name": "oi.multiselect",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "main": ["./dist/multiselect-tpls.js"],
     "dependencies": {
         "angular": ">=1.2"

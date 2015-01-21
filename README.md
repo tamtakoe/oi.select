@@ -3,10 +3,10 @@
 ## Features
 
 * API compatible with [Angular select](http://docs.angularjs.org/api/ng/directive/select)
-* without jQuery and other dependencies
+* Angular 1.2+ without jQuery and other dependencies
 * search options by substring (including the search query to the server)
 * use [Bootstrap](http://getbootstrap.com) styles (but you can use own styles)
-* 16 KB minified
+* 17 KB minified
 
 ## Demo
 
@@ -57,7 +57,7 @@ Use `oi-multiselect` directive:
 ## Attributes
 * `ng-options` — see: [Angular select](http://docs.angularjs.org/api/ng/directive/select)
   * `ng-options="item for item in shopArrShort | limitTo: 3"` — filter input list
-  * `ng-options="item for item in shopArrFn($query)"` — generate input list (expects array/object or promise)
+  * `ng-options="item for item in shopArrFn($query, $querySelectAs)"` — generate input list (expects array/object or promise)
 * `ng-model` — chosen item/items
 * `ng-disabled` — specifies that a drop-down list should be disabled
 * `multiple` — specifies that multiple options can be selected at once
@@ -70,4 +70,8 @@ Use `oi-multiselect` directive:
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
   * `listFilter` — filter name for items order in dropdown
-  * `saveLastQuery` — function which get `lastQuery` and `removedValue` and return string for input after element was removed (default: '').
+  * `saveLastQuery` — function which get `lastQuery` and `removedValue` and return string for input after element was removed (default: '')
+  * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `slash`, `tab`, `blur` (default: `enter`, `slash`)
+  * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
+  * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
+  * `newItemFn` — function which get query and return new item object or promise

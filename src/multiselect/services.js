@@ -7,7 +7,9 @@ angular.module('oi.multiselect')
             searchFilter: 'oiMultiselectCloseIcon',
             dropdownFilter: 'oiMultiselectHighlight',
             listFilter: 'oiMultiselectAscSort',
-            saveLastQuery: null
+            saveLastQuery: null,
+            newItem: false,
+            saveTrigger: 'enter, slash'
         },
         $get: function() {
             return {
@@ -222,11 +224,68 @@ angular.module('oi.multiselect')
         return arr;
     }
 
+    //lodash _.isEqual
+    function isEqual(x, y) {
+        if ( x === y ) return true;
+        if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
+        if ( x.constructor !== y.constructor ) return false;
+
+        for ( var p in x ) {
+            if ( ! x.hasOwnProperty( p ) ) continue;
+            if ( ! y.hasOwnProperty( p ) ) return false;
+            if ( x[ p ] === y[ p ] ) continue;
+            if ( typeof( x[ p ] ) !== "object" ) return false;
+            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+        }
+
+        for ( p in y ) {
+            if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
+        }
+        return true;
+    }
+
+    //lodash _.intersection + filter + callback + invert
+    function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
+        var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
+
+        callback = callback || function(xValue, yValue) {
+            return xValue === yValue;
+        };
+
+        for (i = 0, n = xArr.length; i < xArr.length; i++) {
+            filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];
+
+            for (j = 0; j < yArr.length; j++) {
+                filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
+
+                if (callback(filteredX, filteredY, xArr, yArr, i, j)) {
+                    invert ? out.splice(i + out.length - n, 1) : out.push(xArr[i]);
+                    break;
+                }
+            }
+        }
+        return out;
+    }
+
+    function getValue(valueName, item, scope, getter) {
+        var locals = {};
+
+        //'name.subname' -> {name: {subname: list}}'
+        valueName.split('.').reduce(function(previousValue, currentItem, index, arr) {
+            return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
+        }, locals);
+
+        return getter(scope, locals);
+    }
+
     return {
-        copyWidth: copyWidth,
-        measureString: measureString,
+        copyWidth:          copyWidth,
+        measureString:      measureString,
         scrollActiveOption: scrollActiveOption,
-        groupsIsEmpty: groupsIsEmpty,
-        objToArr: objToArr
+        groupsIsEmpty:      groupsIsEmpty,
+        objToArr:           objToArr,
+        getValue:           getValue,
+        isEqual:            isEqual,
+        intersection:       intersection
     }
 }]);

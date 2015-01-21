@@ -226,6 +226,113 @@ multiple-limit="3"
 </pre>
 </div>
 
+<h2>Autoselect</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for (key, item) in shopObj"
+    ng-model="bundle13"
+    placeholder="Select"
+    oi-multiselect-options="{
+        newItem: 'autoselect',
+        newItemModel: {id: null, name: $query, category: 'shoes'},
+        saveTrigger: 'enter, blur'
+    }"
+></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for (key, item) in shopObj"
+ng-model="bundle13"
+oi-multiselect-options="{
+    newItem: 'autoselect',
+    newItemModel: {id: null, name: $query, category: 'shoes'},
+    saveTrigger: 'enter, blur'
+}"
+</div>
+<pre class="col-md-6">
+{{bundle13}}
+</pre>
+</div>
+
+<h2>Prompt</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.name for (key, item) in shopObj"
+    ng-model="bundle14"
+    placeholder="Select"
+    oi-multiselect-options="{
+        newItem: 'prompt',
+        newItemModel: {id: null, name: $query, category: 'shoes'},
+        saveTrigger: 'enter, blur'
+    }"
+></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for (key, item) in shopObj"
+ng-model="bundle14"
+oi-multiselect-options="{
+    newItem: 'prompt',
+    newItemModel: {id: null, name: $query, category: 'shoes'},
+    saveTrigger: 'enter, blur'
+}"
+</div>
+<pre class="col-md-6">
+{{bundle14}}
+</pre>
+</div>
+
+
+<h2>Select <b>as</b> (lazy loading case)</h2>
+<div class="row">
+<div class="col-md-6">
+<oi-multiselect
+    ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+    ng-model="bundle15"
+    multiple
+    placeholder="Select"
+    oi-multiselect-options="{
+        newItem: 'prompt',
+        newItemFn: addItem,
+    }"
+></oi-multiselect>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6">
+<div hljs>
+ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+ng-model="bundle15"
+multiple
+oi-multiselect-options="{
+    newItem: 'prompt',
+    newItemFn: addItem,
+}"
+</div>
+<div hljs>
+$scope.shopArrFn = function(query, querySelectAs) {
+    if (querySelectAs) {
+        return getOptionsById(querySelectAs);
+    } else {
+        return findOptions(query);
+    }
+};
+</div>
+<div hljs>
+$scope.addItem = function(query) {
+    return createOption(query);
+};
+</div>
+</div>
+<pre class="col-md-6">
+{{bundle15}}
+</pre>
+</div>
+
 <h2>Customization</h2>
 <div class="row">
 <div class="col-md-6">

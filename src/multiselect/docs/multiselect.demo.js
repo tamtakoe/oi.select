@@ -18,10 +18,41 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
             })
         ]).then(function() {
 
-            $scope.shopArrFn = function(query) {
+            var newItem = {
+                id: 0,
+                name: "SavedItem",
+                category: "shoes"
+            };
+
+            function findOptions(query) {
                 var deferred = $q.defer();
                 $timeout(function() {
                     deferred.resolve($scope.shopArr);
+                }, 1000);
+                return deferred.promise;
+            }
+
+            function getOptionsById(querySelectAs) {
+                var deferred = $q.defer();
+                $timeout(function() {
+                    deferred.resolve($scope.shopArr.concat(newItem));
+                }, 1000);
+                return deferred.promise;
+            }
+
+            $scope.shopArrFn = function(query, querySelectAs) {
+                if (querySelectAs) {
+                    return getOptionsById(querySelectAs);
+
+                } else {
+                    return findOptions(query);
+                }
+            };
+
+            $scope.addItem = function(query) {
+                var deferred = $q.defer();
+                $timeout(function() {
+                    deferred.resolve(newItem);
                 }, 1000);
                 return deferred.promise;
             };
@@ -72,6 +103,12 @@ angular.module('multiselectDemo', ['oi.multiselect', 'hljs'])
                 "name": "shoes",
                 "category": "shoes"
             }];
+
+            $scope.bundle13 = $scope.shopObj[5];
+
+            $scope.bundle14 = $scope.shopObj[5];
+
+            $scope.bundle15 = [2,3,4];
         });
 
         $scope.scrollTo = function(id) {

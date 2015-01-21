@@ -1,3 +1,16 @@
+<a name="0.1.5"></a>
+# 0.1.5
+
+## Features
+
+- select `as` support
+
+- **oi-multiselect-options:**
+    - saveTrigger
+    - newItem
+    - newItemModel
+    - newItemFn
+
 <a name="0.1.4"></a>
 # 0.1.4
 
