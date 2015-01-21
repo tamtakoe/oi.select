@@ -55,7 +55,7 @@ Use `oi-multiselect` directive:
 ```
 
 ## Attributes
-* `ng-options` — see: [Angular select](http://docs.angularjs.org/api/ng/directive/select)
+* `ng-options` — see: [ngOptions](http://docs.angularjs.org/api/ng/directive/ngOptions)
   * `ng-options="item for item in shopArrShort | limitTo: 3"` — filter input list
   * `ng-options="item for item in shopArrFn($query, $querySelectAs)"` — generate input list (expects array/object or promise)
 * `ng-model` — chosen item/items
