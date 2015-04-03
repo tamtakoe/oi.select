@@ -18,7 +18,7 @@ You can download files through Bower:
 
 ```
 npm install -g bower
-bower install oi.bootstrap
+bower install oi.multiselect
 ```
 
 or make build:
