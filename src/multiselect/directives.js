@@ -17,26 +17,23 @@ angular.module('oi.multiselect')
                 throw new Error("Expected expression in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'");
             }
 
-            var selectAsName       = / as /.test(match[0]) && match[1],    //item.modelValue
-                displayName        = match[2] || match[1],                 //item.label
-                valueName          = match[4] || match[6],                 //item
-                groupByName        = match[3] || '',                       //item.groupName
-                trackByName        = match[8] || displayName,              //item.id
-                valueMatches       = match[7].match(VALUES_REGEXP);        //collection
+            var selectAsName         = / as /.test(match[0]) && match[1],    //item.modelValue
+                displayName          = match[2] || match[1],                 //item.label
+                valueName            = match[4] || match[6],                 //item
+                groupByName          = match[3] || '',                       //item.groupName
+                trackByName          = match[8] || displayName,              //item.id
+                valueMatches         = match[7].match(VALUES_REGEXP);        //collection
 
-            var valuesName         = valueMatches[1],                      //collection
-                filteredValuesName = valuesName + (valueMatches[3] || ''), //collection | filter
-                valuesFnName       = valuesName + (valueMatches[2] || ''); //collection()
+            var valuesName           = valueMatches[1],                      //collection
+                filteredValuesName   = valuesName + (valueMatches[3] || ''), //collection | filter
+                valuesFnName         = valuesName + (valueMatches[2] || ''); //collection()
 
-            var selectAsFn         = selectAsName && $parse(selectAsName),
-                displayFn          = $parse(displayName),
-                groupByFn          = $parse(groupByName),
-                filteredValuesFn   = $parse(filteredValuesName),
-                valuesFn           = $parse(valuesFnName),
-                trackByFn          = $parse(trackByName);
-
-            var timeoutPromise,
-                lastQuery;
+            var selectAsFn           = selectAsName && $parse(selectAsName),
+                displayFn            = $parse(displayName),
+                groupByFn            = $parse(groupByName),
+                filteredValuesFn     = $parse(filteredValuesName),
+                valuesFn             = $parse(valuesFnName),
+                trackByFn            = $parse(trackByName);
 
             var multiple             = angular.isDefined(attrs.multiple),
                 multipleLimit        = Number(attrs.multipleLimit),
@@ -44,6 +41,9 @@ angular.module('oi.multiselect')
                 keyUpDownWerePressed = false,
                 matchesWereReset     = false,
                 optionsFn            = $parse(attrs.oiMultiselectOptions);
+
+            var timeoutPromise,
+                lastQuery;
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement = element.find('input'),
@@ -218,7 +218,7 @@ angular.module('oi.multiselect')
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(selectedOrder || newItemFn(scope.query));
+                        itemPromise = $q.when(newItemFn(scope.query));
                     }
 
                     itemPromise

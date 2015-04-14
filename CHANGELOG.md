@@ -1,3 +1,10 @@
+<a name="0.1.6"></a>
+# 0.1.6
+
+## Features
+
+- do not select the highlighted option on blur (native select behavior)
+
 <a name="0.1.5"></a>
 # 0.1.5
 
