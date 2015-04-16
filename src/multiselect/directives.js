@@ -218,7 +218,7 @@ angular.module('oi.multiselect')
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(newItemFn(scope.query));
+                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.query));
                     }
 
                     itemPromise
