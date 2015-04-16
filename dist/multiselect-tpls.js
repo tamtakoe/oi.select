@@ -542,7 +542,7 @@ angular.module('oi.multiselect')
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(newItemFn(scope.query));
+                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.query));
                     }
 
                     itemPromise
@@ -718,7 +718,7 @@ angular.module('oi.multiselect')
                 }
 
                 function toArr(list) {
-                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list); //TODO to oi.utils
+                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
 
                     return [].concat(input);
                 }
