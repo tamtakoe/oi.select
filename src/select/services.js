@@ -217,8 +217,10 @@ angular.module('oi.multiselect')
     function objToArr(obj) {
         var arr = [];
 
-        angular.forEach(obj, function(value) {
-            arr.push(value);
+        angular.forEach(obj, function(value, key) {
+            if (key.toString().charAt(0) !== '$') {
+                arr.push(value);
+            }
         });
 
         return arr;

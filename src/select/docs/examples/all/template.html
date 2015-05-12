@@ -1,0 +1,24 @@
+<div ng-controller="selectAllController">
+    <h2>All</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <oi-multiselect
+                ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
+                ng-model="bundle"
+                multiple
+                placeholder="Select"
+                ></oi-multiselect>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name group by item.category for item in shopArrFn($query) | limitTo: 3 track by item.id"
+ng-model="bundle"
+multiple
+</div>
+<pre class="col-md-6">
+{{bundle}}
+</pre>
+</div>
+</div>

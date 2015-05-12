@@ -364,7 +364,7 @@ angular.module('oi.multiselect')
                         scope.oldQuery = null;
                     }
 
-                    if (timeoutPromise && angular.isFunction(values.then)) {
+                    if (timeoutPromise && (angular.isFunction(values.then) || angular.isFunction(values.$promise))) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                         waitTime = options.debounce;
                     }
@@ -372,10 +372,10 @@ angular.module('oi.multiselect')
                     timeoutPromise = $timeout(function() {
                         scope.showLoader = true;
 
-                        return $q.when(values)
+                        return $q.when(values.$promise || values)
                             .then(function(values) {
                                 if (!querySelectAs) {
-                                    var filteredList   = $filter(options.listFilter)(toArr(values), query, getLabel);
+                                    var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
                                     var withoutOverlap = oiUtils.intersection(filteredList, scope.output, oiUtils.isEqual, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 
@@ -391,12 +391,6 @@ angular.module('oi.multiselect')
                     }, waitTime);
 
                     return timeoutPromise;
-                }
-
-                function toArr(list) {
-                    var input = angular.isArray(list) ? list : oiUtils.objToArr(list);
-
-                    return [].concat(input);
                 }
 
                 function updateGroupPos() {

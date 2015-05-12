@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="multiselectDemo">
+<html ng-app="selectDemo">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Angular multiselect</title>
@@ -10,17 +10,34 @@
 
     <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular-resource.min.js"></script>
     <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
 
-    <script src="src/multiselect/module.js"></script>
-    <script src="src/multiselect/directives.js"></script>
-    <script src="src/multiselect/filters.js"></script>
-    <script src="src/multiselect/services.js"></script>
+    <script src="src/select/module.js"></script>
+    <script src="src/select/directives.js"></script>
+    <script src="src/select/filters.js"></script>
+    <script src="src/select/services.js"></script>
     <!--<script src="dist/multiselect-tpls.min.js"></script>-->
-    <script src="src/multiselect/docs/multiselect.demo.js"></script>
+    <script src="src/select/docs/app.js"></script>
+    <script src="src/select/docs/examples/autofocus/controller.js"></script>
+    <script src="src/select/docs/examples/multiple/controller.js"></script>
+    <script src="src/select/docs/examples/single/controller.js"></script>
+    <script src="src/select/docs/examples/grouping/controller.js"></script>
+    <script src="src/select/docs/examples/filtered/controller.js"></script>
+    <script src="src/select/docs/examples/lazyloading/controller.js"></script>
+    <script src="src/select/docs/examples/disabled/controller.js"></script>
+    <script src="src/select/docs/examples/readonly/controller.js"></script>
+    <script src="src/select/docs/examples/notempty/controller.js"></script>
+    <script src="src/select/docs/examples/multiplelimit/controller.js"></script>
+    <script src="src/select/docs/examples/autoselect/controller.js"></script>
+    <script src="src/select/docs/examples/prompt/controller.js"></script>
+    <script src="src/select/docs/examples/selectas/controller.js"></script>
+    <script src="src/select/docs/examples/customization/controller.js"></script>
+    <script src="src/select/docs/examples/customization/filters.js"></script>
+    <script src="src/select/docs/examples/all/controller.js"></script>
 </head>
 
 <body class="container">
-    <ng-include src="'src/multiselect/docs/multiselect.demo.html'" ng-controller="MainCtrl"></ng-include>
+    <ng-include src="'src/select/docs/main.html'" ng-controller="selectDocsController"></ng-include>
 </body>
 </html>

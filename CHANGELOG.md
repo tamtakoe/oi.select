@@ -1,3 +1,14 @@
+<a name="0.1.7"></a>
+# 0.1.7
+
+## Features
+
+- **demo:** new demo page
+
+## Bug Fixes
+
+- **dropdown:** ignore private keys starts with `$` (f.e. $promise and $resolved added by ngResource)
+
 <a name="0.1.6"></a>
 # 0.1.6
 

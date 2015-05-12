@@ -1,0 +1,28 @@
+<style>
+    oi-multiselect {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 id="top">oi.multiselect demo</h1>
+            <p><a href="//github.com/tamtakoe/oi.multiselect">GitHub project</a></p>
+            <hr/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="list-group">
+                <a ng-repeat="item in demo.menu"
+                   href="#/select/#{{item.urlName}}"
+                   class="list-group-item capitalize"
+                   ng-class="{active: item.urlName == demo.name}">{{item.name}}</a>
+            </div>
+        </div>
+        <div class="col-xs-10">
+            <div ng-include="demo.viewUrl"></div>
+        </div>
+    </div>
+</div>

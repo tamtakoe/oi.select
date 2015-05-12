@@ -1,0 +1,22 @@
+<div ng-controller="selectLazyloadingController">
+    <h2>Lazy loading</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <oi-multiselect
+                ng-options="item.name for item in shopArrFn($query)"
+                ng-model="bundle"
+                placeholder="Select"
+                ></oi-multiselect>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-6">
+ng-options="item.name for item in shopArrFn($query)"
+ng-model="bundle"
+</div>
+<pre class="col-md-6">
+{{bundle}}
+</pre>
+</div>
+</div>

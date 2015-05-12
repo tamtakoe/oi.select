@@ -1,0 +1,47 @@
+<div ng-controller="selectSelectasController">
+    <h2>Select <b>as</b> (lazy loading case)</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <oi-multiselect
+                ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+                ng-model="bundle"
+                multiple
+                placeholder="Select"
+                oi-multiselect-options="{
+                    newItem: 'prompt',
+                    newItemFn: addItem,
+                }"
+                ></oi-multiselect>
+        </div>
+    </div>
+<div class="row">
+<div class="col-md-6">
+<div hljs>
+ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+ng-model="bundle"
+multiple
+oi-multiselect-options="{
+    newItem: 'prompt',
+    newItemFn: addItem,
+}"
+</div>
+<div hljs>
+$scope.shopArrFn = function(query, querySelectAs) {
+    if (querySelectAs) {
+        return getOptionsById(querySelectAs);
+    } else {
+        return findOptions(query);
+    }
+};
+</div>
+<div hljs>
+$scope.addItem = function(query) {
+    return createOption(query);
+};
+</div>
+</div>
+<pre class="col-md-6">
+{{bundle}}
+</pre>
+</div>
+</div>
