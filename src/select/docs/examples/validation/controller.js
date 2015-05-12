@@ -1,6 +1,5 @@
 angular.module('selectDemo')
-    .controller('selectMultipleController', function ($scope, ShopArr) {
-
+    .controller('selectValidationController', function ($scope, ShopArr) {
         $scope.shopArr = ShopArr.query();
 
         $scope.bundle = [{

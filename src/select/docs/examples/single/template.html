@@ -1,7 +1,7 @@
 <div ng-controller="selectSingleController">
     <h2>Single</h2>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <oi-multiselect
                 ng-options="item for (key, item) in shopObjShort"
                 ng-model="bundle"
@@ -11,11 +11,11 @@
     </div>
 
 <div class="row">
-<div hljs class="col-md-6">
+<div hljs class="col-md-8">
 ng-options="item for (key, item) in shopObjShort"
 ng-model="bundle"
 </div>
-<pre class="col-md-6">
+<pre class="col-md-4">
 {{bundle}}
 </pre>
 </div>

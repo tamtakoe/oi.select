@@ -71,7 +71,7 @@ Use `oi-multiselect` directive:
   * `dropdownFilter` — filter name for items in dropdown
   * `listFilter` — filter name for items order in dropdown
   * `saveLastQuery` — function which get `lastQuery` and `removedValue` and return string for input after element was removed (default: '')
-  * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `slash`, `tab`, `blur` (default: `enter`, `slash`)
+  * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `backslash`, `blur` (default: `enter`, `backslash`)
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise

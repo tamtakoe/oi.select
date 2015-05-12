@@ -1,9 +1,9 @@
 angular.module('selectDemo')
-.controller('selectSingleController', function ($scope, ShopObjShort) {
+    .controller('selectSingleController', function ($scope, ShopObjShort) {
 
-    $scope.shopObjShort = ShopObjShort.get();
+        $scope.shopObjShort = ShopObjShort.get();
 
-    $scope.shopObjShort.$promise.then(function(data) {
-        $scope.bundle = data[3];
-    })
-});
+        $scope.shopObjShort.$promise.then(function(data) {
+            $scope.bundle = data[3];
+        })
+    });

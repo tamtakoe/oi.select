@@ -1,7 +1,7 @@
 <div ng-controller="selectSelectasController">
     <h2>Select <b>as</b> (lazy loading case)</h2>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <oi-multiselect
                 ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
                 ng-model="bundle"
@@ -15,7 +15,7 @@
         </div>
     </div>
 <div class="row">
-<div class="col-md-6">
+<div class="col-md-8">
 <div hljs>
 ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
 ng-model="bundle"
@@ -40,7 +40,7 @@ $scope.addItem = function(query) {
 };
 </div>
 </div>
-<pre class="col-md-6">
+<pre class="col-md-4">
 {{bundle}}
 </pre>
 </div>

@@ -8,7 +8,8 @@
         <li class="multiselect-search-list-item multiselect-search-list-item_input"><input autocomplete="off"
                                                                                            ng-model="query"
                                                                                            ng-style="{'width': inputWidth + 'px'}"
-                                                                                           ng-keydown="keyParser($event)"/></li>
+                                                                                           ng-keydown="keyParser($event)"
+                                                                                           ng-focus="setFocus($event)"/></li>
         <li class="multiselect-search-list-item multiselect-search-list-item_loader" ng-show="showLoader"></li>
     </ul>
 </div>

@@ -1,7 +1,7 @@
 <div ng-controller="selectCustomizationController">
     <h2>Customization</h2>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <oi-multiselect
                 ng-options="item.name for item in shopArrFn($query) track by item.id"
                 ng-model="bundle"
@@ -19,7 +19,7 @@
     </div>
 <div class="row">
 
-<div class="col-md-6">
+<div class="col-md-8">
 <div hljs>
 ng-options="item.name for item in shopArrFn($query) track by item.id"
 ng-model="bundle"
@@ -67,7 +67,7 @@ oi-multiselect-options="{
 })
 </div>
 </div>
-<pre class="col-md-6">
+<pre class="col-md-4">
 {{bundle}}
 </pre>
 </div>

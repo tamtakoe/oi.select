@@ -1,7 +1,7 @@
 angular.module('selectDemo')
-.controller('selectAutofocusController', function ($scope, ShopArr) {
+    .controller('selectAutofocusController', function ($scope, ShopArr) {
 
-    $scope.shopArr = ShopArr.query();
+        $scope.shopArr = ShopArr.query();
 
-    $scope.bundle = null;
-});
+        $scope.bundle = null;
+    });

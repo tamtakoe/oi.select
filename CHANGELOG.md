@@ -4,10 +4,12 @@
 ## Features
 
 - **demo:** new demo page
+- **events:** fire `focus` and `blur` event on multiselect element
 
 ## Bug Fixes
 
 - **dropdown:** ignore private keys starts with `$` (f.e. $promise and $resolved added by ngResource)
+- **input:** error where `position < 0`
 
 <a name="0.1.6"></a>
 # 0.1.6

@@ -30,7 +30,7 @@ angular.module('selectDemo', ['oi.multiselect', 'ngResource', 'hljs'])
         );
     })
 
-    .controller('selectDocsController', function ($scope, ShopArr, $timeout, $q, $location, $anchorScroll) {
+    .controller('selectDocsController', function ($scope, $location) {
         var menu = [
             {urlName: 'autofocus',     name: 'Autofocus'},
             {urlName: 'multiple',      name: 'Multiple'},
@@ -46,6 +46,7 @@ angular.module('selectDemo', ['oi.multiselect', 'ngResource', 'hljs'])
             {urlName: 'prompt',        name: 'Prompt'},
             {urlName: 'selectas',      name: 'Select as'},
             {urlName: 'customization', name: 'Customization'},
+            {urlName: 'validation',    name: 'Validation'},
             {urlName: 'all',           name: 'All'}
         ];
 

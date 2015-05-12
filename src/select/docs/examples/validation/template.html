@@ -1,11 +1,13 @@
-<div ng-controller="selectMultipleController">
-    <h2>Multiple</h2>
+<form name="demoForm" ng-controller="selectValidationController">
+    <h2>Validation</h2>
     <div class="row">
         <div class="col-md-8">
             <oi-multiselect
+                name="select"
                 ng-options="item.name for item in shopArr track by item.id"
                 ng-model="bundle"
                 multiple
+                required
                 placeholder="Select"
                 ></oi-multiselect>
         </div>
@@ -16,9 +18,14 @@
 ng-options="item.name for item in shopArr track by item.id"
 ng-model="bundle"
 multiple
+required
 </div>
 <pre class="col-md-4">
+dirty: {{demoForm.select.$dirty}}
+invalid: {{demoForm.select.$invalid}}
+errors: {{demoForm.select.$error}}
+
 {{bundle}}
 </pre>
 </div>
-</div>
+</form>

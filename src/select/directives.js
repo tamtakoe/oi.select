@@ -117,29 +117,39 @@ angular.module('oi.multiselect')
 
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
+                        scope.isFocused = true;
                         oiUtils.copyWidth(element, listElement);
+                    }
+                });
 
-                        if (!scope.isFocused) {
-                            $document.on('click', blurHandler);
-                            scope.isFocused = true;
-                        }
+                scope.$watch('isFocused', function(isFocused) {
+                    if (isFocused) {
+                        element.triggerHandler('focus');
+                        $document.on('click', blurHandler);
                     }
                 });
 
                 scope.setFocus = function(event) {
                     if (attrs.disabled) return;
 
-                    if (angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                        if (scope.isOpen && !scope.query) {
-                            resetMatches()
-                        } else {
-                            getMatches(scope.query)
-                        }
-                    }
                     scope.backspaceFocus = false;
 
                     if (event.target.nodeName !== 'INPUT') {
                         inputElement[0].focus();
+                    }
+
+                    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
+                        scope.isFocused = true;
+
+                        return;
+                    }
+
+                    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
+                        if (scope.isOpen && !scope.query) {
+                            resetMatches();
+                        } else {
+                            getMatches(scope.query);
+                        }
                     }
                 };
 
@@ -181,7 +191,7 @@ angular.module('oi.multiselect')
 
                     if (attrs.disabled) return;
 
-                    if (multiple) {
+                    if (multiple && position >= 0) {
                         removedValue = ctrl.$modelValue[position];
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
@@ -262,10 +272,10 @@ angular.module('oi.multiselect')
                             saveOn('enter');
                             break;
                         case 9: /* tab */
-                            saveOn('tab');
+                            blurHandler();
                             break;
-                        case 220: /* slash */
-                            saveOn('slash');
+                        case 220: /* backslash */
+                            saveOn('backslash');
                             event.preventDefault(); //backslash interpreted as a regexp
                             break;
 
@@ -319,11 +329,14 @@ angular.module('oi.multiselect')
                 resetMatches();
 
                 function blurHandler(event) {
-                    if (event.target.ownerDocument.activeElement !== inputElement[0]) {
+                    if (!event || event.target.ownerDocument.activeElement !== inputElement[0]) {
+                        $timeout(function() {
+                            element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                        });
                         saveOn('blur');
                         $document.off('click', blurHandler);
                         scope.isFocused = false;
-                        scope.$digest();
+                        scope.$evalAsync();
                     }
                 }
 

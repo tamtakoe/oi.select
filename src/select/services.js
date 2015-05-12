@@ -9,7 +9,7 @@ angular.module('oi.multiselect')
             listFilter: 'oiMultiselectAscSort',
             saveLastQuery: null,
             newItem: false,
-            saveTrigger: 'enter, slash'
+            saveTrigger: 'enter, backslash'
         },
         $get: function() {
             return {
