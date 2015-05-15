@@ -62,17 +62,17 @@ module.exports = function(grunt) {
 
         concat: {
             multiselect: {
-                src:  [ '<%= srcPath %>/multiselect/module.js',
-                    '<%= srcPath %>/multiselect/services.js',
-                    '<%= srcPath %>/multiselect/directives.js',
-                    '<%= srcPath %>/multiselect/filters.js'],
+                src:  [ '<%= srcPath %>/select/module.js',
+                    '<%= srcPath %>/select/services.js',
+                    '<%= srcPath %>/select/directives.js',
+                    '<%= srcPath %>/select/filters.js'],
                 dest: '<%= distPath %>/multiselect.js'
             },
             multiselectTpls: {
                 src:  [ '<%= distPath %>/multiselect-tpls.js',
-                    '<%= srcPath %>/multiselect/services.js',
-                    '<%= srcPath %>/multiselect/directives.js',
-                    '<%= srcPath %>/multiselect/filters.js'],
+                    '<%= srcPath %>/select/services.js',
+                    '<%= srcPath %>/select/directives.js',
+                    '<%= srcPath %>/select/filters.js'],
                 dest: '<%= distPath %>/multiselect-tpls.js'
             }
         },
