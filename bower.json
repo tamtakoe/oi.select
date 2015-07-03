@@ -4,7 +4,7 @@
     },
     "name": "oi.multiselect",
     "version": "0.1.7",
-    "main": ["./dist/multiselect-tpls.js"],
+    "main": ["./dist/multiselect-tpls.js", "./dist/multiselect.min.css"],
     "dependencies": {
         "angular": ">=1.2"
     }
