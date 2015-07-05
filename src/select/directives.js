@@ -10,7 +10,7 @@ angular.module('oi.multiselect')
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
-            var optionsExp = attrs.ngOptions,
+            var optionsExp = attrs.oiOptions,
                 match;
 
             if (!(match = optionsExp.match(NG_OPTIONS_REGEXP))) {
