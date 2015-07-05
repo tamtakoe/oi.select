@@ -337,7 +337,7 @@ angular.module('oi.multiselect')
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
-            var optionsExp = attrs.ngOptions,
+            var optionsExp = attrs.oiOptions,
                 match;
 
             if (!(match = optionsExp.match(NG_OPTIONS_REGEXP))) {
@@ -484,7 +484,7 @@ angular.module('oi.multiselect')
                     lastQuery = scope.query;
 
                     //duplicate
-                    if (oiUtils.intersection(scope.output, [option], null, getLabel, getLabel).length) return;
+                    if (oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
                     if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
