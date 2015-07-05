@@ -157,7 +157,7 @@ angular.module('oi.multiselect')
                     lastQuery = scope.query;
 
                     //duplicate
-                    if (oiUtils.intersection(scope.output, [option], null, getLabel, getLabel).length) return;
+                    if (oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
                     if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
