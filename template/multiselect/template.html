@@ -1,10 +1,11 @@
-<div class="multiselect-search" ng-class="{open: isOpen, focused: isFocused, loading: showLoader}" ng-click="setFocus($event)">
+<div class="multiselect-search" ng-class="{open: isOpen, focused: isFocused, loading: showLoader}" ng-click="setFocus($event)" tabindex="-1">
     <ul class="multiselect-search-list">
         <li class="btn btn-default btn-xs multiselect-search-list-item multiselect-search-list-item_selection"
             ng-repeat="item in output track by $index"
             ng-class="{focused: backspaceFocus && $last}"
             ng-click="removeItem($index)"
-            ng-bind-html="getSearchLabel(item)"></li>
+            ng-bind-html="getSearchLabel(item)"
+            tabindex="-1"></li>
         <li class="multiselect-search-list-item multiselect-search-list-item_input"><input autocomplete="off"
                                                                                            ng-model="query"
                                                                                            ng-style="{'width': inputWidth + 'px'}"
@@ -13,7 +14,7 @@
         <li class="multiselect-search-list-item multiselect-search-list-item_loader" ng-show="showLoader"></li>
     </ul>
 </div>
-<div class="multiselect-dropdown" ng-show="isOpen" ng-click="setFocus($event)">
+<div class="multiselect-dropdown" ng-show="isOpen" ng-click="setFocus($event)" tabindex="-1">
     <ul ng-if="isOpen" class="multiselect-dropdown-optgroup" ng-repeat="(group, options) in groups">
         <div class="multiselect-dropdown-optgroup-header"
             ng-if="group && options.length"

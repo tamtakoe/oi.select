@@ -1,5 +1,5 @@
 angular.module('oi.multiselect')
-    
+
 .directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', 'oiUtils', 'oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, oiUtils, oiMultiselect) {
     var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
         VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
@@ -270,6 +270,7 @@ angular.module('oi.multiselect')
 
                         case 13: /* enter */
                             saveOn('enter');
+                            event.preventDefault(); // Prevent the event from bubbling up as it might otherwise cause a form submission
                             break;
                         case 9: /* tab */
                             blurHandler();
