@@ -21,12 +21,29 @@ npm install -g bower
 bower install oi.multiselect
 ```
 
-or make build:
+or use local:
 
 ```
 npm install
-npm install -g grunt-cli
-grunt build
+npm install -g bower
+npm install -g gulp
+bower install
+```
+
+run local:
+
+```
+gulp
+open "http://localhost:3000"
+```
+
+make build:
+
+```
+npm install
+npm install -g bower
+npm install -g gulp
+bower install
 ```
 
 
