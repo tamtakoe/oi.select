@@ -52,7 +52,7 @@ gulp.task('compileScripts', function() {
         .pipe(minifyHtml())
         .pipe(templateCache({
             module: 'oi.select',
-            root: 'template/'
+            root: 'template/select/'
         }));
 
     var scriptStream = gulp.src([
