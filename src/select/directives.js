@@ -6,7 +6,7 @@ angular.module('oi.multiselect')
 
     return {
         restrict: 'AE',
-        templateUrl: 'template/multiselect/template.html',
+        templateUrl: 'template/select/template.html',
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
