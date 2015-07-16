@@ -1,5 +1,5 @@
 {
-    "name":    "multiselect",
+    "name":    "oi.select",
     "version": "0.2.0",
     "devDependencies": {
         "gulp": "3.9.0",
