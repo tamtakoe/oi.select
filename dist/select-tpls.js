@@ -1,39 +1,4 @@
-angular.module('oi.select', ['template/select/template.html']);
-
-angular.module("template/select/template.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("template/select/template.html",
-    "<div class=\"select-search\" ng-class=\"{open: isOpen, focused: isFocused, loading: showLoader}\" ng-click=\"setFocus($event)\" tabindex=\"-1\">\n" +
-    "    <ul class=\"select-search-list\">\n" +
-    "        <li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\"\n" +
-    "            ng-repeat=\"item in output track by $index\"\n" +
-    "            ng-class=\"{focused: backspaceFocus && $last}\"\n" +
-    "            ng-click=\"removeItem($index)\"\n" +
-    "            ng-bind-html=\"getSearchLabel(item)\"></li>\n" +
-    "        <li class=\"select-search-list-item select-search-list-item_input\"><input autocomplete=\"off\"\n" +
-    "                                                                                 ng-model=\"query\"\n" +
-    "                                                                                 ng-style=\"{'width': inputWidth + 'px'}\"\n" +
-    "                                                                                 ng-keydown=\"keyParser($event)\"\n" +
-    "                                                                                 ng-focus=\"setFocus($event)\"/></li>\n" +
-    "        <li class=\"select-search-list-item select-search-list-item_loader\" ng-show=\"showLoader\"></li>\n" +
-    "    </ul>\n" +
-    "</div>\n" +
-    "<div class=\"select-dropdown\" ng-show=\"isOpen\" ng-click=\"setFocus($event)\" tabindex=\"-1\">\n" +
-    "    <ul ng-if=\"isOpen\" class=\"select-dropdown-optgroup\" ng-repeat=\"(group, options) in groups\">\n" +
-    "        <div class=\"select-dropdown-optgroup-header\"\n" +
-    "            ng-if=\"group && options.length\"\n" +
-    "            ng-bind=\"group\"></div><!-- we use fast getElementsByTagName('li')-->\n" +
-    "        <li class=\"select-dropdown-optgroup-option\"\n" +
-    "            ng-init=\"isDisabled = getDisableWhen(option)\"\n" +
-    "            ng-repeat=\"option in options\"\n" +
-    "            ng-class=\"{'active': selectorPosition === groupPos[group] + $index, 'disabled': isDisabled}\"\n" +
-    "            ng-click=\"isDisabled || addItem(option)\"\n" +
-    "            ng-mouseenter=\"setSelection(groupPos[group] + $index)\"\n" +
-    "            ng-bind-html=\"getDropdownLabel(option)\"></li>\n" +
-    "    </ul>\n" +
-    "</div>\n" +
-    "");
-}]);
-
+angular.module('oi.select', []);
 angular.module('oi.select')
 
 .provider('oiSelect', function() {
@@ -864,3 +829,4 @@ angular.module('oi.select')
 
     return ascSort;
 });
+angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("template/template.html","<div class=select-search ng-class=\"{open: isOpen, focused: isFocused, loading: showLoader}\" ng-click=setFocus($event) tabindex=-1><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\"><input autocomplete=off ng-model=query ng-style=\"{\'width\': inputWidth + \'px\'}\" ng-keydown=keyParser($event) ng-focus=setFocus($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen ng-click=setFocus($event) tabindex=-1><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=group></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);

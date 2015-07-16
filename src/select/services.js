@@ -227,7 +227,7 @@ angular.module('oi.select')
     }
 
     //lodash _.isEqual
-    function isEqual(x, y) {
+    function  (x, y) {
         if ( x === y ) return true;
         if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
         if ( x.constructor !== y.constructor ) return false;
