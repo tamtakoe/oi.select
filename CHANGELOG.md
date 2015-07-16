@@ -1,3 +1,18 @@
+<a name="0.2.0"></a>
+# 0.2.0
+
+## Features
+
+- **oi-select:** rename oi-select to oi-select
+- **oi-options:** rename `ng-options` to `oi-options` (compatible with angular 1.4.x)
+- **disable when:** provide disabled expression for option
+
+## Bug Fixes
+
+- **tabindex:** work with ngArea
+- **input:** prevent default event on enter (prevents accidental form submission)
+- **groupping** remove sort group indexes for angular 1.4.x
+
 <a name="0.1.7"></a>
 # 0.1.7
 
@@ -25,7 +40,7 @@
 
 - select `as` support
 
-- **oi-multiselect-options:**
+- **oi-select-options:**
     - saveTrigger
     - newItem
     - newItemModel
@@ -41,7 +56,7 @@
 
 ## Performance Improvements
 
-- **oi-multiselect-options:**
+- **oi-select-options:**
     - saveLastQuery
 
 <a name="0.1.3"></a>
@@ -49,7 +64,7 @@
 
 ## Features
 
-- **oi-multiselect-options:**
+- **oi-select-options:**
     - saveLastQuery
 
 - **styles**
@@ -61,7 +76,7 @@
 
 ## Features
 
-- **oi-multiselect-options:**
+- **oi-select-options:**
     - listFilter
 
 
@@ -71,7 +86,7 @@
 ## Features
 
 - **autofocus**
-- **oi-multiselect-options:**
+- **oi-select-options:**
     - debounce
     - searchFilter
     - dropdownFilter

@@ -1,7 +1,7 @@
 angular.module('selectDemo')
-.controller('selectDizabledController', function ($scope, ShopArrShort) {
+    .controller('selectDisabledController', function ($scope, ShopArrShort) {
 
-    $scope.shopArrShort = ShopArrShort.query();
+        $scope.shopArrShort = ShopArrShort.query();
 
-    $scope.bundle = ["slippers", "shirt", "pants"];
-});
+        $scope.bundle = ["slippers", "shirt", "pants"];
+    });

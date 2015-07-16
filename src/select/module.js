@@ -1,1 +1,1 @@
-angular.module('oi.multiselect', []);
+angular.module('oi.select', []);

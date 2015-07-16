@@ -1,6 +1,6 @@
 var URL = 'src/select/docs/';
 
-angular.module('selectDemo', ['oi.multiselect', 'ngResource', 'hljs'])
+angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs'])
 
     .factory('ShopArr', function ($resource) {
         return $resource(URL + 'data/shopArr.json', {}, {
@@ -32,22 +32,23 @@ angular.module('selectDemo', ['oi.multiselect', 'ngResource', 'hljs'])
 
     .controller('selectDocsController', function ($scope, $location) {
         var menu = [
-            {urlName: 'autofocus',     name: 'Autofocus'},
-            {urlName: 'multiple',      name: 'Multiple'},
-            {urlName: 'single',        name: 'Single'},
-            {urlName: 'grouping',      name: 'Grouping'},
-            {urlName: 'filtered',      name: 'Filtered'},
-            {urlName: 'lazyloading',   name: 'Lazy loading'},
-            {urlName: 'disabled',      name: 'Disabled'},
-            {urlName: 'readonly',      name: 'Read only'},
-            {urlName: 'notempty',      name: 'Not empty'},
-            {urlName: 'multiplelimit', name: 'Multiple limit'},
-            {urlName: 'autoselect',    name: 'Autoselect'},
-            {urlName: 'prompt',        name: 'Prompt'},
-            {urlName: 'selectas',      name: 'Select as'},
-            {urlName: 'customization', name: 'Customization'},
-            {urlName: 'validation',    name: 'Validation'},
-            {urlName: 'all',           name: 'All'}
+            {urlName: 'autofocus',       name: 'Autofocus'},
+            {urlName: 'multiple',        name: 'Multiple'},
+            {urlName: 'single',          name: 'Single'},
+            {urlName: 'grouping',        name: 'Grouping'},
+            {urlName: 'filtered',        name: 'Filtered'},
+            {urlName: 'lazyloading',     name: 'Lazy loading'},
+            {urlName: 'disabled',        name: 'Disabled'},
+            {urlName: 'disabledoptions', name: 'Disabled options'},
+            {urlName: 'readonly',        name: 'Read only'},
+            {urlName: 'notempty',        name: 'Not empty'},
+            {urlName: 'multiplelimit',   name: 'Multiple limit'},
+            {urlName: 'autoselect',      name: 'Autoselect'},
+            {urlName: 'prompt',          name: 'Prompt'},
+            {urlName: 'selectas',        name: 'Select as'},
+            {urlName: 'customization',   name: 'Customization'},
+            {urlName: 'validation',      name: 'Validation'},
+            {urlName: 'all',             name: 'All'}
         ];
 
         $scope.demo = {};

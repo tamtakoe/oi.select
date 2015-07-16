@@ -2,25 +2,25 @@
     <h2>Select <b>as</b> (lazy loading case)</h2>
     <div class="row">
         <div class="col-md-8">
-            <oi-multiselect
-                ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+            <oi-select
+                oi-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
                 ng-model="bundle"
                 multiple
                 placeholder="Select"
-                oi-multiselect-options="{
+                oi-select-options="{
                     newItem: 'prompt',
                     newItemFn: addItem,
                 }"
-                ></oi-multiselect>
+                ></oi-select>
         </div>
     </div>
 <div class="row">
 <div class="col-md-8">
 <div hljs>
-ng-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+oi-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
 ng-model="bundle"
 multiple
-oi-multiselect-options="{
+oi-select-options="{
     newItem: 'prompt',
     newItemFn: addItem,
 }"

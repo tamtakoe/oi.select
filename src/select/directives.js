@@ -1,16 +1,16 @@
-angular.module('oi.multiselect')
+angular.module('oi.select')
 
-.directive('oiMultiselect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', 'oiUtils', 'oiMultiselect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, oiUtils, oiMultiselect) {
-    var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/,
-        VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
+.directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, oiUtils, oiSelect) {
+    var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?(?:\s+disable\s+when\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/;
+    var VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
 
     return {
         restrict: 'AE',
-        templateUrl: 'template/multiselect/template.html',
+        templateUrl: 'template/select/template.html',
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
-            var optionsExp = attrs.ngOptions,
+            var optionsExp = attrs.oiOptions,
                 match;
 
             if (!(match = optionsExp.match(NG_OPTIONS_REGEXP))) {
@@ -19,10 +19,11 @@ angular.module('oi.multiselect')
 
             var selectAsName         = / as /.test(match[0]) && match[1],    //item.modelValue
                 displayName          = match[2] || match[1],                 //item.label
-                valueName            = match[4] || match[6],                 //item
+                valueName            = match[5] || match[7],                 //item
                 groupByName          = match[3] || '',                       //item.groupName
-                trackByName          = match[8] || displayName,              //item.id
-                valueMatches         = match[7].match(VALUES_REGEXP);        //collection
+                disableWhenName      = match[4] || '',                       //item.disableWhenName
+                trackByName          = match[9] || displayName,              //item.id
+                valueMatches         = match[8].match(VALUES_REGEXP);        //collection
 
             var valuesName           = valueMatches[1],                      //collection
                 filteredValuesName   = valuesName + (valueMatches[3] || ''), //collection | filter
@@ -31,6 +32,7 @@ angular.module('oi.multiselect')
             var selectAsFn           = selectAsName && $parse(selectAsName),
                 displayFn            = $parse(displayName),
                 groupByFn            = $parse(groupByName),
+                disableWhenFn        = $parse(disableWhenName),
                 filteredValuesFn     = $parse(filteredValuesName),
                 valuesFn             = $parse(valuesFnName),
                 trackByFn            = $parse(trackByName);
@@ -40,16 +42,16 @@ angular.module('oi.multiselect')
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
                 keyUpDownWerePressed = false,
                 matchesWereReset     = false,
-                optionsFn            = $parse(attrs.oiMultiselectOptions);
+                optionsFn            = $parse(attrs.oiSelectOptions);
 
             var timeoutPromise,
                 lastQuery;
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement = element.find('input'),
-                    listElement  = angular.element(element[0].querySelector('.multiselect-dropdown')),
+                    listElement  = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder  = placeholderFn(scope),
-                    options      = angular.extend({}, oiMultiselect.options, optionsFn(scope.$parent)),
+                    options      = angular.extend({}, oiSelect.options, optionsFn(scope.$parent)),
                     lastQueryFn  = options.saveLastQuery ? $injector.get(options.saveLastQuery) : function() {return ''};
 
                 options.newItemModelFn = function (query) {
@@ -320,6 +322,9 @@ angular.module('oi.multiselect')
                     return label;
                 };
 
+                scope.getDisableWhen = getDisableWhen;
+
+
                 if (multiple) {
                     // Override the standard $isEmpty because an empty array means the input is empty.
                     ctrl.$isEmpty = function(value) {
@@ -358,6 +363,10 @@ angular.module('oi.multiselect')
 
                 function getLabel(item) {
                     return oiUtils.getValue(valueName, item, scope, displayFn);
+                }
+
+                function getDisableWhen(item) {
+                    return oiUtils.getValue(valueName, item, scope, disableWhenFn);
                 }
 
                 function getGroupName(option) {
@@ -418,7 +427,10 @@ angular.module('oi.multiselect')
                             collectionKeys.push(key);
                         }
                     }
-                    collectionKeys.sort();
+
+                    if (angular.version.major <= 1 && angular.version.minor <= 3) {
+                        collectionKeys.sort(); //TODO: Think of a way which does not depend on the order in which Angular displays objects by ngRepeat
+                    }
 
                     for (i = 0; i < collectionKeys.length; i++) {
                         key = collectionKeys[i];

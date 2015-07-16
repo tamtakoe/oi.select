@@ -1,15 +1,15 @@
-angular.module('oi.multiselect')
+angular.module('oi.select')
 
-.provider('oiMultiselect', function() {
+.provider('oiSelect', function() {
     return {
         options: {
-            debounce: 500,
-            searchFilter: 'oiMultiselectCloseIcon',
-            dropdownFilter: 'oiMultiselectHighlight',
-            listFilter: 'oiMultiselectAscSort',
-            saveLastQuery: null,
-            newItem: false,
-            saveTrigger: 'enter, backslash'
+            debounce:       500,
+            searchFilter:   'oiSelectCloseIcon',
+            dropdownFilter: 'oiSelectHighlight',
+            listFilter:     'oiSelectAscSort',
+            saveLastQuery:  null,
+            newItem:        false,
+            saveTrigger:    'enter, backslash'
         },
         $get: function() {
             return {

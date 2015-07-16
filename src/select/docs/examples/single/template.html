@@ -2,17 +2,17 @@
     <h2>Single</h2>
     <div class="row">
         <div class="col-md-8">
-            <oi-multiselect
-                ng-options="item for (key, item) in shopObjShort"
+            <oi-select
+                oi-options="item for (key, item) in shopObjShort"
                 ng-model="bundle"
                 placeholder="Select"
-                ></oi-multiselect>
+                ></oi-select>
         </div>
     </div>
 
 <div class="row">
 <div hljs class="col-md-8">
-ng-options="item for (key, item) in shopObjShort"
+oi-options="item for (key, item) in shopObjShort"
 ng-model="bundle"
 </div>
 <pre class="col-md-4">

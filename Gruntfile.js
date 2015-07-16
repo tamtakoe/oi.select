@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             },
             compile: {
                 files: {
-                    '<%= distPath %>/multiselect.css': ['<%= publicPath %>/template/**/*.styl']
+                    '<%= distPath %>/select.css': ['<%= publicPath %>/template/**/*.styl']
                 }
             }
         },
@@ -50,30 +50,30 @@ module.exports = function(grunt) {
         html2js: {
             dist: {
                 options: {
-                    module: 'oi.multiselect',
+                    module: 'oi.select',
                     base: '.'
                 },
                 files: [{
-                    src: ['<%= tplsPath %>/multiselect/template.html'],
-                    dest: '<%= distPath %>/multiselect-tpls.js'
+                    src: ['<%= tplsPath %>/select/template.html'],
+                    dest: '<%= distPath %>/select-tpls.js'
                 }]
             }
         },
 
         concat: {
-            multiselect: {
+            select: {
                 src:  [ '<%= srcPath %>/select/module.js',
                     '<%= srcPath %>/select/services.js',
                     '<%= srcPath %>/select/directives.js',
                     '<%= srcPath %>/select/filters.js'],
-                dest: '<%= distPath %>/multiselect.js'
+                dest: '<%= distPath %>/select.js'
             },
-            multiselectTpls: {
-                src:  [ '<%= distPath %>/multiselect-tpls.js',
+            selectTpls: {
+                src:  [ '<%= distPath %>/select-tpls.js',
                     '<%= srcPath %>/select/services.js',
                     '<%= srcPath %>/select/directives.js',
                     '<%= srcPath %>/select/filters.js'],
-                dest: '<%= distPath %>/multiselect-tpls.js'
+                dest: '<%= distPath %>/select-tpls.js'
             }
         },
 
@@ -81,17 +81,17 @@ module.exports = function(grunt) {
             options: {
                 keepSpecialComments: 0
             },
-            multiselect: {
-                src: '<%= distPath %>/multiselect.css',
-                dest: '<%= distPath %>/multiselect.min.css'
+            select: {
+                src: '<%= distPath %>/select.css',
+                dest: '<%= distPath %>/select.min.css'
             }
         },
 
         uglify: {
-            multiselect: {
+            select: {
                 files: {
-                    '<%= distPath %>/multiselect.min.js': '<%= distPath %>/multiselect.js',
-                    '<%= distPath %>/multiselect-tpls.min.js': '<%= distPath %>/multiselect-tpls.js'
+                    '<%= distPath %>/select.min.js': '<%= distPath %>/select.js',
+                    '<%= distPath %>/select-tpls.min.js': '<%= distPath %>/select-tpls.js'
                 }
             }
         },
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true
                 },
-                files:   ['<%= distPath %>/multiselect.css']
+                files:   ['<%= distPath %>/select.css']
             }
         }
     });

@@ -1,7 +1,8 @@
 {
     "1": {
         "name": "sneakers",
-        "category": "shoes"
+        "category": "shoes",
+        "disabled": true
     },
     "2": {
         "name": "shoes",
@@ -13,11 +14,13 @@
     },
     "4": {
         "name": "boots",
-        "category": "shoes"
+        "category": "shoes",
+        "disabled": true
     },
     "5": {
         "name": "shirt",
-        "category": "clothes"
+        "category": "clothes",
+        "disabled": true
     },
     "6": {
         "name": "jacket",

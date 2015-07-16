@@ -1,14 +1,14 @@
-angular.module('oi.multiselect')
+angular.module('oi.select')
 
-.filter('oiMultiselectCloseIcon', ['$sce', function($sce) {
+.filter('oiSelectCloseIcon', ['$sce', function($sce) {
     return function(label) {
-        var closeIcon = '<span class="close multiselect-search-list-item_selection-remove">×</span>';
+        var closeIcon = '<span class="close select-search-list-item_selection-remove">×</span>';
 
         return $sce.trustAsHtml(label + closeIcon);
     };
 }])
 
-.filter('oiMultiselectHighlight', ['$sce', function($sce) {
+.filter('oiSelectHighlight', ['$sce', function($sce) {
     return function(label, query) {
 
         var html;
@@ -24,7 +24,7 @@ angular.module('oi.multiselect')
     };
 }])
 
-.filter('oiMultiselectAscSort', function() {
+.filter('oiSelectAscSort', function() {
     function ascSort(input, query, getLabel) {
         var i, output, output1 = [], output2 = [], output3 = [];
 

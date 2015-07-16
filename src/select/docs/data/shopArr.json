@@ -2,7 +2,8 @@
     {
         "id": 1,
         "name": "sneakers",
-        "category": "shoes"
+        "category": "shoes",
+        "disabled": true
     },{
         "id": 2,
         "name": "shoes",
@@ -14,11 +15,13 @@
     },{
         "id": 4,
         "name": "boots",
-        "category": "shoes"
+        "category": "shoes",
+        "disabled": true
     },{
         "id": 5,
         "name": "shirt",
-        "category": "clothes"
+        "category": "clothes",
+        "disabled": true
     },{
         "id": 6,
         "name": "jacket",
