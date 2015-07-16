@@ -2,6 +2,7 @@
 
 ## Features
 
+* multiselect
 * API compatible with [Angular select](http://docs.angularjs.org/api/ng/directive/select)
 * Angular 1.2+ without jQuery and other dependencies
 * search options by substring (including the search query to the server)
@@ -10,7 +11,7 @@
 
 ## Demo
 
-Do you want to see module in action? Visit http://tamtakoe.github.io/oi.multiselect/!
+Do you want to see module in action? Visit http://tamtakoe.github.io/oi.select/!
 
 ## Installation
 
@@ -18,7 +19,7 @@ You can download files through Bower:
 
 ```
 npm install -g bower
-bower install oi.multiselect
+bower install oi.select
 ```
 
 or use local:
