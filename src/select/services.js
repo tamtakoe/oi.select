@@ -246,11 +246,11 @@ angular.module('oi.select')
         return true;
     }
 
-    //lodash _.intersection + filter + callback + invert
-    function intersection(xArr, yArr, callback, xFilter, yFilter, invert) {
+    //lodash _.intersection + filter + isEqual + invert
+    function intersection(xArr, yArr, isEqual, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
 
-        callback = callback || function(xValue, yValue) {
+        isEqual = isEqual || function(xValue, yValue) {
             return xValue === yValue;
         };
 
@@ -260,7 +260,7 @@ angular.module('oi.select')
             for (j = 0; j < yArr.length; j++) {
                 filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
 
-                if (callback(filteredX, filteredY, xArr, yArr, i, j)) {
+                if (isEqual(filteredX, filteredY, xArr, yArr, i, j)) {
                     invert ? out.splice(i + out.length - n, 1) : out.push(xArr[i]);
                     break;
                 }
