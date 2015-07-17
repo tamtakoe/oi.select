@@ -3,7 +3,7 @@
 
 ## Features
 
-- **oi-select:** rename oi-select to oi-select
+- **oi-select:** rename oi-multiselect to oi-select
 - **oi-options:** rename `ng-options` to `oi-options` (compatible with angular 1.4.x)
 - **disable when:** provide disabled expression for option
 - **build** Grunt replaced on Gulp
