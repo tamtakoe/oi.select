@@ -14,6 +14,10 @@ var autoprefixer  = require('autoprefixer-stylus')({
     browsers: ["ff >= 20", "chrome >= 35", "safari >= 7", "ios >= 7", "android >= 4", "opera >= 12.1", "ie >= 10"]
 });
 
+//var runSequence     = require('run-sequence');
+var through = require('through2');
+
+
 var paths = {
     root:     __dirname,
     src:      path.join(__dirname, '/src'),
@@ -83,3 +87,21 @@ gulp.task('watch', function() {
 
 gulp.task('build', ['clean', 'compileScripts', 'compileStyles']);
 gulp.task('default', ['webserver', 'watch']);
+
+
+
+var karma = require('karma').server;
+
+gulp.task('karma:unit', function(done) {
+
+    karma.start({
+        configFile: path.join(__dirname, 'test/karma.conf.js'),
+        browsers: ['PhantomJS'],
+        //reporters: ['dots'],
+        singleRun: true
+    }, function(code) {
+        console.log('Karma has exited with ' + code);
+        process.exit(code);
+        dove();
+    });
+});
