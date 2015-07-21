@@ -682,7 +682,6 @@ angular.module('oi.select')
                         }
 
                         saveOn('blur');
-
                         scope.isFocused = false;
                         scope.$evalAsync();
                     }
@@ -690,7 +689,6 @@ angular.module('oi.select')
 
                 function adjustInput() {
                     var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length && multiple ? '' : placeholder;
-
                     inputElement.attr('placeholder', currentPlaceholder);
                     // expand input box width based on content
                     scope.inputWidth = oiUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;
