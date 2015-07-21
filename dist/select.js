@@ -378,7 +378,7 @@ angular.module('oi.select')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
-                                return oiUtils.intersection(collection, output, oiUtils.isEqual, selectAs);
+                                return oiUtils.intersection(output, collection, oiUtils.isEqual, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }

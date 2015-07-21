@@ -10,6 +10,7 @@
 
 - **items:** use `trackBy` for labels if items are identified by IDs rather than by name
 - **oi-options:** use correct scope for getters
+- **select as** the order of chosen elements now equal the order of elements in the model
 
 ## Breaking Changes
 
