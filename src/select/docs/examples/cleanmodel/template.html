@@ -1,0 +1,31 @@
+<div ng-controller="selectCleanmodelController">
+    <h2>Clean model [depricated]</h2>
+    <p>Angular select doesn't clean the model on blur. Use external function for cleaning the model. F.e.: <code>ng-click="bundle = undefined"</code></p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle"
+                    oi-select-options="{
+                        cleanModel: true
+                    }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-default" ng-click="bundle = undefined">clean</button>
+        </div>
+    </div>
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr"
+ng-model="bundle"
+oi-select-options="{
+    cleanModel: true
+}"
+</div>
+<pre class="col-md-4">
+{{bundle}}
+</pre>
+</div>
+</div>

@@ -1,5 +1,5 @@
 angular.module('selectDemo')
-    .controller('selectAutoselectController', function ($scope, ShopObj) {
+    .controller('selectAutocompleteController', function ($scope, ShopObj) {
 
         $scope.shopObj = ShopObj.get();
 

@@ -12,15 +12,6 @@ oi-select .select-search {
        box-sizing: border-box;
   border-radius: 4px;
 }
-oi-select .select-search.focused {
-  border-color: #66afe9;
-  outline: 0;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
-}
-oi-select .select-search.open {
-  border-radius: 4px 4px 0 0;
-  border-bottom: 1px solid rgba(0,0,0,0.075);
-}
 oi-select .select-search-list {
   list-style: none;
   margin: 0;
@@ -76,7 +67,7 @@ oi-select .select-dropdown {
   background-color: #fff;
   border-radius: 0 0 4px 4px;
   border: 1px solid #66afe9;
-  border-top: 0px solid rgba(0,0,0,0.075);
+  border-top: 0px;
   outline: 0;
   box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
   background-clip: padding-box;
@@ -100,9 +91,6 @@ oi-select .select-dropdown-optgroup-option.active:not(.disabled) {
 oi-select .select-dropdown-optgroup-option.disabled {
   color: #aaa;
 }
-oi-select:not([multiple]) .select-search-list-item_input:nth-child(2) {
-  display: none;
-}
 oi-select:not([multiple]) .select-search-list-item_selection {
   color: #000;
   width: 100%;
@@ -115,9 +103,6 @@ oi-select:not([multiple]) .select-search-list-item_selection-remove {
 oi-select:not([multiple]) .select-search-list-item_selection:not(:active) {
   background: none;
 }
-oi-select:not([multiple]) .select-search.loading:after {
-  border-width: 0;
-}
 oi-select:not([multiple]) .select-search:after {
   content: "";
   position: absolute;
@@ -129,10 +114,6 @@ oi-select:not([multiple]) .select-search:after {
   border-color: #000 transparent transparent transparent;
   border-style: solid;
   border-width: 5px 5px 0 5px;
-}
-oi-select:not([multiple]) .select-search.open:after {
-  border-color: transparent transparent #000 transparent;
-  border-width: 0 5px 5px 5px;
 }
 oi-select[disabled="disabled"] .select-search {
   cursor: not-allowed;
@@ -150,4 +131,20 @@ oi-select[disabled="disabled"] .select-search-list-item_selection-remove {
 }
 oi-select[disabled="disabled"] .select-search-list-item_input input:disabled {
   background: none;
+}
+oi-select.focused .select-search {
+  border-color: #66afe9;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
+}
+oi-select.open .select-search {
+  border-radius: 4px 4px 0 0;
+  border-bottom: 1px solid rgba(0,0,0,0.075);
+}
+oi-select.open:not([multiple]) .select-search:after {
+  border-color: transparent transparent #000 transparent;
+  border-width: 0 5px 5px 5px;
+}
+oi-select.loading:not([multiple]) .select-search:after {
+  border-width: 0;
 }

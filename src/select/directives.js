@@ -1,6 +1,6 @@
 angular.module('oi.select')
 
-.directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, oiUtils, oiSelect) {
+.directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', '$animate', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, $animate, oiUtils, oiSelect) {
     var NG_OPTIONS_REGEXP = /^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?(?:\s+disable\s+when\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?$/;
     var VALUES_REGEXP     = /([^\(\)\s\|\s]*)\s*(\(.*\))?\s*(\|?\s*.+)?/;
 
@@ -72,6 +72,9 @@ angular.module('oi.select')
                     inputElement.prop('disabled', value);
                 });
 
+                scope.showListItem = true;
+                scope.showInput = true;
+
                 scope.$parent.$watch(attrs.ngModel, function(value) {
                     adjustInput();
 
@@ -93,6 +96,11 @@ angular.module('oi.select')
                             scope.removeItem(collection.length); //if newItem was not created
                         }
                     });
+
+                    if (!multiple) {
+                        scope.showListItem = !!value;
+                        scope.showInput = !value;
+                    }
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
@@ -127,12 +135,32 @@ angular.module('oi.select')
                 scope.$watch('isFocused', function(isFocused) {
                     if (isFocused) {
                         element.triggerHandler('focus');
-                        $document.on('click', blurHandler);
                     }
+
+                    $animate[isFocused ? 'addClass' : 'removeClass'](element, 'focused', {
+                        tempClasses: 'focused-animate'
+                    });
+                });
+
+                scope.$watch('isOpen', function(isOpen) {
+                    $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open', {
+                        tempClasses: 'open-animate'
+                    });
+                });
+
+                scope.$watch('showLoader', function(isLoading) {
+                    $animate[isLoading ? 'addClass' : 'removeClass'](element, 'loading', {
+                        tempClasses: 'loading-animate'
+                    });
                 });
 
                 scope.setFocus = function(event) {
                     if (attrs.disabled) return;
+
+                    if (!multiple) {
+                        scope.showListItem = false;
+                        scope.showInput = true;
+                    }
 
                     scope.backspaceFocus = false;
 
@@ -198,9 +226,9 @@ angular.module('oi.select')
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
-                    } else if (!angular.isDefined(attrs.notempty)) {
-                        removedValue = ctrl.$modelValue;
-                        ctrl.$setViewValue(undefined);
+                    } else {
+                        scope.showListItem = false;
+                        scope.showInput = true;
                     }
 
                     scope.query = lastQueryFn(removedValue, lastQuery);
@@ -219,6 +247,12 @@ angular.module('oi.select')
                         keyUpDownWerePressed = false;
                     }
                 };
+
+                $document.on('click', blurHandler);
+
+                scope.$on('destroy', function() {
+                    $document.off('click', blurHandler);
+                });
 
                 function saveOn(triggerName) {
                     var isTriggered    = (new RegExp(triggerName)).test(options.saveTrigger),
@@ -283,6 +317,10 @@ angular.module('oi.select')
                             break;
 
                         case 27: /* esc */
+                            if (!multiple) {
+                                scope.showListItem = !!ctrl.$modelValue;
+                                scope.showInput = !ctrl.$modelValue;
+                            }
                             resetMatches();
                             break;
 
@@ -339,15 +377,24 @@ angular.module('oi.select')
                         $timeout(function() {
                             element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
                         });
+
+                        if (!multiple && options.cleanModel && scope.isOpen) {
+                            ctrl.$setViewValue(undefined); //deprecated
+                        }
+
+                        if (!multiple) {
+                            scope.showListItem = !!ctrl.$modelValue;
+                            scope.showInput = !ctrl.$modelValue;
+                        }
+
                         saveOn('blur');
-                        $document.off('click', blurHandler);
                         scope.isFocused = false;
                         scope.$evalAsync();
                     }
                 }
 
                 function adjustInput() {
-                    var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length ? '' : placeholder;
+                    var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length && multiple ? '' : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                     // expand input box width based on content
                     scope.inputWidth = oiUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;

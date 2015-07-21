@@ -1,3 +1,21 @@
+<a name="0.2.1"></a>
+# 0.2.1
+
+## Features
+
+- **oi-select-options:**
+    - cleanModel [depricated] clean model on blur (old behaviour)
+
+## Bug Fixes
+
+- **items:** use `trackBy` for labels if items are identified by IDs rather than by name
+- **oi-options:** use correct scope for getters
+
+## Breaking Changes
+
+- **notempty** remove `notempty` (this behavior is the default now)
+- **classes** move `open`, `focused` and `loading` classes to `oi-multiselect` element
+
 <a name="0.2.0"></a>
 # 0.2.0
 

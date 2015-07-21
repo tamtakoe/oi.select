@@ -1,9 +1,10 @@
 <div ng-controller="selectFilteredController">
     <h2>Filtered</h2>
+    <p>Filter dropdown list</p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                oi-options="item for item in shopArrShort | limitTo: 3"
+                oi-options="item for item in shopArrShort | limitTo: 3 | orderBy"
                 ng-model="bundle"
                 multiple
                 placeholder="Select"
@@ -13,7 +14,7 @@
 
 <div class="row">
 <div hljs class="col-md-8">
-oi-options="item for item in shopArrShort | limitTo: 3"
+oi-options="item for item in shopArrShort | limitTo: 3 | orderBy"
 ng-model="bundle"
 multiple
 </div>

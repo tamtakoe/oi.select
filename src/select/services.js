@@ -205,9 +205,9 @@ angular.module('oi.select')
         dstElement.css('width', getWidthOrHeight(srcElement[0], 'width', 'margin') + 'px');
     }
 
-    function groupsIsEmpty(groups) {
+    function groupsIsEmpty(groups, excludedItem) {
         for (var k in groups) {
-            if (groups.hasOwnProperty(k) && groups[k].length) {
+            if (groups.hasOwnProperty(k) && (groups[k].length > 1 || groups[k].length === 1 && groups[k][0] !== excludedItem)) {
                 return false;
             }
         }
