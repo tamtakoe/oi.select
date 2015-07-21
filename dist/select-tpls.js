@@ -521,6 +521,7 @@ angular.module('oi.select')
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                     } else {
+                        removedValue = ctrl.$modelValue;
                         scope.showListItem = false;
                         scope.showInput = true;
                     }
