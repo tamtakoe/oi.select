@@ -205,9 +205,9 @@ angular.module('oi.select')
         dstElement.css('width', getWidthOrHeight(srcElement[0], 'width', 'margin') + 'px');
     }
 
-    function groupsIsEmpty(groups, excludedItem) {
+    function groupsIsEmpty(groups) {
         for (var k in groups) {
-            if (groups.hasOwnProperty(k) && (groups[k].length > 1 || groups[k].length === 1 && groups[k][0] !== excludedItem)) {
+            if (groups.hasOwnProperty(k) && groups[k].length) {
                 return false;
             }
         }
@@ -261,7 +261,7 @@ angular.module('oi.select')
                 filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
 
                 if (isEqual(filteredX, filteredY, xArr, yArr, i, j)) {
-                    invert ? out.splice(i + out.length - n, 1) : out.push(xArr[i]);
+                    invert ? out.splice(i + out.length - n, 1) : out.push(yArr[j]);
                     break;
                 }
             }
