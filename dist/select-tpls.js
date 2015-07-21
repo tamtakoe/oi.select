@@ -697,23 +697,23 @@ angular.module('oi.select')
                 }
 
                 function trackBy(item) {
-                    return oiUtils.getValue(valueName, item, scope, trackByFn);
+                    return oiUtils.getValue(valueName, item, scope.$parent, trackByFn);
                 }
 
                 function selectAs(item) {
-                    return oiUtils.getValue(valueName, item, scope, selectAsFn);
+                    return oiUtils.getValue(valueName, item, scope.$parent, selectAsFn);
                 }
 
                 function getLabel(item) {
-                    return oiUtils.getValue(valueName, item, scope, displayFn);
+                    return oiUtils.getValue(valueName, item, scope.$parent, displayFn);
                 }
 
                 function getDisableWhen(item) {
-                    return oiUtils.getValue(valueName, item, scope, disableWhenFn);
+                    return oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
                 }
 
                 function getGroupName(option) {
-                    return oiUtils.getValue(valueName, option, scope, groupByFn) || '';
+                    return oiUtils.getValue(valueName, option, scope.$parent, groupByFn) || '';
                 }
 
                 function filter(list) {
