@@ -15,7 +15,9 @@
 ## Breaking Changes
 
 - **notempty** remove `notempty` (this behavior is the default now)
-- **classes** move `open`, `focused` and `loading` classes to `oi-multiselect` element
+- **classes** move `open`, `focused` and `loading` classes to `oi-select` element
+- **oi-select-options:**
+    - autocomplete (rename `autoselect` to `autocomplete`)
 
 <a name="0.2.0"></a>
 # 0.2.0
