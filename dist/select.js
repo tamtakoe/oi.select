@@ -520,7 +520,9 @@ angular.module('oi.select')
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
-                    } else {
+                    }
+
+                    if (!multiple) {
                         removedValue = ctrl.$modelValue;
                         scope.showListItem = false;
                         scope.showInput = true;

@@ -1,3 +1,10 @@
+<a name="0.2.2"></a>
+# 0.2.2
+
+## Bug Fixes
+
+- **multiple:** fixed deletion of all items from the list
+
 <a name="0.2.1"></a>
 # 0.2.1
 
