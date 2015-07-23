@@ -41,10 +41,7 @@ open "http://localhost:3000"
 make build:
 
 ```
-npm install
-npm install -g bower
-npm install -g gulp
-bower install
+gulp build
 ```
 
 
