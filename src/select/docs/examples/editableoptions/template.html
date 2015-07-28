@@ -1,0 +1,39 @@
+<div ng-controller="selectEditableoptionsController">
+    <h2>Editable options</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item.name for item in shopArr track by item.id"
+                ng-model="bundle"
+
+                oi-select-options="{
+                    saveLastQuery: 'mySaveLastQuery'
+                }"
+                placeholder="Select"
+                ></oi-select>
+        </div>
+    </div>
+<div class="row">
+
+<div class="col-md-8">
+<div hljs>
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle"
+multiple
+oi-select-options="{
+    saveLastQuery: 'mySaveLastQuery'
+}"
+</div>
+<div hljs>
+.factory('mySaveLastQuery', function() {
+    return function(removedValue, lastQuery) {
+        return removedValue.name;
+    };
+})
+</div>
+</div>
+<pre class="col-md-4">
+{{bundle}}
+</pre>
+</div>
+</div>

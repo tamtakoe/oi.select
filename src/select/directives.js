@@ -158,6 +158,9 @@ angular.module('oi.select')
                     if (attrs.disabled) return;
 
                     if (!multiple) {
+                        //var placeholder = getLabel(ctrl.$modelValue);
+                        //inputElement.attr('placeholder', placeholder);
+                        //scope.inputWidth = oiUtils.measureString(placeholder, inputElement) + 4;
                         scope.showListItem = false;
                         scope.showInput = true;
                     }
@@ -187,7 +190,7 @@ angular.module('oi.select')
                     lastQuery = scope.query;
 
                     //duplicate
-                    if (oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
+                    if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
                     if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
@@ -207,6 +210,11 @@ angular.module('oi.select')
 
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
+                    }
+
+                    if (!multiple) {
+                        scope.showListItem = !!ctrl.$modelValue;
+                        scope.showInput = !ctrl.$modelValue;
                     }
 
                     scope.oldQuery = scope.oldQuery || scope.query;
@@ -427,7 +435,7 @@ angular.module('oi.select')
                     return oiUtils.getValue(valuesName, list, scope.$parent, filteredValuesFn);
                 }
 
-                function getMatches(query, querySelectAs) {
+                function getMatches(query, querySelectAs, exceptionItem) {
                     var values = valuesFn(scope.$parent, {$query: query, $querySelectAs: querySelectAs}),
                         waitTime = 0;
 
@@ -448,8 +456,18 @@ angular.module('oi.select')
                         return $q.when(values.$promise || values)
                             .then(function(values) {
                                 if (!querySelectAs) {
+                                    //var outputValues = [];
+                                    //scope.output.forEach(function(item) {
+                                    //    if (item !== exceptionItem) {
+                                    //        outputValues.push(item)
+                                    //    }
+                                    //});
+
+                                    var outputValues = multiple ? scope.output : [];
+
+                                    //console.log(scope.output);
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
-                                    var withoutOverlap = oiUtils.intersection(filteredList, scope.output, oiUtils.isEqual, trackBy, trackBy, true);
+                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, oiUtils.isEqual, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 
                                     scope.groups = group(filteredOutput);

@@ -46,6 +46,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs'])
             {urlName: 'autocomplete',    name: 'Autocomplete'},
             {urlName: 'prompt',          name: 'Prompt'},
             {urlName: 'selectas',        name: 'Select as'},
+            {urlName: 'editableoptions', name: 'Editable options'},
             {urlName: 'customization',   name: 'Customization'},
             {urlName: 'validation',      name: 'Validation'},
             {urlName: 'all',             name: 'All'}
