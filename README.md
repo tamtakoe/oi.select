@@ -84,8 +84,8 @@ Use `oi-select` directive:
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
   * `listFilter` — filter name for items order in dropdown
-  * `saveLastQuery` — function which get `lastQuery` and `removedValue` and return string for input after element was removed (default: '')
-  * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `backslash`, `blur` (default: `enter`, `backslash`)
+  * `saveLastQuery` — function which get `lastQuery`, `removedItem` and `getLabel(item)` and return string for input after element was removed (default: ''). If `saveLastQuery = true` it will return removed value
+  * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `blur` (default: `enter`)
   * `cleanModel` [deprecated] — Clean model on blur for single select.
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.

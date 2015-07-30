@@ -38,6 +38,9 @@ oi-select .select-search-list-item_selection.focused {
   border-radius: 0;
   box-shadow: inset 0 0 10px 5px #fff;
 }
+oi-select .select-search-list-item_selection.focused .close {
+  display: none;
+}
 oi-select .select-search-list-item_selection-remove {
   float: right;
   padding-left: 4px;

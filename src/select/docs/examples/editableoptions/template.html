@@ -1,0 +1,31 @@
+<div ng-controller="selectEditableoptionsController">
+    <h2>Editable options</h2>
+    <p>It allows you to edit the value of the deleted item. You can to use custom service for tweaking <code>saveLastQuery: 'myFactory'</code></p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item.name for item in shopArr track by item.id"
+                ng-model="bundle"
+                oi-select-options="{
+                    saveLastQuery: true,
+                }"
+                placeholder="Select"
+                ></oi-select>
+        </div>
+    </div>
+<div class="row">
+
+<div class="col-md-8">
+<div hljs>
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle"
+oi-select-options="{
+    saveLastQuery: true
+}"
+</div>
+</div>
+<pre class="col-md-4">
+{{bundle}}
+</pre>
+</div>
+</div>
