@@ -14,7 +14,8 @@ angular.module('oi.select')
         var html;
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
-            query = query.toString();
+            query = query.toString().replace(/\\/g, '\\\\');
+
             html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
             html = label;
@@ -29,6 +30,8 @@ angular.module('oi.select')
         var i, output, output1 = [], output2 = [], output3 = [];
 
         if (query) {
+            query = query.toString().replace(/\\/g, '\\\\');
+
             for (i = 0; i < input.length; i++) {
                 if (getLabel(input[i]).match(new RegExp(query, "i"))) {
                     output1.push(input[i]);

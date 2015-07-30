@@ -1,3 +1,19 @@
+<a name="0.2.3"></a>
+# 0.2.3
+
+## Features
+
+- **oi-select-options:**
+    - saveLastQuery (default function for `true` value. Add example)
+    - newItem = "prompt" (`cleanEmpty = true` by default)
+    - newItem = "autocomplete" (`cleanEmpty = false` by default)
+
+## Bug Fixes
+
+- **dropdown:** stay item in the list if you use `saveLastQuery` in single mode
+- **search:** fix cyclic recovering of query while removing
+- **input:** correct work with backslash
+
 <a name="0.2.2"></a>
 # 0.2.2
 

@@ -48,11 +48,13 @@ angular.module('oi.select')
                 lastQuery;
 
             return function(scope, element, attrs, ctrl) {
-                var inputElement = element.find('input'),
-                    listElement  = angular.element(element[0].querySelector('.select-dropdown')),
-                    placeholder  = placeholderFn(scope),
-                    options      = angular.extend({}, oiSelect.options, optionsFn(scope.$parent)),
-                    lastQueryFn  = options.saveLastQuery ? $injector.get(options.saveLastQuery) : function() {return ''};
+                var inputElement   = element.find('input'),
+                    listElement    = angular.element(element[0].querySelector('.select-dropdown')),
+                    placeholder    = placeholderFn(scope),
+                    elementOptions = optionsFn(scope.$parent) || {},
+                    options        = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
+                    saveLastQuery  = options.saveLastQuery === true ? 'oiSelectSaveLastQuery' : options.saveLastQuery,
+                    lastQueryFn    = saveLastQuery ? $injector.get(saveLastQuery) : function() {return ''};
 
                 options.newItemModelFn = function (query) {
                     return (optionsFn({$query: query}) || {}).newItemModel || query;
@@ -72,14 +74,15 @@ angular.module('oi.select')
                     inputElement.prop('disabled', value);
                 });
 
-                scope.showListItem = true;
-                scope.showInput = true;
-
                 scope.$parent.$watch(attrs.ngModel, function(value) {
-                    adjustInput();
-
                     var output = value instanceof Array ? value : value ? [value]: [],
                         promise = $q.when(output);
+
+                    adjustInput();
+
+                    if (!multiple) {
+                        restoreInput();
+                    }
 
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
@@ -96,11 +99,6 @@ angular.module('oi.select')
                             scope.removeItem(collection.length); //if newItem was not created
                         }
                     });
-
-                    if (!multiple) {
-                        scope.showListItem = !!value;
-                        scope.showInput = !value;
-                    }
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
@@ -113,7 +111,7 @@ angular.module('oi.select')
                         if (inputValue) {
                             getMatches(inputValue);
                             scope.oldQuery = null;
-                        } else {
+                        } else if (multiple) {
                             resetMatches();
                             matchesWereReset = true;
                         }
@@ -158,11 +156,7 @@ angular.module('oi.select')
                     if (attrs.disabled) return;
 
                     if (!multiple) {
-                        //var placeholder = getLabel(ctrl.$modelValue);
-                        //inputElement.attr('placeholder', placeholder);
-                        //scope.inputWidth = oiUtils.measureString(placeholder, inputElement) + 4;
-                        scope.showListItem = false;
-                        scope.showInput = true;
+                        cleanInput();
                     }
 
                     scope.backspaceFocus = false;
@@ -206,15 +200,11 @@ angular.module('oi.select')
                     } else {
                         ctrl.$setViewValue(modelOption);
                         resetMatches();
+                        restoreInput();
                     }
 
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
-                    }
-
-                    if (!multiple) {
-                        scope.showListItem = !!ctrl.$modelValue;
-                        scope.showInput = !ctrl.$modelValue;
                     }
 
                     scope.oldQuery = scope.oldQuery || scope.query;
@@ -225,24 +215,24 @@ angular.module('oi.select')
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    var removedValue;
+                    var removedItem;
 
                     if (attrs.disabled) return;
 
                     if (multiple && position >= 0) {
-                        removedValue = ctrl.$modelValue[position];
+                        removedItem = ctrl.$modelValue[position];
                         ctrl.$modelValue.splice(position, 1);
                         ctrl.$setViewValue([].concat(ctrl.$modelValue));
-
                     }
 
                     if (!multiple) {
-                        removedValue = ctrl.$modelValue;
-                        scope.showListItem = false;
-                        scope.showInput = true;
+                        removedItem = ctrl.$modelValue;
+                        cleanInput();
                     }
 
-                    scope.query = lastQueryFn(removedValue, lastQuery);
+                    if (multiple || !scope.backspaceFocus) {
+                        scope.query = lastQueryFn(removedItem, lastQuery, getLabel);
+                    }
 
                     if (scope.isOpen || scope.oldQuery || !multiple) {
                         getMatches(scope.oldQuery); //stay old list
@@ -279,7 +269,11 @@ angular.module('oi.select')
                     }
 
                     itemPromise
-                        .then(scope.addItem)
+                        .then(function(data) {
+                             if (triggerName !== 'blur' || scope.query || !options.newItem) {
+                                scope.addItem(data)
+                            }
+                        })
                         .finally(function() {
                             var bottom = scope.order.length - 1;
 
@@ -322,21 +316,19 @@ angular.module('oi.select')
                         case 9: /* tab */
                             blurHandler();
                             break;
-                        case 220: /* backslash */
-                            saveOn('backslash');
-                            event.preventDefault(); //backslash interpreted as a regexp
-                            break;
 
                         case 27: /* esc */
                             if (!multiple) {
-                                scope.showListItem = !!ctrl.$modelValue;
-                                scope.showInput = !ctrl.$modelValue;
+                                restoreInput();
                             }
                             resetMatches();
                             break;
 
                         case 8: /* backspace */
                             if (!scope.query.length) {
+                                if (!multiple) {
+                                    scope.backspaceFocus = true;
+                                }
                                 if (scope.backspaceFocus && scope.output) {
                                     scope.removeItem(scope.output.length - 1);
                                     if (!scope.output.length) {
@@ -383,6 +375,16 @@ angular.module('oi.select')
 
                 resetMatches();
 
+                function cleanInput() {
+                    scope.listItemHide = true;
+                    scope.inputHide = false;
+                }
+
+                function restoreInput() {
+                    scope.listItemHide = !ctrl.$modelValue;
+                    scope.inputHide = !!ctrl.$modelValue;
+                }
+
                 function blurHandler(event) {
                     if (!event || event.target.ownerDocument.activeElement !== inputElement[0]) {
                         $timeout(function() {
@@ -394,8 +396,7 @@ angular.module('oi.select')
                         }
 
                         if (!multiple) {
-                            scope.showListItem = !!ctrl.$modelValue;
-                            scope.showInput = !ctrl.$modelValue;
+                            restoreInput();
                         }
 
                         saveOn('blur');
@@ -456,16 +457,7 @@ angular.module('oi.select')
                         return $q.when(values.$promise || values)
                             .then(function(values) {
                                 if (!querySelectAs) {
-                                    //var outputValues = [];
-                                    //scope.output.forEach(function(item) {
-                                    //    if (item !== exceptionItem) {
-                                    //        outputValues.push(item)
-                                    //    }
-                                    //});
-
                                     var outputValues = multiple ? scope.output : [];
-
-                                    //console.log(scope.output);
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
                                     var withoutOverlap = oiUtils.intersection(filteredList, outputValues, oiUtils.isEqual, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);

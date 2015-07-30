@@ -7,15 +7,21 @@ angular.module('oi.select')
             searchFilter:   'oiSelectCloseIcon',
             dropdownFilter: 'oiSelectHighlight',
             listFilter:     'oiSelectAscSort',
-            saveLastQuery:  null,
+            saveLastQuery:  false,
             newItem:        false,
-            saveTrigger:    'enter, backslash'
+            saveTrigger:    'enter'
         },
         $get: function() {
             return {
                 options: this.options
             };
         }
+    };
+})
+
+.factory('oiSelectSaveLastQuery', function() {
+    return function(removedItem, lastQuery, getLabel) {
+        return getLabel(removedItem);
     };
 })
 

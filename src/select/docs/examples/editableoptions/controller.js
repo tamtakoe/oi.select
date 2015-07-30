@@ -3,15 +3,6 @@ angular.module('selectDemo')
 
         $scope.shopArr = ShopArr.query();
 
-        //$scope.bundle = [{
-        //    "id": 9,
-        //    "name": "jeans",
-        //    "category": "clothes"
-        //},{
-        //    "id": 10,
-        //    "name": "cap"
-        //}];
-
         $scope.bundle = {
             "id": 9,
             "name": "jeans",
