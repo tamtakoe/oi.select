@@ -40,9 +40,10 @@ angular.module('oi.select')
             var multiple             = angular.isDefined(attrs.multiple),
                 multipleLimit        = Number(attrs.multipleLimit),
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
+                optionsFn            = $parse(attrs.oiSelectOptions),
                 keyUpDownWerePressed = false,
                 matchesWereReset     = false,
-                optionsFn            = $parse(attrs.oiSelectOptions);
+                cleanModel           = true;
 
             var timeoutPromise,
                 lastQuery;
@@ -189,7 +190,7 @@ angular.module('oi.select')
                     //limit is reached
                     if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
 
-                    var optionGroup = scope.groups[getGroupName(option)];
+                    var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
 
                     optionGroup.splice(optionGroup.indexOf(option), 1);
@@ -199,7 +200,6 @@ angular.module('oi.select')
                         updateGroupPos();
                     } else {
                         ctrl.$setViewValue(modelOption);
-                        resetMatches();
                         restoreInput();
                     }
 
@@ -207,6 +207,7 @@ angular.module('oi.select')
                         scope.groups = {}; //it is necessary for groups watcher
                     }
 
+                    cleanModel = false;
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
                     scope.backspaceFocus = false;
@@ -254,36 +255,6 @@ angular.module('oi.select')
                 scope.$on('destroy', function() {
                     $document.off('click', blurHandler);
                 });
-
-                function saveOn(triggerName) {
-                    var isTriggered    = (new RegExp(triggerName)).test(options.saveTrigger),
-                        isNewItem      = options.newItem && scope.query,
-                        isSelectedItem = angular.isNumber(scope.selectorPosition),
-                        selectedOrder  = scope.order[scope.selectorPosition],
-                        newItemFn      = options.newItemFn || options.newItemModelFn,
-                        itemPromise    = $q.reject();
-
-                    if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
-                        scope.showLoader = true;
-                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.query));
-                    }
-
-                    itemPromise
-                        .then(function(data) {
-                             if (triggerName !== 'blur' || scope.query || !options.newItem) {
-                                scope.addItem(data)
-                            }
-                        })
-                        .finally(function() {
-                            var bottom = scope.order.length - 1;
-
-                            if (scope.selectorPosition === bottom) {
-                                setOption(listElement, 0); //TODO optimise when list will be closed
-                            }
-                            options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
-                            resetMatches();
-                        });
-                }
 
                 scope.keyParser = function keyParser(event) {
                     var top    = 0,
@@ -386,23 +357,56 @@ angular.module('oi.select')
                 }
 
                 function blurHandler(event) {
-                    if (!event || event.target.ownerDocument.activeElement !== inputElement[0]) {
+                    if (scope.isFocused && (!event || event.target.ownerDocument.activeElement !== inputElement[0])) {
                         $timeout(function() {
                             element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
                         });
-
-                        if (!multiple && options.cleanModel && scope.isOpen) {
-                            ctrl.$setViewValue(undefined); //deprecated
-                        }
 
                         if (!multiple) {
                             restoreInput();
                         }
 
+                        if (!multiple && options.cleanModel && cleanModel) {
+                            ctrl.$setViewValue(undefined);
+                        }
+                        cleanModel = true;
+
                         saveOn('blur');
                         scope.isFocused = false;
                         scope.$evalAsync();
                     }
+                }
+
+                function saveOn(triggerName) {
+                    var isTriggered    = (new RegExp(triggerName)).test(options.saveTrigger),
+                        isNewItem      = options.newItem && scope.query,
+                        isSelectedItem = angular.isNumber(scope.selectorPosition),
+                        selectedOrder  = scope.order[scope.selectorPosition],
+                        newItemFn      = options.newItemFn || options.newItemModelFn,
+                        itemPromise    = $q.reject(),
+                        isItemSave     = triggerName !== 'blur' || scope.query || !options.newItem;
+
+                    if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
+                        scope.showLoader = true;
+                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.query));
+                    }
+
+                    itemPromise
+                        .then(function(data) {
+                            if (isItemSave) {
+                                scope.addItem(data);
+                                cleanModel = true;
+                            }
+                        })
+                        .finally(function() {
+                            var bottom = scope.order.length - 1;
+
+                            if (scope.selectorPosition === bottom) {
+                                setOption(listElement, 0); //TODO optimise when list will be closed
+                            }
+                            options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
+                            resetMatches();
+                        });
                 }
 
                 function adjustInput() {
