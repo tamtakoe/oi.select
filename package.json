@@ -1,6 +1,6 @@
 {
     "name":    "oi.select",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "devDependencies": {
         "gulp": "3.9.0",
         "gulp-watch": "4.2.4",

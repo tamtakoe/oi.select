@@ -1,3 +1,16 @@
+<a name="0.2.4"></a>
+# 0.2.4
+
+## Features
+
+- **oi-select-options:**
+    - editItem = "correct" (allows you to edit the value of the deleted item except the first time)
+
+## Breaking Changes
+
+- **oi-select-options:**
+    - saveLastQuery rename to editItem
+
 <a name="0.2.3"></a>
 # 0.2.3
 

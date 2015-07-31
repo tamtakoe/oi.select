@@ -8,7 +8,7 @@ angular.module('oi.select')
             searchFilter:   'oiSelectCloseIcon',
             dropdownFilter: 'oiSelectHighlight',
             listFilter:     'oiSelectAscSort',
-            saveLastQuery:  false,
+            editItem:       false,
             newItem:        false,
             saveTrigger:    'enter'
         },
@@ -20,7 +20,7 @@ angular.module('oi.select')
     };
 })
 
-.factory('oiSelectSaveLastQuery', function() {
+.factory('oiSelectEditItem', function() {
     return function(removedItem, lastQuery, getLabel) {
         return getLabel(removedItem);
     };
@@ -349,13 +349,14 @@ angular.module('oi.select')
                 lastQuery;
 
             return function(scope, element, attrs, ctrl) {
-                var inputElement   = element.find('input'),
-                    listElement    = angular.element(element[0].querySelector('.select-dropdown')),
-                    placeholder    = placeholderFn(scope),
-                    elementOptions = optionsFn(scope.$parent) || {},
-                    options        = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
-                    saveLastQuery  = options.saveLastQuery === true ? 'oiSelectSaveLastQuery' : options.saveLastQuery,
-                    lastQueryFn    = saveLastQuery ? $injector.get(saveLastQuery) : function() {return ''};
+                var inputElement    = element.find('input'),
+                    listElement     = angular.element(element[0].querySelector('.select-dropdown')),
+                    placeholder     = placeholderFn(scope),
+                    elementOptions  = optionsFn(scope.$parent) || {},
+                    options         = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
+                    editItem        = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
+                    editItemCorrect = options.editItem === 'correct',
+                    editItemFn      = editItem ? $injector.get(editItem) : function() {return ''};
 
                 options.newItemModelFn = function (query) {
                     return (optionsFn({$query: query}) || {}).newItemModel || query;
@@ -531,9 +532,11 @@ angular.module('oi.select')
                         cleanInput();
                     }
 
-                    if (multiple || !scope.backspaceFocus) {
-                        scope.query = lastQueryFn(removedItem, lastQuery, getLabel);
+                    if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
+                        scope.query = editItemFn(removedItem, lastQuery, getLabel);
                     }
+
+                    editItemCorrect = false;
 
                     if (scope.isOpen || scope.oldQuery || !multiple) {
                         getMatches(scope.oldQuery); //stay old list
