@@ -11,7 +11,7 @@
                     searchFilter: 'mySearchFilter',
                     dropdownFilter: 'myDropdownFilter',
                     listFilter: 'myListFilter',
-                    saveLastQuery: 'mySaveLastQuery'
+                    editItem: 'myEditItem'
                 }"
                 placeholder="Select"
                 ></oi-select>
@@ -29,7 +29,7 @@ oi-select-options="{
     searchFilter: 'mySearchFilter',
     dropdownFilter: 'myDropdownFilter',
     listFilter: 'myListFilter'
-    saveLastQuery: 'mySaveLastQuery'
+    editItem: 'myEditItem'
 }"
 </div>
 <div hljs>
@@ -60,9 +60,9 @@ oi-select-options="{
 });
 </div>
 <div hljs>
-.factory('mySaveLastQuery', function() {
-    return function(removedValue, lastQuery) {
-        return removedValue.name;
+.factory('myEditItem', function() {
+    return function(removedValue, lastQuery, getLabel) {
+        return removedValue ? getLabel(removedValue) + ' :-)' : '';
     };
 })
 </div>
