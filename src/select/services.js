@@ -9,6 +9,7 @@ angular.module('oi.select')
             listFilter:     'oiSelectAscSort',
             editItem:       false,
             newItem:        false,
+            closeList:      true,
             saveTrigger:    'enter'
         },
         $get: function() {

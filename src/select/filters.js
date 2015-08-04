@@ -53,4 +53,10 @@ angular.module('oi.select')
     }
 
     return ascSort;
+})
+
+.filter('none', function() {
+    return function(input) {
+        return input;
+    };
 });

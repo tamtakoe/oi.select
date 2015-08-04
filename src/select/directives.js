@@ -50,6 +50,7 @@ angular.module('oi.select')
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement    = element.find('input'),
+                    searchElement   = angular.element(element[0].querySelector('.select-search')),
                     listElement     = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder     = placeholderFn(scope),
                     elementOptions  = optionsFn(scope.$parent) || {},
@@ -208,6 +209,10 @@ angular.module('oi.select')
                         scope.groups = {}; //it is necessary for groups watcher
                     }
 
+                    if (multiple && options.closeList) {
+                        resetMatches({query: true});
+                    }
+
                     cleanModel = false;
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
@@ -240,6 +245,10 @@ angular.module('oi.select')
 
                     if (scope.isOpen || scope.oldQuery || !multiple) {
                         getMatches(scope.oldQuery); //stay old list
+                    }
+
+                    if (multiple && options.closeList) {
+                        resetMatches({query: true});
                     }
 
                     adjustInput();
@@ -360,7 +369,9 @@ angular.module('oi.select')
                 }
 
                 function blurHandler(event) {
-                    if (scope.isFocused && (!event || event.target.ownerDocument.activeElement !== inputElement[0])) {
+                    var activeElement = event && event.target.ownerDocument.activeElement;
+
+                    if (scope.isFocused && (!activeElement || activeElement !== inputElement[0])) {
                         $timeout(function() {
                             element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
                         });
@@ -509,14 +520,16 @@ angular.module('oi.select')
                     }
                 }
 
-                function resetMatches() {
-                    scope.oldQuery = null;
-                    scope.backspaceFocus = false; // clears focus on any chosen item for del
-                    scope.query = '';
-                    scope.groups = {};
-                    scope.order = [];
-                    scope.showLoader = false;
-                    scope.isOpen   = false;
+                function resetMatches(options) {
+                    options = options || {};
+
+                    if (!options.oldQuery)       scope.oldQuery = null;
+                    if (!options.backspaceFocus) scope.backspaceFocus = false; // clears focus on any chosen item for del
+                    if (!options.query)          scope.query = '';
+                    if (!options.groups)         scope.groups = {};
+                    if (!options.order)          scope.order = [];
+                    if (!options.showLoader)     scope.showLoader = false;
+                    if (!options.isOpen)         scope.isOpen   = false;
 
                     if (timeoutPromise) {
                         $timeout.cancel(timeoutPromise);//cancel previous timeout

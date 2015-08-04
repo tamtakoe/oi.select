@@ -1,3 +1,17 @@
+<a name="0.2.5"></a>
+# 0.2.5 (in progress)
+
+## Features
+
+- **oi-select-options:**
+    - closeList (close dropdown list by default after choosing or removing item)
+    - listFilter = "none" (add `filter('none', function() { return function(input) { return input; }})`)
+
+## Breaking Changes
+
+- **oi-select-options:**
+    - saveLastQuery rename to editItem
+
 <a name="0.2.4"></a>
 # 0.2.4
 
