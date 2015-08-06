@@ -74,6 +74,26 @@ angular.module('oi.select')
     }
 
     /**
+     * Check to see if a DOM element is a descendant of another DOM element.
+     *
+     * @param {DOM element} container
+     * @param {DOM element} contained
+     * @returns {boolean}
+     */
+    function contains(container, contained) {
+        var current = contained;
+
+        while (current && current.ownerDocument && current.nodeType !== 11) {
+            if (current === container) {
+                return true;
+            }
+            current = current.parentNode;
+        }
+
+        return false;
+    }
+
+    /**
      * Sets the selected item in the dropdown menu
      * of available options.
      *
@@ -290,6 +310,7 @@ angular.module('oi.select')
     return {
         copyWidth:          copyWidth,
         measureString:      measureString,
+        contains:           contains,
         scrollActiveOption: scrollActiveOption,
         groupsIsEmpty:      groupsIsEmpty,
         objToArr:           objToArr,
