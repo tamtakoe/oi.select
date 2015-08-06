@@ -155,33 +155,37 @@ angular.module('oi.select')
                     });
                 });
 
-                scope.setFocus = function(event) {
-                    if (attrs.disabled) return;
 
-                    if (!multiple) {
-                        cleanInput();
-                    }
 
-                    scope.backspaceFocus = false;
 
-                    if (event.target.nodeName !== 'INPUT') {
-                        inputElement[0].focus();
-                    }
-
-                    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
-                        scope.isFocused = true;
-
-                        return;
-                    }
-
-                    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                        if (scope.isOpen && !scope.query) {
-                            resetMatches();
-                        } else {
-                            getMatches(scope.query);
-                        }
-                    }
-                };
+                //scope.setFocus = function(event) {
+                //    if (attrs.disabled) return;
+                //
+                //    //if (!multiple) {
+                //    //    debugger
+                //    //    cleanInput();
+                //    //}
+                //
+                //    scope.backspaceFocus = false;
+                //
+                //    if (event.target.nodeName !== 'INPUT') {
+                //        inputElement[0].focus();
+                //    }
+                //
+                //    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
+                //        scope.isFocused = true;
+                //
+                //        return;
+                //    }
+                //
+                //    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
+                //        if (scope.isOpen && !scope.query) {
+                //            resetMatches();
+                //        } else {
+                //            getMatches(scope.query);
+                //        }
+                //    }
+                //};
 
                 scope.addItem = function addItem(option) {
                     lastQuery = scope.query;
@@ -203,6 +207,7 @@ angular.module('oi.select')
                     } else {
                         ctrl.$setViewValue(modelOption);
                         restoreInput();
+                        resetMatches();
                     }
 
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
@@ -262,11 +267,11 @@ angular.module('oi.select')
                     }
                 };
 
-                $document.on('click', blurHandler);
-
-                scope.$on('destroy', function() {
-                    $document.off('click', blurHandler);
-                });
+                //$document.on('click', blurHandler);
+                //
+                //scope.$on('destroy', function() {
+                //    $document.off('click', blurHandler);
+                //});
 
                 scope.keyParser = function keyParser(event) {
                     var top    = 0,
@@ -368,13 +373,110 @@ angular.module('oi.select')
                     scope.inputHide = !!ctrl.$modelValue;
                 }
 
-                function blurHandler(event) {
+
+
+
+                //element.on('focus', focus);
+
+
+                //
+                //
+                //element.on('click', click);
+
+
+                inputElement.on('focus', focus1);
+
+                function focus1(event) {
+                    console.log('focus1', event);
+
+                    scope.isFocused = true;
+                }
+
+                function blur1(event) {
+                    console.log('blur1', event);
+
+                    scope.isFocused = false;
+                }
+
+
+                $document.on('click', click);
+
+                scope.$on('destroy', function() {
+                    $document.off('click', click);
+                });
+
+                function click(event) {
+                    var activeElement = event.target.ownerDocument.activeElement;
+                    var isSelectElement = activeElement.closest('oi-select');
+
+                    console.log(isSelectElement, activeElement.nodeName !== 'INPUT', !scope.isFocused);
+
+                    if (isSelectElement && activeElement.nodeName !== 'INPUT' && !scope.isFocused) {
+                        console.log('focus');
+
+                        $timeout(function() {
+                            inputElement[0].focus();
+                        });
+                    }
+
+                    if (!isSelectElement && scope.isFocused) {
+                        console.log('blur');
+                        blur1();
+                    }
+                }
+
+                function focus(event) {
+                    console.log('focus', event);
+
+                    if (attrs.disabled) return;
+
+                    scope.isFocused = true;
+
+                    //if (!multiple) {
+                    //    debugger
+                    //    cleanInput();
+                    //}
+
+                    scope.backspaceFocus = false;
+
+                    if (event.target.nodeName !== 'INPUT') {
+                        inputElement[0].focus();
+                    }
+
+                    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
+                        scope.isFocused = true;
+
+                        return;
+                    }
+
+                    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
+                        if (scope.isOpen && !scope.query) {
+                            resetMatches();
+                        } else {
+                            getMatches(scope.query);
+                        }
+                    }
+                }
+
+
+                //$document.on('click', blur);
+                //
+                //scope.$on('destroy', function() {
+                //    $document.off('click', blur);
+                //});
+
+                function blur(event) {
                     var activeElement = event && event.target.ownerDocument.activeElement;
 
-                    if (scope.isFocused && (!activeElement || activeElement !== inputElement[0])) {
+                    if (scope.isFocused && !activeElement.closest('oi-select')) {
+                        console.log('blur');
+                        //blurHandler();
+
                         $timeout(function() {
                             element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
                         });
+
+
 
                         if (!multiple) {
                             restoreInput();
@@ -389,6 +491,29 @@ angular.module('oi.select')
                         scope.isFocused = false;
                         scope.$evalAsync();
                     }
+                }
+
+                function blurHandler(event) {
+                    //var activeElement = event && event.target.ownerDocument.activeElement;
+                    //
+                    //if (scope.isFocused && (!activeElement || activeElement !== inputElement[0])) {
+                    //    $timeout(function() {
+                    //        element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                    //    });
+
+                        //if (!multiple) {
+                        //    restoreInput();
+                        //}
+                        //
+                        //if (!multiple && options.cleanModel && cleanModel) {
+                        //    ctrl.$setViewValue(undefined);
+                        //}
+                        //cleanModel = true;
+                        //
+                        //saveOn('blur');
+                        //scope.isFocused = false;
+                        //scope.$evalAsync();
+                    //}
                 }
 
                 function saveOn(triggerName) {
