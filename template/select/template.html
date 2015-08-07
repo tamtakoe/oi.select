@@ -10,7 +10,8 @@
             ng-hide1="inputHide" ng-class="{'select-search-list-item_hide': inputHide}"><input autocomplete="off"
                                        ng-model="query"
                                        ng-style="{'width': inputWidth + 'px'}"
-                                       ng-keyup="keyParser($event)"/></li>
+                                       ng-keyup="keyUp($event)"
+                                       ng-keydown="keyDown($event)"/></li>
         <li class="select-search-list-item select-search-list-item_loader"
             ng-show="showLoader"></li>
     </ul>

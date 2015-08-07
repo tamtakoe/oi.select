@@ -149,6 +149,11 @@ oi-select.focused .select-search {
   outline: 0;
   box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
 }
+oi-select.limited .select-search,
+oi-select.limited .select-dropdown {
+  border-color: #f1bc28;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(230,189,46,0.6);
+}
 oi-select.open .select-search {
   border-radius: 4px 4px 0 0;
   border-bottom: 1px solid rgba(0,0,0,0.075);

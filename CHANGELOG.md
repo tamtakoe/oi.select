@@ -3,6 +3,8 @@
 
 ## Features
 
+- **multiple-limit:** add `limited` class
+
 - **oi-select-options:**
     - closeList (close dropdown list by default after choosing or removing item)
     - listFilter = "none" (add `filter('none', function() { return function(input) { return input; }})`)

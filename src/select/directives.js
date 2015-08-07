@@ -38,7 +38,7 @@ angular.module('oi.select')
                 trackByFn            = $parse(trackByName);
 
             var multiple             = angular.isDefined(attrs.multiple),
-                multipleLimit        = Number(attrs.multipleLimit),
+                multipleLimit        = Number(attrs.multipleLimit) || Infinity,
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
                 optionsFn            = $parse(attrs.oiSelectOptions),
                 keyUpDownWerePressed = false,
@@ -110,7 +110,7 @@ angular.module('oi.select')
 
                 scope.$watch('query', function(inputValue, oldValue) {
                     adjustInput();
-
+                    console.log('query');
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -127,6 +127,7 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('groups', function(groups) {
+                    console.log('groups');
                     if (oiUtils.groupsIsEmpty(groups)) {
                         scope.isOpen = false;
 
@@ -138,10 +139,6 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('isFocused', function(isFocused) {
-                    if (isFocused) {
-                        element.triggerHandler('focus');
-                    }
-
                     $animate[isFocused ? 'addClass' : 'removeClass'](element, 'focused', {
                         tempClasses: 'focused-animate'
                     });
@@ -167,7 +164,7 @@ angular.module('oi.select')
                     if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
-                    if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
+                    if (scope.output.length >= multipleLimit) return;
 
                     var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
@@ -243,7 +240,11 @@ angular.module('oi.select')
                     }
                 };
 
-                scope.keyParser = function keyParser(event) {
+                scope.keyUp = function keyUp(event) {
+
+                };
+
+                scope.keyDown = function keyDown(event) {
                     var top    = 0,
                         bottom = scope.order.length - 1;
 
@@ -284,17 +285,17 @@ angular.module('oi.select')
 
                         case 8: /* backspace */
                             if (!scope.query.length) {
-                                if (!multiple) {
-                                    scope.backspaceFocus = true;
-                                }
-                                if (scope.backspaceFocus && scope.output) {
+                                if ((multiple || scope.backspaceFocus) && scope.output) {
                                     scope.removeItem(scope.output.length - 1);
                                     if (!scope.output.length) {
                                         getMatches();
-                                        break;
+
                                     }
+                                    scope.backspaceFocus = false;
+                                    break;
                                 }
-                                scope.backspaceFocus = !scope.backspaceFocus;
+                                scope.backspaceFocus = true;
+                                //scope.backspaceFocus = !scope.backspaceFocus;
                                 break;
                             }
                         default: /* any key */
@@ -348,12 +349,24 @@ angular.module('oi.select')
                 }
 
 
-
                 function click(event) {
                     console.log('click', event);
+
+                    //option is disabled
                     if (event.target.closest('oi-select .disabled')) return;
 
-                    if (scope.isOpen && !scope.query && options.closeList) {
+                    //limit is reached
+                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) {
+                        element.addClass('limited');
+
+                        $timeout(function() {
+                            element.removeClass('limited');
+                        }, 150);
+
+                        return;
+                    }
+
+                    if (scope.isOpen && options.closeList) {
                         resetMatches();
                     } else {
                         getMatches(scope.query);
