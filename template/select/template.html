@@ -1,4 +1,4 @@
-<div class="select-search" ng-click1="setFocus($event)">
+<div class="select-search">
     <ul class="select-search-list">
         <li class="btn btn-default btn-xs select-search-list-item select-search-list-item_selection"
             ng-hide="listItemHide"
@@ -10,13 +10,12 @@
             ng-hide1="inputHide" ng-class="{'select-search-list-item_hide': inputHide}"><input autocomplete="off"
                                        ng-model="query"
                                        ng-style="{'width': inputWidth + 'px'}"
-                                       ng-keyup="keyParser($event)"
-                                       ng-focus1="setFocus($event)"/></li>
+                                       ng-keyup="keyParser($event)"/></li>
         <li class="select-search-list-item select-search-list-item_loader"
             ng-show="showLoader"></li>
     </ul>
 </div>
-<div class="select-dropdown" ng-show="isOpen" ng-click1="setFocus($event)">
+<div class="select-dropdown" ng-show="isOpen">
     <ul ng-if="isOpen" class="select-dropdown-optgroup" ng-repeat="(group, options) in groups">
         <div class="select-dropdown-optgroup-header"
              ng-if="group && options.length"

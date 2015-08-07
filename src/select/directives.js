@@ -159,39 +159,8 @@ angular.module('oi.select')
                     });
                 });
 
-
-
-
-                //scope.setFocus = function(event) {
-                //    if (attrs.disabled) return;
-                //
-                //    //if (!multiple) {
-                //    //    debugger
-                //    //    cleanInput();
-                //    //}
-                //
-                //    scope.backspaceFocus = false;
-                //
-                //    if (event.target.nodeName !== 'INPUT') {
-                //        inputElement[0].focus();
-                //    }
-                //
-                //    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
-                //        scope.isFocused = true;
-                //
-                //        return;
-                //    }
-                //
-                //    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                //        if (scope.isOpen && !scope.query) {
-                //            resetMatches();
-                //        } else {
-                //            getMatches(scope.query);
-                //        }
-                //    }
-                //};
-
                 scope.addItem = function addItem(option) {
+                    console.log('addItem');
                     lastQuery = scope.query;
 
                     //duplicate
@@ -207,64 +176,63 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-                        updateGroupPos();
+                        //updateGroupPos();
                     } else {
                         ctrl.$setViewValue(modelOption);
                         restoreInput();
-                        resetMatches();
                     }
+
+                    //resetMatches();
 
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
                     }
 
-                    if (multiple && options.closeList) {
+                    if (!multiple && !options.closeList) {
                         resetMatches({query: true});
                     }
 
                     cleanModel = false;
                     scope.oldQuery = scope.oldQuery || scope.query;
-                    scope.query = '';
-                    scope.backspaceFocus = false;
+                    //scope.query = '';
+                    //scope.backspaceFocus = false;
 
                     adjustInput();
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    //console.log('removeItem');
-                    //$timeout(function() {
-                        var removedItem;
+                    console.log('removeItem');
 
-                        if (attrs.disabled) return;
+                    var removedItem;
 
-                        if (multiple && position >= 0) {
-                            removedItem = ctrl.$modelValue[position];
-                            ctrl.$modelValue.splice(position, 1);
-                            ctrl.$setViewValue([].concat(ctrl.$modelValue));
-                        }
+                    if (attrs.disabled) return;
 
-                        if (!multiple) {
-                            removedItem = ctrl.$modelValue;
-                            cleanInput();
-                        }
+                    if (multiple && position >= 0) {
+                        removedItem = ctrl.$modelValue[position];
+                        ctrl.$modelValue.splice(position, 1);
+                        ctrl.$setViewValue([].concat(ctrl.$modelValue));
+                    }
 
-                        if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
-                            scope.query = editItemFn(removedItem, lastQuery, getLabel);
-                        }
+                    if (!multiple) {
+                        removedItem = ctrl.$modelValue;
+                        cleanInput();
+                    }
 
-                        editItemCorrect = false;
+                    if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
+                        scope.query = editItemFn(removedItem, lastQuery, getLabel);
+                    }
 
-                        if (scope.isOpen || scope.oldQuery || !multiple) {
-                            getMatches(scope.oldQuery); //stay old list
-                        }
+                    editItemCorrect = false;
 
-                        if (multiple && options.closeList) {
-                            resetMatches({query: true});
-                        }
+                    //if (scope.isOpen || scope.oldQuery || !multiple) {
+                    //    getMatches(scope.oldQuery); //stay old list
+                    //}
+                    //
+                    if (multiple && options.closeList) {
+                        resetMatches({query: true});
+                    }
 
-                        adjustInput();
-                    //})
-
+                    adjustInput();
                 };
 
                 scope.setSelection = function(index) {
@@ -274,12 +242,6 @@ angular.module('oi.select')
                         keyUpDownWerePressed = false;
                     }
                 };
-
-                //$document.on('click', blurHandler);
-                //
-                //scope.$on('destroy', function() {
-                //    $document.off('click', blurHandler);
-                //});
 
                 scope.keyParser = function keyParser(event) {
                     var top    = 0,
@@ -371,9 +333,7 @@ angular.module('oi.select')
 
                 resetMatches();
 
-
-
-                element.on('click', click);
+                element[0].addEventListener('click', click, true); //triggered before add or delete item event
                 element.on('focus', focus);
                 element.on('blur', blur);
 
@@ -391,8 +351,9 @@ angular.module('oi.select')
 
                 function click(event) {
                     console.log('click', event);
+                    if (event.target.closest('oi-select .disabled')) return;
 
-                    if (scope.isOpen && !scope.query) {
+                    if (scope.isOpen && !scope.query && options.closeList) {
                         resetMatches();
                     } else {
                         getMatches(scope.query);
@@ -405,23 +366,13 @@ angular.module('oi.select')
                     scope.isFocused = true;
                     console.log('focus', event);
 
-                    if (attrs.disabled) return;
-
                     //if (!multiple) {
-                    //    debugger
                     //    cleanInput();
                     //}
 
-                    scope.backspaceFocus = false;
+                    if (attrs.disabled) return;
 
-                    //if (event.type === 'click' && angular.element(event.target).scope() === scope) { //not click on add or remove buttons
-                    //if (event.type === 'click') {
-                    //    if (scope.isOpen && !scope.query) {
-                    //        resetMatches();
-                    //    } else {
-                    //        getMatches(scope.query);
-                    //    }
-                    //}
+                    scope.backspaceFocus = false;
                 }
 
 
@@ -430,41 +381,16 @@ angular.module('oi.select')
                     console.log('blur', event);
 
                     if (!multiple) {
+                        if (options.cleanModel && !scope.inputHide) {
+                            ctrl.$setViewValue(undefined);
+                        }
                         restoreInput();
                     }
 
-                    if (!multiple && options.cleanModel && cleanModel) {
-                        ctrl.$setViewValue(undefined);
-                    }
                     cleanModel = true;
 
                     saveOn('blur');
                     scope.$evalAsync();
-                }
-
-
-
-                function blurHandler(event) {
-                    //var activeElement = event && event.target.ownerDocument.activeElement;
-                    //
-                    //if (scope.isFocused && (!activeElement || activeElement !== inputElement[0])) {
-                    //    $timeout(function() {
-                    //        element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
-                    //    });
-
-                        //if (!multiple) {
-                        //    restoreInput();
-                        //}
-                        //
-                        //if (!multiple && options.cleanModel && cleanModel) {
-                        //    ctrl.$setViewValue(undefined);
-                        //}
-                        //cleanModel = true;
-                        //
-                        //saveOn('blur');
-                        //scope.isFocused = false;
-                        //scope.$evalAsync();
-                    //}
                 }
 
                 function saveOn(triggerName) {
