@@ -26,7 +26,7 @@ angular.module('oi.select')
     };
 })
 
-.factory('oiUtils', ['$document', function($document) {
+.factory('oiUtils', ['$document', '$timeout', function($document, $timeout) {
     /**
      * Measures the width of a string within a
      * parent element (in pixels).
@@ -91,6 +91,62 @@ angular.module('oi.select')
         }
 
         return false;
+    }
+
+    /**
+     * Simulate focus/blur events of the inner input element to the outer element
+     *
+     * @param {element} outer element
+     * @param {element} inner input element
+     * @returns {function} deregistration function for listeners.
+     */
+    function bindFocusBlur(element, inputElement) {
+        var isFocused = false;
+
+        $document[0].addEventListener('click', clickHandler, true);
+        element[0].addEventListener('blur', blurHandler, true);
+        inputElement.on('focus', focusHandler);
+
+        function blurHandler(event) {
+            if (event.relatedTarget === inputElement[0]) {
+                event.stopImmediatePropagation(); //cancel blur if focus to input element
+            }
+        }
+
+        function focusHandler(event) {
+            if (!isFocused) {
+                isFocused = true;
+
+                $timeout(function() {
+                    element.triggerHandler('focus'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
+        }
+
+        function clickHandler(event) {
+            var activeElement = event.target;
+            var isSelectElement = contains(element[0], activeElement);
+
+            if (isSelectElement && activeElement.nodeName !== 'INPUT') {
+                $timeout(function() {
+                    inputElement[0].focus();
+                });
+            }
+
+            if (!isSelectElement && isFocused) {
+                isFocused = false;
+
+                $timeout(function() {
+                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
+        }
+
+        return function() {
+            $document[0].removeEventListener('click', clickHandler);
+            element[0].removeEventListener('blur', blurHandler, true);
+            inputElement.off('focus', focusHandler);
+        }
     }
 
     /**
@@ -311,6 +367,7 @@ angular.module('oi.select')
         copyWidth:          copyWidth,
         measureString:      measureString,
         contains:           contains,
+        bindFocusBlur:      bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
         groupsIsEmpty:      groupsIsEmpty,
         objToArr:           objToArr,

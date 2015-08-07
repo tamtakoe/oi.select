@@ -59,7 +59,7 @@ angular.module('oi.select')
                     editItemCorrect = options.editItem === 'correct',
                     editItemFn      = editItem ? $injector.get(editItem) : function() {return ''};
 
-                var unbindFocusBlur = delegateFocusBlur(element, inputElement, focus, blur);
+                var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
 
                 options.newItemModelFn = function (query) {
                     return (optionsFn({$query: query}) || {}).newItemModel || query;
@@ -371,40 +371,11 @@ angular.module('oi.select')
 
                 resetMatches();
 
-                function delegateFocusBlur(element, inputElement, focus, blur) {
-                    document.addEventListener('click', clickHandler, true);
-                    inputElement.on('focus', focusHandler);
 
-                    function focusHandler(event) {
-                        if (!scope.isFocused) {
-                            scope.isFocused = true;
 
-                            focus(event);
-                        }
-                    }
-
-                    function clickHandler(event) {
-                        var activeElement = event.target;
-                        var isSelectElement = oiUtils.contains(element[0], activeElement);
-
-                        if (isSelectElement && activeElement.nodeName !== 'INPUT') {
-                            $timeout(function() {
-                                inputElement[0].focus();
-                            });
-                        }
-
-                        if (!isSelectElement && scope.isFocused) {
-                            scope.isFocused = false;
-
-                            blur(event);
-                        }
-                    }
-
-                    return function() {
-                        document.removeEventListener('click', clickHandler);
-                        inputElement.off('focus', focusHandler);
-                    }
-                }
+                element.on('click', click);
+                element.on('focus', focus);
+                element.on('blur', blur);
 
                 function cleanInput() {
                     scope.listItemHide = true;
@@ -416,7 +387,22 @@ angular.module('oi.select')
                     scope.inputHide = !!ctrl.$modelValue;
                 }
 
+
+
+                function click(event) {
+                    console.log('click', event);
+
+                    if (scope.isOpen && !scope.query) {
+                        resetMatches();
+                    } else {
+                        getMatches(scope.query);
+                    }
+                }
+
                 function focus(event) {
+                    if (scope.isFocused) return;
+
+                    scope.isFocused = true;
                     console.log('focus', event);
 
                     if (attrs.disabled) return;
@@ -428,27 +414,19 @@ angular.module('oi.select')
 
                     scope.backspaceFocus = false;
 
-                    if (event.target.nodeName !== 'INPUT') {
-                        inputElement[0].focus();
-                    }
-
-                    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
-                        scope.isFocused = true;
-
-                        return;
-                    }
-
-                    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                        if (scope.isOpen && !scope.query) {
-                            resetMatches();
-                        } else {
-                            getMatches(scope.query);
-                        }
-                    }
+                    //if (event.type === 'click' && angular.element(event.target).scope() === scope) { //not click on add or remove buttons
+                    //if (event.type === 'click') {
+                    //    if (scope.isOpen && !scope.query) {
+                    //        resetMatches();
+                    //    } else {
+                    //        getMatches(scope.query);
+                    //    }
+                    //}
                 }
 
 
                 function blur(event) {
+                    scope.isFocused = false;
                     console.log('blur', event);
 
                     if (!multiple) {
