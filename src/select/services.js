@@ -108,18 +108,19 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
+            console.log('blurHandler', isFocused, event.relatedTarget);
             if (event.relatedTarget === inputElement[0]) {
                 event.stopImmediatePropagation(); //cancel blur if focus to input element
                 return;
             }
 
-            //if (event.relatedTarget) { //not triggered blur
-            //    isFocused = false;
-            //
-            //    $timeout(function () {
-            //        element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
-            //    });
-            //}
+            if (event.relatedTarget) { //not triggered blur
+                isFocused = false;
+
+                $timeout(function () {
+                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
         }
 
         function focusHandler(event) {

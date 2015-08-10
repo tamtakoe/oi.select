@@ -75,6 +75,10 @@ angular.module('oi.select')
                     inputElement.attr('readonly', true)
                 }
 
+                if (angular.isDefined(attrs.tabindex)) {
+                    inputElement.attr('tabindex', attrs.tabindex)
+                }
+
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
                 });
@@ -367,6 +371,7 @@ angular.module('oi.select')
                 }
 
                 function focus(event) {
+                    console.log('focus', event);
                     if (scope.isFocused) return;
 
                     scope.isFocused = true;
@@ -378,6 +383,7 @@ angular.module('oi.select')
 
 
                 function blur(event) {
+                    console.log('blur', event);
                     scope.isFocused = false;
 
                     if (!multiple) {

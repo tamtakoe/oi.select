@@ -4,13 +4,15 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                    number="1"
+                    number="2"
+                    tabindex="2"
                 oi-options="item.name for item in shopArr"
                 ng-model="bundle"
                 placeholder="Select"
                 ></oi-select>
             <oi-select
                     number="2"
+                    tabindex="1"
                     oi-options="item.name for item in shopArr"
                     ng-model="bundle"
                     autofocus
@@ -18,8 +20,10 @@
                     ></oi-select>
             <oi-select
                     number="3"
-                    oi-options="item.name for item in shopArr"
-                    ng-model="bundle"
+                    tabindex="3"
+                    oi-options="item.name for item in shopArr track by item.id"
+                    multiple
+                    ng-model="bundle1"
                     placeholder="Select"
                     ></oi-select>
         </div>
