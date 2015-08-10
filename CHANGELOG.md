@@ -1,5 +1,5 @@
 <a name="0.2.5"></a>
-# 0.2.5 (in progress)
+# 0.2.5
 
 ## Features
 
