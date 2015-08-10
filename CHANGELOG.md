@@ -8,6 +8,10 @@
 - **oi-select-options:**
     - closeList (close dropdown list by default after choosing or removing item)
     - listFilter = "none" (add `filter('none', function() { return function(input) { return input; }})`)
+    
+## Bug Fixes
+
+- **input:** fix focus/blur
 
 ## Breaking Changes
 

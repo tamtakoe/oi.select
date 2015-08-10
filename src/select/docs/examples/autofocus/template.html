@@ -4,28 +4,24 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                    number="2"
-                    tabindex="2"
                 oi-options="item.name for item in shopArr"
+                tabindex="2"
                 ng-model="bundle"
                 placeholder="Select"
                 ></oi-select>
             <oi-select
-                    number="2"
-                    tabindex="1"
-                    oi-options="item.name for item in shopArr"
-                    ng-model="bundle"
-                    autofocus
-                    placeholder="Select"
-                    ></oi-select>
+                oi-options="item.name for item in shopArr"
+                autofocus
+                tabindex="1"
+                ng-model="bundle"
+                placeholder="Select"
+                ></oi-select>
             <oi-select
-                    number="3"
-                    tabindex="3"
-                    oi-options="item.name for item in shopArr track by item.id"
-                    multiple
-                    ng-model="bundle1"
-                    placeholder="Select"
-                    ></oi-select>
+                oi-options="item.name for item in shopArr track by item.id"
+                tabindex="3"
+                ng-model="bundle1"
+                placeholder="Select"
+                ></oi-select>
         </div>
     </div>
 
@@ -34,6 +30,7 @@
 oi-options="item.name for item in shopArr"
 ng-model="bundle"
 autofocus
+tabindex="1"
 </div>
 <pre class="col-md-4">
 {{bundle}}

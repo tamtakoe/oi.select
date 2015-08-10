@@ -76,7 +76,8 @@ angular.module('oi.select')
                 }
 
                 if (angular.isDefined(attrs.tabindex)) {
-                    inputElement.attr('tabindex', attrs.tabindex)
+                    inputElement.attr('tabindex', attrs.tabindex);
+                    element[0].removeAttribute('tabindex');
                 }
 
                 attrs.$observe('disabled', function(value) {
@@ -166,7 +167,15 @@ angular.module('oi.select')
                     if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
-                    if (scope.output.length >= multipleLimit) return;
+                    if (scope.output.length >= multipleLimit) {
+                        element.addClass('limited');
+
+                        $timeout(function() {
+                            element.removeClass('limited');
+                        }, 150);
+
+                        return;
+                    }
 
                     var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
@@ -193,8 +202,8 @@ angular.module('oi.select')
 
                     cleanModel = false;
                     scope.oldQuery = scope.oldQuery || scope.query;
-                    //scope.query = '';
-                    //scope.backspaceFocus = false;
+                    scope.query = '';
+                    scope.backspaceFocus = false;
 
                     adjustInput();
                 };
@@ -221,10 +230,6 @@ angular.module('oi.select')
 
                     editItemCorrect = false;
 
-                    //if (scope.isOpen || scope.oldQuery || !multiple) {
-                    //    getMatches(scope.oldQuery); //stay old list
-                    //}
-                    //
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
                     }
@@ -237,6 +242,15 @@ angular.module('oi.select')
                         setOption(listElement, index);
                     } else {
                         keyUpDownWerePressed = false;
+                    }
+                };
+
+                scope.keyUp = function keyUp(event) { //scope.query is actual
+                    switch (event.keyCode) {
+                        case 8: /* backspace */
+                            if (!scope.query.length && (!multiple || !scope.output.length)) {
+                                getMatches();
+                            }
                     }
                 };
 
@@ -287,13 +301,8 @@ angular.module('oi.select')
                                     if (editItem) {
                                         event.preventDefault();
                                     }
-
-                                    if (!scope.output.length) {
-                                        getMatches();
-                                    }
                                     break;
                                 }
-                                //scope.backspaceFocus = true;
                                 scope.backspaceFocus = !scope.backspaceFocus;
                                 break;
                             }
@@ -353,25 +362,16 @@ angular.module('oi.select')
                     if (event.target.closest('oi-select .disabled')) return;
 
                     //limit is reached
-                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) {
-                        element.addClass('limited');
+                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) return;
 
-                        $timeout(function() {
-                            element.removeClass('limited');
-                        }, 150);
-
-                        return;
-                    }
-
-                    if (scope.isOpen && options.closeList) {
-                        resetMatches();
+                    if (scope.isOpen && options.closeList && (options.editItem && !editItemCorrect || !scope.query)) {
+                        resetMatches({query: options.editItem && !editItemCorrect});
                     } else {
                         getMatches(scope.query);
                     }
                 }
 
                 function focus(event) {
-                    console.log('focus', event);
                     if (scope.isFocused) return;
 
                     scope.isFocused = true;
@@ -383,7 +383,6 @@ angular.module('oi.select')
 
 
                 function blur(event) {
-                    console.log('blur', event);
                     scope.isFocused = false;
 
                     if (!multiple) {

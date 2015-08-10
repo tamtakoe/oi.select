@@ -108,13 +108,14 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
-            console.log('blurHandler', isFocused, event.relatedTarget);
-            if (event.relatedTarget === inputElement[0]) {
+            var relatedTarget = event.relatedTarget;
+
+            if (relatedTarget === inputElement[0]) {
                 event.stopImmediatePropagation(); //cancel blur if focus to input element
                 return;
             }
 
-            if (event.relatedTarget) { //not triggered blur
+            if (relatedTarget) { //not triggered blur
                 isFocused = false;
 
                 $timeout(function () {
