@@ -12,11 +12,7 @@
 ## Bug Fixes
 
 - **input:** fix focus/blur
-
-## Breaking Changes
-
-- **oi-select-options:**
-    - saveLastQuery rename to editItem
+- **default filters** correct work with search expression of several words
 
 <a name="0.2.4"></a>
 # 0.2.4

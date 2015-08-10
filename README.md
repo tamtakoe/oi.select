@@ -83,10 +83,11 @@ Use `oi-select` directive:
   * `debounce` — timeout of debounced input field (default: 500). Set only if `value` is function which return promise
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
-  * `listFilter` — filter name for items order in dropdown
+  * `listFilter` — filter name for items order in dropdown. Use `none` to disable filtering
   * `editItem` — function which get `lastQuery`, `removedItem` and `getLabel(item)` and return string for input after element was removed (default: ''). `editItem = true` allows you to edit a deleted item. `editItem = 'correct'` same as `true` but does not edit the first time
   * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `blur` (default: `enter`)
   * `cleanModel` [deprecated] — Clean model on blur for single select.
+  * `closeList` — close dropdown list by default after choosing or removing item (default: true)
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise
