@@ -249,7 +249,8 @@ angular.module('oi.select')
                     switch (event.keyCode) {
                         case 8: /* backspace */
                             if (!scope.query.length && (!multiple || !scope.output.length)) {
-                                getMatches();
+                                //getMatches();
+                                resetMatches();
                             }
                     }
                 };
