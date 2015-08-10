@@ -1,3 +1,11 @@
+<a name="0.2.6"></a>
+# 0.2.6
+
+## Bug Fixes
+
+- **IE:** fixed disabled options and multiple limit in IE
+- **dropdown** fixed bug when the list does not close immediately when you select item
+
 <a name="0.2.5"></a>
 # 0.2.5
 

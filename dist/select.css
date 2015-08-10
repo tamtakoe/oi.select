@@ -68,6 +68,7 @@ oi-select .select-search-list-item_hide {
   margin: 0;
   opacity: 0;
   pointer-events: none;
+  text-indent: -9999em;
 }
 oi-select .select-dropdown {
   position: absolute;

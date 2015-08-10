@@ -360,12 +360,12 @@ angular.module('oi.select')
 
                 function click(event) {
                     //option is disabled
-                    if (event.target.closest('oi-select .disabled')) return;
+                    if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
                     //limit is reached
-                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) return;
-
-                    if (scope.isOpen && options.closeList && (options.editItem && !editItemCorrect || !scope.query)) {
+                    if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
+                    
+                    if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                     } else {
                         getMatches(scope.query);

@@ -79,14 +79,24 @@ angular.module('oi.select')
      *
      * @param {DOM element} container
      * @param {DOM element} contained
+     * @param {string} class name of element in container
      * @returns {boolean}
      */
-    function contains(container, contained) {
+    function contains(container, contained, className) {
         var current = contained;
 
         while (current && current.ownerDocument && current.nodeType !== 11) {
-            if (current === container) {
-                return true;
+            if (className) {
+                if (current === container) {
+                    return false;
+                }
+                if (current.classList.contains(className)) {
+                    return true;
+                }
+            } else {
+                if (current === container) {
+                    return true;
+                }
             }
             current = current.parentNode;
         }
@@ -109,7 +119,7 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
-            var relatedTarget = event.relatedTarget;
+            var relatedTarget = event.relatedTarget; //TODO: get relativeTarget in IE, FF (event.explicitOriginalTarget || document.activeElement);
 
             if (relatedTarget === inputElement[0]) {
                 event.stopImmediatePropagation(); //cancel blur if focus to input element
@@ -750,12 +760,12 @@ angular.module('oi.select')
 
                 function click(event) {
                     //option is disabled
-                    if (event.target.closest('oi-select .disabled')) return;
+                    if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
                     //limit is reached
-                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) return;
-
-                    if (scope.isOpen && options.closeList && (options.editItem && !editItemCorrect || !scope.query)) {
+                    if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
+                    
+                    if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                     } else {
                         getMatches(scope.query);
