@@ -1,11 +1,9 @@
 angular.module('selectDemo')
-    .controller('selectEditableoptionsController', function ($scope, $q, $timeout, ShopArr) {
+    .controller('selectEditableoptionsController', function ($scope, $q, $timeout, ShopArrShort) {
 
-        $scope.shopArr = ShopArr.query();
+        $scope.ShopArrShort = ShopArrShort.query();
+        $scope.ShopArrShort1 = ShopArrShort.query();
 
-        $scope.bundle = {
-            "id": 9,
-            "name": "jeans",
-            "category": "clothes"
-        }
+        $scope.bundle = ["boots", "shoes"];
+        $scope.bundle2 = "shoes";
     });

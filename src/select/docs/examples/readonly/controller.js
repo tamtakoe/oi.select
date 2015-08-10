@@ -3,5 +3,5 @@ angular.module('selectDemo')
 
         $scope.shopArrShort = ShopArrShort.query();
 
-        $scope.bundle = 'T-shirt';
+        $scope.bundle = ['T-shirt'];
     });

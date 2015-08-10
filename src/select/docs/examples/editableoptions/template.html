@@ -1,11 +1,13 @@
 <div ng-controller="selectEditableoptionsController">
     <h2>Editable options</h2>
-    <p>It allows you to edit the value of the deleted item. You can to use <code>editItem: 'correct'</code> for editing deleted item except the first time or custom service for tweaking <code>editItem: 'myFactory'</code></p>
+    <p>It allows you to edit the value of the deleted item. You can to use custom service for tweaking <code>editItem: 'myFactory'</code></p>
+
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                oi-options="item.name for item in shopArr track by item.id"
+                oi-options="item for item in ShopArrShort"
                 ng-model="bundle"
+                multiple
                 oi-select-options="{
                     editItem: true
                 }"
@@ -14,11 +16,11 @@
         </div>
     </div>
 <div class="row">
-
 <div class="col-md-8">
 <div hljs>
-oi-options="item.name for item in shopArr track by item.id"
+oi-options="item for item in ShopArrShort"
 ng-model="bundle"
+multiple
 oi-select-options="{
     editItem: true
 }"
@@ -28,4 +30,37 @@ oi-select-options="{
 {{bundle}}
 </pre>
 </div>
+
+    <br/>
+
+    <p>Use <code>editItem: 'correct'</code> for editing deleted item except the first time.</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item for item in ShopArrShort"
+                ng-model="bundle2"
+                oi-select-options="{
+                    editItem: 'correct'
+                }"
+                placeholder="Select"
+                ></oi-select>
+        </div>
+
+    </div>
+<div class="row">
+<div class="col-md-8">
+<div hljs>
+oi-options="item for item in ShopArrShort"
+ng-model="bundle2"
+oi-select-options="{
+    editItem: 'correct'
+}"
 </div>
+</div>
+<pre class="col-md-4">
+{{bundle2}}
+</pre>
+</div>
+
+</div>
+

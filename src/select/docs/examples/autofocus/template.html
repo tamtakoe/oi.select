@@ -4,11 +4,24 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
+                    number="1"
                 oi-options="item.name for item in shopArr"
                 ng-model="bundle"
-                autofocus
                 placeholder="Select"
                 ></oi-select>
+            <oi-select
+                    number="2"
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle"
+                    autofocus
+                    placeholder="Select"
+                    ></oi-select>
+            <oi-select
+                    number="3"
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle"
+                    placeholder="Select"
+                    ></oi-select>
         </div>
     </div>
 

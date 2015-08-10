@@ -110,7 +110,7 @@ angular.module('oi.select')
 
                 scope.$watch('query', function(inputValue, oldValue) {
                     adjustInput();
-                    console.log('query');
+
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -127,7 +127,6 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('groups', function(groups) {
-                    console.log('groups');
                     if (oiUtils.groupsIsEmpty(groups)) {
                         scope.isOpen = false;
 
@@ -157,7 +156,6 @@ angular.module('oi.select')
                 });
 
                 scope.addItem = function addItem(option) {
-                    console.log('addItem');
                     lastQuery = scope.query;
 
                     //duplicate
@@ -198,8 +196,6 @@ angular.module('oi.select')
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    console.log('removeItem');
-
                     var removedItem;
 
                     if (attrs.disabled) return;
@@ -240,10 +236,6 @@ angular.module('oi.select')
                     }
                 };
 
-                scope.keyUp = function keyUp(event) {
-
-                };
-
                 scope.keyDown = function keyDown(event) {
                     var top    = 0,
                         bottom = scope.order.length - 1;
@@ -272,9 +264,6 @@ angular.module('oi.select')
                             saveOn('enter');
                             event.preventDefault(); // Prevent the event from bubbling up as it might otherwise cause a form submission
                             break;
-                        case 9: /* tab */
-                            blurHandler();
-                            break;
 
                         case 27: /* esc */
                             if (!multiple) {
@@ -285,17 +274,23 @@ angular.module('oi.select')
 
                         case 8: /* backspace */
                             if (!scope.query.length) {
-                                if ((multiple || scope.backspaceFocus) && scope.output) {
+                                if (!multiple || editItem) {
+                                    scope.backspaceFocus = true;
+                                }
+                                if (scope.backspaceFocus && scope.output) {
                                     scope.removeItem(scope.output.length - 1);
+
+                                    if (editItem) {
+                                        event.preventDefault();
+                                    }
+
                                     if (!scope.output.length) {
                                         getMatches();
-
                                     }
-                                    scope.backspaceFocus = false;
                                     break;
                                 }
-                                scope.backspaceFocus = true;
-                                //scope.backspaceFocus = !scope.backspaceFocus;
+                                //scope.backspaceFocus = true;
+                                scope.backspaceFocus = !scope.backspaceFocus;
                                 break;
                             }
                         default: /* any key */
@@ -350,8 +345,6 @@ angular.module('oi.select')
 
 
                 function click(event) {
-                    console.log('click', event);
-
                     //option is disabled
                     if (event.target.closest('oi-select .disabled')) return;
 
@@ -377,11 +370,6 @@ angular.module('oi.select')
                     if (scope.isFocused) return;
 
                     scope.isFocused = true;
-                    console.log('focus', event);
-
-                    //if (!multiple) {
-                    //    cleanInput();
-                    //}
 
                     if (attrs.disabled) return;
 
@@ -391,7 +379,6 @@ angular.module('oi.select')
 
                 function blur(event) {
                     scope.isFocused = false;
-                    console.log('blur', event);
 
                     if (!multiple) {
                         if (options.cleanModel && !scope.inputHide) {
