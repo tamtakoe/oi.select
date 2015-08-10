@@ -1,11 +1,17 @@
 <a name="0.2.5"></a>
-# 0.2.5 (in progress)
+# 0.2.5
 
 ## Features
+
+- **multiple-limit:** add `limited` class
 
 - **oi-select-options:**
     - closeList (close dropdown list by default after choosing or removing item)
     - listFilter = "none" (add `filter('none', function() { return function(input) { return input; }})`)
+    
+## Bug Fixes
+
+- **input:** fix focus/blur
 
 ## Breaking Changes
 

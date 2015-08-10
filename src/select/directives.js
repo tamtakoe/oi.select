@@ -38,7 +38,7 @@ angular.module('oi.select')
                 trackByFn            = $parse(trackByName);
 
             var multiple             = angular.isDefined(attrs.multiple),
-                multipleLimit        = Number(attrs.multipleLimit),
+                multipleLimit        = Number(attrs.multipleLimit) || Infinity,
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
                 optionsFn            = $parse(attrs.oiSelectOptions),
                 keyUpDownWerePressed = false,
@@ -59,6 +59,8 @@ angular.module('oi.select')
                     editItemCorrect = options.editItem === 'correct',
                     editItemFn      = editItem ? $injector.get(editItem) : function() {return ''};
 
+                var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
+
                 options.newItemModelFn = function (query) {
                     return (optionsFn({$query: query}) || {}).newItemModel || query;
                 };
@@ -73,9 +75,16 @@ angular.module('oi.select')
                     inputElement.attr('readonly', true)
                 }
 
+                if (angular.isDefined(attrs.tabindex)) {
+                    inputElement.attr('tabindex', attrs.tabindex);
+                    element[0].removeAttribute('tabindex');
+                }
+
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
                 });
+
+                scope.$on('destroy', unbindFocusBlur);
 
                 scope.$parent.$watch(attrs.ngModel, function(value) {
                     var output = value instanceof Array ? value : value ? [value]: [],
@@ -134,10 +143,6 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('isFocused', function(isFocused) {
-                    if (isFocused) {
-                        element.triggerHandler('focus');
-                    }
-
                     $animate[isFocused ? 'addClass' : 'removeClass'](element, 'focused', {
                         tempClasses: 'focused-animate'
                     });
@@ -155,34 +160,6 @@ angular.module('oi.select')
                     });
                 });
 
-                scope.setFocus = function(event) {
-                    if (attrs.disabled) return;
-
-                    if (!multiple) {
-                        cleanInput();
-                    }
-
-                    scope.backspaceFocus = false;
-
-                    if (event.target.nodeName !== 'INPUT') {
-                        inputElement[0].focus();
-                    }
-
-                    if (event.type === 'focus' && !scope.isOpen && !scope.isFocused) {
-                        scope.isFocused = true;
-
-                        return;
-                    }
-
-                    if (event.type === 'click' && angular.element(event.target).scope() === this) { //not click on add or remove buttons
-                        if (scope.isOpen && !scope.query) {
-                            resetMatches();
-                        } else {
-                            getMatches(scope.query);
-                        }
-                    }
-                };
-
                 scope.addItem = function addItem(option) {
                     lastQuery = scope.query;
 
@@ -190,7 +167,15 @@ angular.module('oi.select')
                     if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
 
                     //limit is reached
-                    if (!isNaN(multipleLimit) && scope.output.length >= multipleLimit) return;
+                    if (scope.output.length >= multipleLimit) {
+                        element.addClass('limited');
+
+                        $timeout(function() {
+                            element.removeClass('limited');
+                        }, 150);
+
+                        return;
+                    }
 
                     var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
@@ -199,17 +184,19 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-                        updateGroupPos();
+                        //updateGroupPos();
                     } else {
                         ctrl.$setViewValue(modelOption);
                         restoreInput();
                     }
 
+                    //resetMatches();
+
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
                     }
 
-                    if (multiple && options.closeList) {
+                    if (!multiple && !options.closeList) {
                         resetMatches({query: true});
                     }
 
@@ -243,10 +230,6 @@ angular.module('oi.select')
 
                     editItemCorrect = false;
 
-                    if (scope.isOpen || scope.oldQuery || !multiple) {
-                        getMatches(scope.oldQuery); //stay old list
-                    }
-
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
                     }
@@ -262,13 +245,17 @@ angular.module('oi.select')
                     }
                 };
 
-                $document.on('click', blurHandler);
+                scope.keyUp = function keyUp(event) { //scope.query is actual
+                    switch (event.keyCode) {
+                        case 8: /* backspace */
+                            if (!scope.query.length && (!multiple || !scope.output.length)) {
+                                //getMatches();
+                                resetMatches();
+                            }
+                    }
+                };
 
-                scope.$on('destroy', function() {
-                    $document.off('click', blurHandler);
-                });
-
-                scope.keyParser = function keyParser(event) {
+                scope.keyDown = function keyDown(event) {
                     var top    = 0,
                         bottom = scope.order.length - 1;
 
@@ -296,9 +283,6 @@ angular.module('oi.select')
                             saveOn('enter');
                             event.preventDefault(); // Prevent the event from bubbling up as it might otherwise cause a form submission
                             break;
-                        case 9: /* tab */
-                            blurHandler();
-                            break;
 
                         case 27: /* esc */
                             if (!multiple) {
@@ -309,15 +293,16 @@ angular.module('oi.select')
 
                         case 8: /* backspace */
                             if (!scope.query.length) {
-                                if (!multiple) {
+                                if (!multiple || editItem) {
                                     scope.backspaceFocus = true;
                                 }
                                 if (scope.backspaceFocus && scope.output) {
                                     scope.removeItem(scope.output.length - 1);
-                                    if (!scope.output.length) {
-                                        getMatches();
-                                        break;
+
+                                    if (editItem) {
+                                        event.preventDefault();
                                     }
+                                    break;
                                 }
                                 scope.backspaceFocus = !scope.backspaceFocus;
                                 break;
@@ -358,6 +343,10 @@ angular.module('oi.select')
 
                 resetMatches();
 
+                element[0].addEventListener('click', click, true); //triggered before add or delete item event
+                element.on('focus', focus);
+                element.on('blur', blur);
+
                 function cleanInput() {
                     scope.listItemHide = true;
                     scope.inputHide = false;
@@ -368,27 +357,46 @@ angular.module('oi.select')
                     scope.inputHide = !!ctrl.$modelValue;
                 }
 
-                function blurHandler(event) {
-                    var activeElement = event && event.target.ownerDocument.activeElement;
 
-                    if (scope.isFocused && (!activeElement || activeElement !== inputElement[0])) {
-                        $timeout(function() {
-                            element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
-                        });
+                function click(event) {
+                    //option is disabled
+                    if (event.target.closest('oi-select .disabled')) return;
 
-                        if (!multiple) {
-                            restoreInput();
-                        }
+                    //limit is reached
+                    if (scope.output.length >= multipleLimit && event.target.closest('oi-select .select-dropdown')) return;
 
-                        if (!multiple && options.cleanModel && cleanModel) {
+                    if (scope.isOpen && options.closeList && (options.editItem && !editItemCorrect || !scope.query)) {
+                        resetMatches({query: options.editItem && !editItemCorrect});
+                    } else {
+                        getMatches(scope.query);
+                    }
+                }
+
+                function focus(event) {
+                    if (scope.isFocused) return;
+
+                    scope.isFocused = true;
+
+                    if (attrs.disabled) return;
+
+                    scope.backspaceFocus = false;
+                }
+
+
+                function blur(event) {
+                    scope.isFocused = false;
+
+                    if (!multiple) {
+                        if (options.cleanModel && !scope.inputHide) {
                             ctrl.$setViewValue(undefined);
                         }
-                        cleanModel = true;
-
-                        saveOn('blur');
-                        scope.isFocused = false;
-                        scope.$evalAsync();
+                        restoreInput();
                     }
+
+                    cleanModel = true;
+
+                    saveOn('blur');
+                    scope.$evalAsync();
                 }
 
                 function saveOn(triggerName) {
