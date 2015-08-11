@@ -1,16 +1,18 @@
-<div ng-controller="selectAutoselectController">
-    <h2>Autoselect</h2>
+<div ng-controller="selectAutocompleteController">
+    <h2>Autocomplete</h2>
+    <p>Priority save matches on enter</p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
                 oi-options="item.name for (key, item) in shopObj"
                 ng-model="bundle"
-                placeholder="Select"
+                multiple
                 oi-select-options="{
-                        newItem: 'autoselect',
-                        newItemModel: {id: null, name: $query, category: 'shoes'},
-                        saveTrigger: 'enter, blur'
-                    }"
+                    newItem: 'autocomplete',
+                    newItemModel: {id: null, name: $query, category: 'shoes'},
+                    saveTrigger: 'enter, blur'
+                }"
+                placeholder="Select"
                     ></oi-select>
         </div>
     </div>
@@ -19,8 +21,9 @@
 <div hljs class="col-md-8">
 oi-options="item.name for (key, item) in shopObj"
 ng-model="bundle"
+multiple
 oi-select-options="{
-    newItem: 'autoselect',
+    newItem: 'autocomplete',
     newItemModel: {id: null, name: $query, category: 'shoes'},
     saveTrigger: 'enter, blur'
 }"

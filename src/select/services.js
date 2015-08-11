@@ -7,9 +7,10 @@ angular.module('oi.select')
             searchFilter:   'oiSelectCloseIcon',
             dropdownFilter: 'oiSelectHighlight',
             listFilter:     'oiSelectAscSort',
-            saveLastQuery:  null,
+            editItem:       false,
             newItem:        false,
-            saveTrigger:    'enter, backslash'
+            closeList:      true,
+            saveTrigger:    'enter'
         },
         $get: function() {
             return {
@@ -19,7 +20,13 @@ angular.module('oi.select')
     };
 })
 
-.factory('oiUtils', ['$document', function($document) {
+.factory('oiSelectEditItem', function() {
+    return function(removedItem, lastQuery, getLabel) {
+        return getLabel(removedItem);
+    };
+})
+
+.factory('oiUtils', ['$document', '$timeout', function($document, $timeout) {
     /**
      * Measures the width of a string within a
      * parent element (in pixels).
@@ -67,6 +74,103 @@ angular.module('oi.select')
     }
 
     /**
+     * Check to see if a DOM element is a descendant of another DOM element.
+     *
+     * @param {DOM element} container
+     * @param {DOM element} contained
+     * @param {string} class name of element in container
+     * @returns {boolean}
+     */
+    function contains(container, contained, className) {
+        var current = contained;
+
+        while (current && current.ownerDocument && current.nodeType !== 11) {
+            if (className) {
+                if (current === container) {
+                    return false;
+                }
+                if (current.classList.contains(className)) {
+                    return true;
+                }
+            } else {
+                if (current === container) {
+                    return true;
+                }
+            }
+            current = current.parentNode;
+        }
+
+        return false;
+    }
+
+    /**
+     * Simulate focus/blur events of the inner input element to the outer element
+     *
+     * @param {element} outer element
+     * @param {element} inner input element
+     * @returns {function} deregistration function for listeners.
+     */
+    function bindFocusBlur(element, inputElement) {
+        var isFocused = false;
+
+        $document[0].addEventListener('click', clickHandler, true);
+        element[0].addEventListener('blur', blurHandler, true);
+        inputElement.on('focus', focusHandler);
+
+        function blurHandler(event) {
+            var relatedTarget = event.relatedTarget; //TODO: get relativeTarget in IE, FF (event.explicitOriginalTarget || document.activeElement);
+
+            if (relatedTarget === inputElement[0]) {
+                event.stopImmediatePropagation(); //cancel blur if focus to input element
+                return;
+            }
+
+            if (relatedTarget) { //not triggered blur
+                isFocused = false;
+
+                $timeout(function () {
+                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
+        }
+
+        function focusHandler(event) {
+            if (!isFocused) {
+                isFocused = true;
+
+                $timeout(function () {
+                    element.triggerHandler('focus'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
+        }
+
+        function clickHandler(event) {
+            var activeElement = event.target;
+            var isSelectElement = contains(element[0], activeElement);
+
+            if (isSelectElement && activeElement.nodeName !== 'INPUT') {
+                $timeout(function () {
+                    inputElement[0].focus();
+                });
+            }
+
+            if (!isSelectElement && isFocused) {
+                isFocused = false;
+
+                $timeout(function () {
+                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+                });
+            }
+        }
+
+        return function () {
+            $document[0].removeEventListener('click', clickHandler);
+            element[0].removeEventListener('blur', blurHandler, true);
+            inputElement.off('focus', focusHandler);
+        }
+    }
+
+    /**
      * Sets the selected item in the dropdown menu
      * of available options.
      *
@@ -77,11 +181,11 @@ angular.module('oi.select')
         var y, height_menu, height_item, scroll, scroll_top, scroll_bottom;
 
         if (item) {
-            height_menu   = list.offsetHeight;
-            height_item   = getWidthOrHeight(item, 'height', 'margin'); //outerHeight(true);
-            scroll        = list.scrollTop || 0;
-            y             = getOffset(item).top - getOffset(list).top + scroll;
-            scroll_top    = y;
+            height_menu = list.offsetHeight;
+            height_item = getWidthOrHeight(item, 'height', 'margin'); //outerHeight(true);
+            scroll = list.scrollTop || 0;
+            y = getOffset(item).top - getOffset(list).top + scroll;
+            scroll_top = y;
             scroll_bottom = y - height_menu + height_item;
 
             //TODO Make animation
@@ -95,17 +199,17 @@ angular.module('oi.select')
 
     // Used for matching numbers
     var core_pnum = /[+-]?(?:\d*\.|)\d+(?:[eE][+-]?\d+|)/.source;
-    var rnumnonpx = new RegExp( "^(" + core_pnum + ")(?!px)[a-z%]+$", "i" );
+    var rnumnonpx = new RegExp("^(" + core_pnum + ")(?!px)[a-z%]+$", "i");
 
     function augmentWidthOrHeight(elem, name, extra, isBorderBox, styles) {
         var i = extra === (isBorderBox ? 'border' : 'content') ?
                 // If we already have the right measurement, avoid augmentation
                 4 :
                 // Otherwise initialize for horizontal or vertical properties
-                    name === 'width' ? 1 : 0,
+                name === 'width' ? 1 : 0,
 
             val = 0,
-            cssExpand = ['Top','Right','Bottom','Left'];
+            cssExpand = ['Top', 'Right', 'Bottom', 'Left'];
 
         //TODO Use angular.element.css instead of getStyleValue after https://github.com/caitp/angular.js/commit/92bbb5e225253ebddd38ef5735d66ffef76b6a14 will be applied
         function getStyleValue(name) {
@@ -118,7 +222,7 @@ angular.module('oi.select')
                 val += getStyleValue(extra + cssExpand[i]);
             }
 
-            if ( isBorderBox ) {
+            if (isBorderBox) {
                 // border-box includes padding, so remove it if we want content
                 if (extra === 'content') {
                     val -= getStyleValue('padding' + cssExpand[i]);
@@ -217,7 +321,7 @@ angular.module('oi.select')
     function objToArr(obj) {
         var arr = [];
 
-        angular.forEach(obj, function(value, key) {
+        angular.forEach(obj, function (value, key) {
             if (key.toString().charAt(0) !== '$') {
                 arr.push(value);
             }
@@ -228,20 +332,20 @@ angular.module('oi.select')
 
     //lodash _.isEqual
     function isEqual(x, y) {
-        if ( x === y ) return true;
-        if ( ! ( x instanceof Object ) || ! ( y instanceof Object ) ) return false;
-        if ( x.constructor !== y.constructor ) return false;
+        if (x === y) return true;
+        if (!( x instanceof Object ) || !( y instanceof Object )) return false;
+        if (x.constructor !== y.constructor) return false;
 
-        for ( var p in x ) {
-            if ( ! x.hasOwnProperty( p ) ) continue;
-            if ( ! y.hasOwnProperty( p ) ) return false;
-            if ( x[ p ] === y[ p ] ) continue;
-            if ( typeof( x[ p ] ) !== "object" ) return false;
-            if ( ! objectEquals( x[ p ],  y[ p ] ) ) return false;
+        for (var p in x) {
+            if (!x.hasOwnProperty(p)) continue;
+            if (!y.hasOwnProperty(p)) return false;
+            if (x[p] === y[p]) continue;
+            if (typeof( x[p] ) !== "object") return false;
+            if (!objectEquals(x[p], y[p])) return false;
         }
 
-        for ( p in y ) {
-            if ( y.hasOwnProperty( p ) && ! x.hasOwnProperty( p ) ) return false;
+        for (p in y) {
+            if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
         }
         return true;
     }
@@ -250,9 +354,9 @@ angular.module('oi.select')
     function intersection(xArr, yArr, isEqual, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
 
-        isEqual = isEqual || function(xValue, yValue) {
-            return xValue === yValue;
-        };
+        isEqual = isEqual || function (xValue, yValue) {
+                return xValue === yValue;
+            };
 
         for (i = 0, n = xArr.length; i < xArr.length; i++) {
             filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];
@@ -261,7 +365,7 @@ angular.module('oi.select')
                 filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
 
                 if (isEqual(filteredX, filteredY, xArr, yArr, i, j)) {
-                    invert ? out.splice(i + out.length - n, 1) : out.push(xArr[i]);
+                    invert ? out.splice(i + out.length - n, 1) : out.push(yArr[j]);
                     break;
                 }
             }
@@ -273,7 +377,7 @@ angular.module('oi.select')
         var locals = {};
 
         //'name.subname' -> {name: {subname: list}}'
-        valueName.split('.').reduce(function(previousValue, currentItem, index, arr) {
+        valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
             return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
         }, locals);
 
@@ -281,13 +385,15 @@ angular.module('oi.select')
     }
 
     return {
-        copyWidth:          copyWidth,
-        measureString:      measureString,
+        copyWidth: copyWidth,
+        measureString: measureString,
+        contains: contains,
+        bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
-        groupsIsEmpty:      groupsIsEmpty,
-        objToArr:           objToArr,
-        getValue:           getValue,
-        isEqual:            isEqual,
-        intersection:       intersection
+        groupsIsEmpty: groupsIsEmpty,
+        objToArr: objToArr,
+        getValue: getValue,
+        isEqual: isEqual,
+        intersection: intersection
     }
 }]);

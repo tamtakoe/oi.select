@@ -1,10 +1,12 @@
 <div ng-controller="selectReadonlyController">
     <h2>Read only</h2>
+    <p>Specifies that an input field is read-only (autocomplete doesn't work)</p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
                 oi-options="item for item in shopArrShort"
                 ng-model="bundle"
+                multiple
                 readonly
                 placeholder="Select"
                 ></oi-select>

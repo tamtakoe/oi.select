@@ -1,6 +1,5 @@
 angular.module('selectDemo')
     .controller('selectAllController', function ($scope, $q, $timeout, ShopArr) {
-
         $scope.shopArr = ShopArr.query();
 
         $scope.shopArrFn = function(query, querySelectAs) {
@@ -12,19 +11,21 @@ angular.module('selectDemo')
 
             $timeout(function() {
                 $scope.shopArr.$promise
-                    .then(deferred.resolve);
-            }, 1000);
+                    .then(function(data) {
+                        if (query) {
+                            deferred.resolve(data)
+                        } else {
+                            deferred.resolve([])
+                        }
+                    });
+            }, 500);
 
             return deferred.promise;
         }
 
-        $scope.bundle = [{
+        $scope.bundle = {
             "id": 9,
             "name": "jeans",
             "category": "clothes"
-        },{
-            "id": 2,
-            "name": "shoes",
-            "category": "shoes"
-        }];
+        };
     });

@@ -23,8 +23,8 @@ angular.module('selectDemo')
         }
     })
 
-    .factory('mySaveLastQuery', function() {
-        return function(removedValue, lastQuery) {
-            return removedValue.name;
+    .factory('myEditItem', function() {
+        return function(removedValue, lastQuery, getLabel) {
+            return removedValue ? getLabel(removedValue) + ' :-)' : '';
         };
     });

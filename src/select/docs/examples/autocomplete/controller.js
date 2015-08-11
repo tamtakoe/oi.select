@@ -1,9 +1,9 @@
 angular.module('selectDemo')
-    .controller('selectAutoselectController', function ($scope, ShopObj) {
+    .controller('selectAutocompleteController', function ($scope, ShopObj) {
 
         $scope.shopObj = ShopObj.get();
 
         $scope.shopObj.$promise.then(function(data) {
-            $scope.bundle = data[5];
+            $scope.bundle = [data[5]];
         });
     });
