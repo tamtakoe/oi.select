@@ -8,7 +8,7 @@ module.exports = function(config) {
     config.set({
 
         // base path, that will be used to resolve files and exclude
-        basePath: './..',
+        basePath: '.',
 
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
@@ -18,20 +18,13 @@ module.exports = function(config) {
             'bower_components/angular/angular.js',
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-mocks/angular-mocks.js',
-            //'src/{,*/}*.js',
 
-            //'dist/select-tpls.js',
-            'src/select/module.js',
-            'src/select/directives.js',
-            'src/select/filters.js',
-            'src/select/services.js',
-
-            'src/select/test/*.spec.js'
+            'src/module.js',
+            'src/*.js'
         ],
 
         // list of files / patterns to exclude
-        exclude: [
-        ],
+        exclude: [],
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'

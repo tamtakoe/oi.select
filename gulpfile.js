@@ -21,7 +21,6 @@ var through = require('through2');
 var paths = {
     root:     __dirname,
     src:      path.join(__dirname, '/src'),
-    template: path.join(__dirname, '/template'),
     dist:     path.join(__dirname, '/dist')
 };
 
@@ -40,7 +39,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('compileStyles', function() {
-    return gulp.src(path.join(paths.template, 'select/style.styl'))
+    return gulp.src(path.join(paths.src, 'style.styl'))
         .pipe(stylus({
             use: autoprefixer
         }))
@@ -52,18 +51,18 @@ gulp.task('compileStyles', function() {
 });
 
 gulp.task('compileScripts', function() {
-    var templateStream = gulp.src(path.join(paths.template, 'select/template.html'))
+    var templateStream = gulp.src(path.join(paths.src, 'template.html'))
         .pipe(minifyHtml())
         .pipe(templateCache({
             module: 'oi.select',
-            root: 'template/select/'
+            root: 'src/'
         }));
 
     var scriptStream = gulp.src([
-        path.join(paths.src, 'select/module.js'),
-        path.join(paths.src, 'select/services.js'),
-        path.join(paths.src, 'select/directives.js'),
-        path.join(paths.src, 'select/filters.js')
+        path.join(paths.src, 'module.js'),
+        path.join(paths.src, 'services.js'),
+        path.join(paths.src, 'directives.js'),
+        path.join(paths.src, 'filters.js')
     ]);
 
     scriptStream
@@ -82,7 +81,7 @@ gulp.task('compileScripts', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(path.join(paths.template, '**/*.styl'), ['compileStyles']);
+    gulp.watch(path.join(paths.src, '**/*.styl'), ['compileStyles']);
 });
 
 gulp.task('build', ['clean', 'compileScripts', 'compileStyles']);
@@ -95,7 +94,7 @@ var karma = require('karma').server;
 gulp.task('karma:unit', function(done) {
 
     karma.start({
-        configFile: path.join(__dirname, 'test/karma.conf.js'),
+        configFile: path.join(__dirname, 'karma.conf.js'),
         browsers: ['PhantomJS'],
         //reporters: ['dots'],
         singleRun: true

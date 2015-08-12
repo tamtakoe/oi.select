@@ -6,7 +6,7 @@ angular.module('oi.select')
 
     return {
         restrict: 'AE',
-        templateUrl: 'template/select/template.html',
+        templateUrl: 'src/template.html',
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
@@ -99,7 +99,7 @@ angular.module('oi.select')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
-                                return oiUtils.intersection(output, collection, oiUtils.isEqual, null, selectAs);
+                                return oiUtils.intersection(output, collection, null, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
@@ -164,7 +164,7 @@ angular.module('oi.select')
                     lastQuery = scope.query;
 
                     //duplicate
-                    if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
+                    if (multiple && oiUtils.intersection(scope.output, [option], trackBy, trackBy).length) return;
 
                     //limit is reached
                     if (scope.output.length >= multipleLimit) {
@@ -485,7 +485,7 @@ angular.module('oi.select')
                                 if (!querySelectAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
-                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, oiUtils.isEqual, trackBy, trackBy, true);
+                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 
                                     scope.groups = group(filteredOutput);

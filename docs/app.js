@@ -1,4 +1,4 @@
-var URL = 'src/select/docs/';
+var URL = 'docs/';
 
 angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs'])
 
