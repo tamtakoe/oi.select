@@ -92,7 +92,6 @@ gulp.task('default', ['webserver', 'watch']);
 var karma = require('karma').server;
 
 gulp.task('karma:unit', function(done) {
-
     karma.start({
         configFile: path.join(__dirname, 'karma.conf.js'),
         browsers: ['PhantomJS'],

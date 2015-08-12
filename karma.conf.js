@@ -97,7 +97,7 @@ module.exports = function(config) {
         singleRun: true,
 
         preprocessors: {
-            'src/{,*/}*.js': 'coverage'
+            'src/!(*.spec).js': 'coverage'
         },
 
         plugins: [
@@ -111,8 +111,8 @@ module.exports = function(config) {
         // Coverage reporter generates the coverage
         coverageReporter: {
             reporters:[
-                {type: 'lcov', dir:'test/coverage/'},
-                {type: 'text-summary', dir:'test/coverage/'}
+                {type: 'lcov', dir:'coverage/'},
+                {type: 'text-summary', dir:'coverage/'}
             ]
         }
 
