@@ -20,7 +20,7 @@ describe('factory: oiSelectEditItem', function() {
 describe('factory: oiUtils', function() {
    var oiUtils;
 
-   beforeEach(module('oi.select'));
+   beforeEach(module('oi.select')); //beforeAll
    beforeEach(inject(function($injector) {
       oiUtils = $injector.get('oiUtils');
    }));
@@ -33,7 +33,7 @@ describe('factory: oiUtils', function() {
       });
 
       it('returns positive number if str exist', function(){
-         expect(oiUtils.measureString('a', parent) > 0).toEqual(true);
+         expect( oiUtils.measureString('a', parent) > 0 ).toEqual(true);
       });
 
       it('returns "a" width * 3 if str contains "aaa"', function(){
@@ -58,5 +58,31 @@ describe('factory: oiUtils', function() {
       it('returns false if contained is out of element', function(){
          expect( oiUtils.contains(container, noContained) ).toEqual(false);
       });
-   })
+   });
+
+   describe('bindFocusBlur', function(){
+      var container = angular.element('<div><input id="bi"/><p id="el"><input id="i"/></p></div>')[0];
+
+      var beforeInputElement = angular.element(container.querySelector("#bi"));
+      var element            = angular.element(container.querySelector('#el'));
+      var inputElement       = angular.element(container.querySelector('#i'));
+
+
+      it('sets focus on element if input was focused', function(){
+         oiUtils.bindFocusBlur(element, inputElement);
+
+         var angularElement = angular.element; //save previous function
+
+         angular.element = jasmine.createSpy("angular.element").and.callFake(function(){
+            return element;
+         });
+
+         spyOn(element, 'triggerHandler');
+         //element.triggerHandler('focus'); //work
+         inputElement[0].focus(); //doesn't work
+
+         angular.element = angularElement; //restore
+         expect(element.triggerHandler).toHaveBeenCalledWith('focus'); // Expected spy trigger to have been called
+      });
+   });
 });
