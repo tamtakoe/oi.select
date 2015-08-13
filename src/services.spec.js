@@ -61,12 +61,11 @@ describe('factory: oiUtils', function() {
    });
 
    describe('bindFocusBlur', function(){
-      var container = angular.element('<div><input id="bi"/><p id="el"><input id="i"/></p></div>')[0];
+      var container = angular.element('<div><input id="bie"/><p id="e"><input id="ie"/></p></div>')[0];
 
       var beforeInputElement = angular.element(container.querySelector("#bi"));
-      var element            = angular.element(container.querySelector('#el'));
-      var inputElement       = angular.element(container.querySelector('#i'));
-
+      var element            = angular.element(container.querySelector('#e'));
+      var inputElement       = angular.element(container.querySelector('#ie'));
 
       it('sets focus on element if input was focused', function(){
          oiUtils.bindFocusBlur(element, inputElement);
