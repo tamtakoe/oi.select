@@ -330,33 +330,9 @@ angular.module('oi.select')
         return arr;
     }
 
-    //lodash _.isEqual
-    function isEqual(x, y) {
-        if (x === y) return true;
-        if (!( x instanceof Object ) || !( y instanceof Object )) return false;
-        if (x.constructor !== y.constructor) return false;
-
-        for (var p in x) {
-            if (!x.hasOwnProperty(p)) continue;
-            if (!y.hasOwnProperty(p)) return false;
-            if (x[p] === y[p]) continue;
-            if (typeof( x[p] ) !== "object") return false;
-            if (!objectEquals(x[p], y[p])) return false;
-        }
-
-        for (p in y) {
-            if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
-        }
-        return true;
-    }
-
-    //lodash _.intersection + filter + isEqual + invert
-    function intersection(xArr, yArr, isEqual, xFilter, yFilter, invert) {
+    //lodash _.intersection + filter + invert
+    function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
-
-        isEqual = isEqual || function (xValue, yValue) {
-                return xValue === yValue;
-            };
 
         for (i = 0, n = xArr.length; i < xArr.length; i++) {
             filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];
@@ -364,7 +340,7 @@ angular.module('oi.select')
             for (j = 0; j < yArr.length; j++) {
                 filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
 
-                if (isEqual(filteredX, filteredY, xArr, yArr, i, j)) {
+                if (angular.equals(filteredX, filteredY, xArr, yArr, i, j)) {
                     invert ? out.splice(i + out.length - n, 1) : out.push(yArr[j]);
                     break;
                 }
@@ -393,7 +369,6 @@ angular.module('oi.select')
         groupsIsEmpty: groupsIsEmpty,
         objToArr: objToArr,
         getValue: getValue,
-        isEqual: isEqual,
         intersection: intersection
     }
 }]);

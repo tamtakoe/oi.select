@@ -331,33 +331,9 @@ angular.module('oi.select')
         return arr;
     }
 
-    //lodash _.isEqual
-    function isEqual(x, y) {
-        if (x === y) return true;
-        if (!( x instanceof Object ) || !( y instanceof Object )) return false;
-        if (x.constructor !== y.constructor) return false;
-
-        for (var p in x) {
-            if (!x.hasOwnProperty(p)) continue;
-            if (!y.hasOwnProperty(p)) return false;
-            if (x[p] === y[p]) continue;
-            if (typeof( x[p] ) !== "object") return false;
-            if (!objectEquals(x[p], y[p])) return false;
-        }
-
-        for (p in y) {
-            if (y.hasOwnProperty(p) && !x.hasOwnProperty(p)) return false;
-        }
-        return true;
-    }
-
-    //lodash _.intersection + filter + isEqual + invert
-    function intersection(xArr, yArr, isEqual, xFilter, yFilter, invert) {
+    //lodash _.intersection + filter + invert
+    function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
-
-        isEqual = isEqual || function (xValue, yValue) {
-                return xValue === yValue;
-            };
 
         for (i = 0, n = xArr.length; i < xArr.length; i++) {
             filteredX = xFilter ? xFilter(xArr[i]) : xArr[i];
@@ -365,7 +341,7 @@ angular.module('oi.select')
             for (j = 0; j < yArr.length; j++) {
                 filteredY = yFilter ? yFilter(yArr[j]) : yArr[j];
 
-                if (isEqual(filteredX, filteredY, xArr, yArr, i, j)) {
+                if (angular.equals(filteredX, filteredY, xArr, yArr, i, j)) {
                     invert ? out.splice(i + out.length - n, 1) : out.push(yArr[j]);
                     break;
                 }
@@ -394,7 +370,6 @@ angular.module('oi.select')
         groupsIsEmpty: groupsIsEmpty,
         objToArr: objToArr,
         getValue: getValue,
-        isEqual: isEqual,
         intersection: intersection
     }
 }]);
@@ -406,7 +381,7 @@ angular.module('oi.select')
 
     return {
         restrict: 'AE',
-        templateUrl: 'template/select/template.html',
+        templateUrl: 'src/template.html',
         require: 'ngModel',
         scope: {},
         compile: function (element, attrs) {
@@ -499,7 +474,7 @@ angular.module('oi.select')
                     if (selectAsFn && value) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
-                                return oiUtils.intersection(output, collection, oiUtils.isEqual, null, selectAs);
+                                return oiUtils.intersection(output, collection, null, selectAs);
                             });
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
@@ -564,7 +539,7 @@ angular.module('oi.select')
                     lastQuery = scope.query;
 
                     //duplicate
-                    if (multiple && oiUtils.intersection(scope.output, [option], null, trackBy, trackBy).length) return;
+                    if (multiple && oiUtils.intersection(scope.output, [option], trackBy, trackBy).length) return;
 
                     //limit is reached
                     if (scope.output.length >= multipleLimit) {
@@ -885,7 +860,7 @@ angular.module('oi.select')
                                 if (!querySelectAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
-                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, oiUtils.isEqual, trackBy, trackBy, true);
+                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 
                                     scope.groups = group(filteredOutput);
@@ -1032,4 +1007,4 @@ angular.module('oi.select')
         return input;
     };
 });
-angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("template/select/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-style=\"{\'width\': inputWidth + \'px\'}\" ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=group></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);
+angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-style=\"{\'width\': inputWidth + \'px\'}\" ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=group></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);
