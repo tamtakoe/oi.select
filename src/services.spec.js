@@ -61,27 +61,44 @@ describe('factory: oiUtils', function() {
    });
 
    describe('bindFocusBlur', function(){
-      var container = angular.element('<div><input id="bie"/><p id="e"><input id="ie"/></p></div>')[0];
+      var $rootScope, $timeout;
 
-      var beforeInputElement = angular.element(container.querySelector("#bie"));
-      var element            = angular.element(container.querySelector('#e'));
-      var inputElement       = angular.element(container.querySelector('#ie'));
+      beforeEach(inject(function($injector) {
+         $rootScope = $injector.get('$rootScope');
+         $timeout   = $injector.get('$timeout');
+      }));
 
-      it('sets focus on element if input was focused', function(){
-         oiUtils.bindFocusBlur(element, inputElement);
+      it('sets focus on element if input was focused', function(done){
+         var container = angular.element('<div><input id="bie"/><p id="e"><input id="ie"/></p></div>')[0];
+         var beforeInputElement = angular.element(container.querySelector("#bie"));
+         var element            = angular.element(container.querySelector('#e'));
+         var inputElement       = element.find('input');//angular.element(container.querySelector('#ie'));
 
-         var angularElement = angular.element; //save previous function
-
-         angular.element = jasmine.createSpy("angular.element").and.callFake(function(){
-            return element;
-         });
+         //var angularElement = angular.element; //save previous function
+         //
+         //angular.element = jasmine.createSpy("angular.element").and.callFake(function(){
+         //   return element;
+         //});
 
          spyOn(element, 'triggerHandler');
-         //element.triggerHandler('focus'); //work
-         inputElement[0].focus(); //doesn't work
 
-         angular.element = angularElement; //restore
-         expect(element.triggerHandler).toHaveBeenCalledWith('focus'); // Expected spy trigger to have been called
+         oiUtils.bindFocusBlur(element, inputElement);
+
+         inputElement.triggerHandler('focus'); //work
+         //inputElement[0].focus(); //doesn't work
+
+         $timeout.flush();
+         //$rootScope.$apply();
+
+         setTimeout(function() {
+            $rootScope.$apply();
+            expect(element.triggerHandler).toHaveBeenCalledWith('focus'); // Expected spy trigger to have been called
+            //deferred.resolve();
+            done();
+         }, 500);
+
+         //angular.element = angularElement; //restore
+         //expect(element.triggerHandler).toHaveBeenCalledWith('focus'); // Expected spy trigger to have been called
       });
    });
 });

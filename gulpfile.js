@@ -10,7 +10,7 @@ var minifyCss     = require('gulp-minify-css');
 var minifyHtml    = require('gulp-minify-html');
 var uglify        = require('gulp-uglify');
 var stylus        = require('gulp-stylus');
-var karma         = require('karma').server;
+var KarmaServer   = require('karma').Server;
 var autoprefixer  = require('autoprefixer-stylus')({
     browsers: ["ff >= 20", "chrome >= 35", "safari >= 7", "ios >= 7", "android >= 4", "opera >= 12.1", "ie >= 10"]
 });
@@ -85,19 +85,12 @@ gulp.task('watch', function() {
     gulp.watch(path.join(paths.src, '**/*.styl'), ['compileStyles']);
 });
 
+gulp.task('test', function(done) {
+    new KarmaServer({
+        configFile: path.join(paths.root, 'karma.conf.js')
+    }, done).start();
+});
+
 gulp.task('build', ['clean', 'compileScripts', 'compileStyles']);
 gulp.task('default', ['webserver', 'watch']);
 
-
-gulp.task('test', function(done) {
-    karma.start({
-        configFile: path.join(paths.root, 'karma.conf.js'),
-        browsers: ['PhantomJS'],
-        //reporters: ['dots'],
-        singleRun: true
-    }, function(code) {
-        console.log('Karma has exited with ' + code);
-        process.exit(code);
-        done();
-    });
-});

@@ -8,7 +8,7 @@ module.exports = function(config) {
     config.set({
 
         // base path, that will be used to resolve files and exclude
-        basePath: '.',
+        basePath: '',
 
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
@@ -28,7 +28,8 @@ module.exports = function(config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['progress', 'coverage'],
+        //reporters: ['progress', 'coverage'],
+        reporters: ['progress'],
 
         // web server port
         port: 8080,
@@ -45,7 +46,7 @@ module.exports = function(config) {
         customLaunchers: {
             'SL_Chrome': {
                 base: 'SauceLabs',
-                browserName: 'chrome',
+                browserName: 'chrome'
             },
             'SL_Firefox': {
                 base: 'SauceLabs',
@@ -85,7 +86,7 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
         // Timeouts for SauceLabs
         browserDisconnectTimeout: 10000, // default 2000
@@ -109,12 +110,12 @@ module.exports = function(config) {
         ],
 
         // Coverage reporter generates the coverage
-        coverageReporter: {
-            reporters:[
-                {type: 'lcov', dir:'coverage/'},
-                {type: 'text-summary', dir:'coverage/'}
-            ]
-        }
+        //coverageReporter: {
+        //    reporters:[
+        //        {type: 'lcov', dir:'coverage/'},
+        //        {type: 'text-summary', dir:'coverage/'}
+        //    ]
+        //}
 
     });
 
