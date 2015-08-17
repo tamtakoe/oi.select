@@ -28,7 +28,6 @@ module.exports = function(config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        //reporters: ['progress', 'coverage'],
         reporters: ['progress'],
 
         // web server port
@@ -97,26 +96,13 @@ module.exports = function(config) {
         // if true, it capture browsers, run tests and exit
         singleRun: true,
 
-        preprocessors: {
-            'src/!(*.spec).js': 'coverage'
-        },
-
         plugins: [
             'karma-jasmine',
             'karma-phantomjs-launcher',
             'karma-chrome-launcher',
             'karma-sauce-launcher',
             'karma-coverage'
-        ],
-
-        // Coverage reporter generates the coverage
-        //coverageReporter: {
-        //    reporters:[
-        //        {type: 'lcov', dir:'coverage/'},
-        //        {type: 'text-summary', dir:'coverage/'}
-        //    ]
-        //}
-
+        ]
     });
 
 };

@@ -150,7 +150,7 @@ angular.module('oi.select')
 
             if (isSelectElement && activeElement.nodeName !== 'INPUT') {
                 $timeout(function () {
-                    inputElement[0].focus();
+                    inputElement.triggerHandler('focus');
                 });
             }
 
