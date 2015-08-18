@@ -95,5 +95,5 @@ Use `oi-select` directive:
   * `newItemFn` — function which get query and return new item object or promise
 
 ### oiSelect service
- * `oiSelect.options` — default options which we can override in `oiSelectProvider.options`
- * `oiSelect.version` — current version
+ * `options` — default options which we can override in `oiSelectProvider.options`
+ * `version` — current version
