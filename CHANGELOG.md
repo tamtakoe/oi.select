@@ -1,3 +1,11 @@
+<a name="0.2.8"></a>
+# 0.2.8 (in progress)
+
+## Bug Fixes
+
+- **blur** fixed blur trigger in IE, FF, Opera
+- **tests** fixed some tests
+
 <a name="0.2.7"></a>
 # 0.2.7
 

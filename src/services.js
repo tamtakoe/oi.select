@@ -13,10 +13,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.7',
+            full: '0.2.8',
             major: 0,
             minor: 2,
-            dot: 7
+            dot: 8
         },
         $get: function() {
             return {
@@ -139,6 +139,14 @@ angular.module('oi.select')
                     element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
                 });
             }
+
+            //Hack for IE, FF, Opera which do not support relativeTarget
+            $timeout(function() {
+                if (inputElement[0] !== document.activeElement) {
+                    isFocused = false;
+                    element.triggerHandler('blur');
+                }
+            }, 100);
         }
 
         function focusHandler(event) {
