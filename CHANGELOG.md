@@ -1,11 +1,15 @@
 <a name="0.2.7"></a>
-# 0.2.7 (in progress)
+# 0.2.7
 
 ## Features
 
 - **version** added version info in `oiSelect` service
 - **tests** created test environment and added tests
 - **structure** file structure refactoring
+
+## Bug Fixes
+
+- **compatibility** correct work with `ngAria`
 
 <a name="0.2.6"></a>
 # 0.2.6

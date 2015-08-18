@@ -132,7 +132,7 @@ angular.module('oi.select')
                 return;
             }
 
-            if (relatedTarget) { //not triggered blur
+            if (relatedTarget && !contains(element[0], relatedTarget)) { //not triggered blur
                 isFocused = false;
 
                 $timeout(function () {
@@ -157,7 +157,7 @@ angular.module('oi.select')
 
             if (isSelectElement && activeElement.nodeName !== 'INPUT') {
                 $timeout(function () {
-                    inputElement.triggerHandler('focus');
+                    inputElement[0].focus();
                 });
             }
 
