@@ -12,9 +12,16 @@ angular.module('oi.select')
             closeList:      true,
             saveTrigger:    'enter'
         },
+        version: {
+            full: '0.2.6',
+            major: 0,
+            minor: 2,
+            dot: 6
+        },
         $get: function() {
             return {
-                options: this.options
+                options: this.options,
+                version: this.version
             };
         }
     };
