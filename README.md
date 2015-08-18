@@ -38,15 +38,10 @@ gulp
 open "http://localhost:3000"
 ```
 
-make build:
+make build and run tests:
 
 ```
 gulp build
-```
-
-or run unit tests:
-
-```
 gulp test
 ```
 
