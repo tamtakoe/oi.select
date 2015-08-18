@@ -71,6 +71,7 @@ Use `oi-select` directive:
 ```
 
 ## Attributes
+### oi-select directive
 * `oi-options` — see: [ngOptions](http://docs.angularjs.org/api/ng/directive/ngOptions)
   * `oi-options="item for item in shopArrShort | limitTo: 3"` — filter input list
   * `oi-options="item for item in shopArrFn($query, $querySelectAs)"` — generate input list (expects array/object or promise)
@@ -92,3 +93,7 @@ Use `oi-select` directive:
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise
+
+### oiSelect service
+ * `oiSelect.options` — default options which we can override in `oiSelectProvider.options`
+ * `oiSelect.version` — current version

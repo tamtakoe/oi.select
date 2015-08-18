@@ -13,9 +13,16 @@ angular.module('oi.select')
             closeList:      true,
             saveTrigger:    'enter'
         },
+        version: {
+            full: '0.2.7',
+            major: 0,
+            minor: 2,
+            dot: 7
+        },
         $get: function() {
             return {
-                options: this.options
+                options: this.options,
+                version: this.version
             };
         }
     };
@@ -151,7 +158,7 @@ angular.module('oi.select')
 
             if (isSelectElement && activeElement.nodeName !== 'INPUT') {
                 $timeout(function () {
-                    inputElement[0].focus();
+                    inputElement.triggerHandler('focus');
                 });
             }
 
