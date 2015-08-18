@@ -44,6 +44,12 @@ make build:
 gulp build
 ```
 
+or run unit tests:
+
+```
+gulp test
+```
+
 
 Then you need to include into index.html:
 
