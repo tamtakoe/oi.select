@@ -50,7 +50,6 @@ angular.module('oi.select')
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement    = element.find('input'),
-                    searchElement   = angular.element(element[0].querySelector('.select-search')),
                     listElement     = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder     = placeholderFn(scope),
                     elementOptions  = optionsFn(scope.$parent) || {},
@@ -82,6 +81,7 @@ angular.module('oi.select')
 
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
+                    scope.inputHide = value;
                 });
 
                 scope.$on('destroy', unbindFocusBlur);
@@ -90,7 +90,7 @@ angular.module('oi.select')
                     var output = value instanceof Array ? value : value ? [value]: [],
                         promise = $q.when(output);
 
-                    adjustInput();
+                    modifyPlaceholder();
 
                     if (!multiple) {
                         restoreInput();
@@ -114,8 +114,6 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    adjustInput();
-
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -204,8 +202,6 @@ angular.module('oi.select')
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
                     scope.backspaceFocus = false;
-
-                    adjustInput();
                 };
 
                 scope.removeItem = function removeItem(position) {
@@ -233,8 +229,6 @@ angular.module('oi.select')
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
                     }
-
-                    adjustInput();
                 };
 
                 scope.setSelection = function(index) {
@@ -431,11 +425,9 @@ angular.module('oi.select')
                         });
                 }
 
-                function adjustInput() {
-                    var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length && multiple ? '' : placeholder;
+                function modifyPlaceholder() {
+                    var currentPlaceholder = multiple && ctrl.$modelValue && ctrl.$modelValue.length ? '' : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
-                    // expand input box width based on content
-                    scope.inputWidth = oiUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;
                 }
 
                 function trackBy(item) {

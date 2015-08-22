@@ -25,23 +25,6 @@ describe('factory: oiUtils', function() {
         oiUtils = $injector.get('oiUtils');
     }));
 
-    describe('measureString', function() {
-        var parent = angular.element('<span></span>');
-
-        it('returns 0 if str is empty', function() {
-            expect(oiUtils.measureString('', parent)).toEqual(0);
-        });
-
-        it('returns positive number if str exist', function() {
-            expect(oiUtils.measureString('a', parent) > 0).toEqual(true);
-        });
-
-        it('returns "a" width * 3 if str contains "aaa"', function() {
-            var aWidth = oiUtils.measureString('a', parent);
-            expect(oiUtils.measureString('aaa', parent)).toEqual(aWidth * 3);
-        });
-    });
-
     describe('contains', function() {
         var container = angular.element('<div><p class="someClass"><span></span></p></div>')[0];
         var contained = container.getElementsByTagName('span')[0];
