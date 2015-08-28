@@ -36,52 +36,6 @@ angular.module('oi.select')
 
 .factory('oiUtils', ['$document', '$timeout', function($document, $timeout) {
     /**
-     * Measures the width of a string within a
-     * parent element (in pixels).
-     *
-     * @param {string} str
-     * @param {object} $parent
-     * @returns {int}
-     */
-    function measureString(str, $parent) {
-        var $mirror = angular.element('<mirror>').css({
-            position: 'absolute',
-            width: 'auto',
-            padding: 0,
-            whiteSpace: 'pre',
-            visibility: 'hidden',
-            'z-index': -99999
-        }).text(str || '');
-
-        transferStyles($parent, $mirror, 'letterSpacing fontSize fontFamily fontWeight textTransform'.split(' '));
-
-        $document[0].body.appendChild($mirror[0]);
-
-        var width = $mirror[0].offsetWidth;
-        $mirror.remove();
-
-        return width;
-    }
-
-    /**
-     * Copies CSS properties from one element to another.
-     *
-     * @param {object} $from
-     * @param {object} $to
-     * @param {array} properties
-     */
-    function transferStyles($from, $to, properties) {
-        var stylesTo = {},
-            stylesFrom = getComputedStyle($from[0], '');
-
-        for (var i = 0, n = properties.length; i < n; i++) {
-            stylesTo[properties[i]] = stylesFrom[properties[i]];
-        }
-
-        $to.css(stylesTo);
-    }
-
-    /**
      * Check to see if a DOM element is a descendant of another DOM element.
      *
      * @param {DOM element} container
@@ -378,7 +332,6 @@ angular.module('oi.select')
 
     return {
         copyWidth: copyWidth,
-        measureString: measureString,
         contains: contains,
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
@@ -440,7 +393,6 @@ angular.module('oi.select')
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement    = element.find('input'),
-                    searchElement   = angular.element(element[0].querySelector('.select-search')),
                     listElement     = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder     = placeholderFn(scope),
                     elementOptions  = optionsFn(scope.$parent) || {},
@@ -472,6 +424,7 @@ angular.module('oi.select')
 
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
+                    scope.inputHide = value;
                 });
 
                 scope.$on('destroy', unbindFocusBlur);
@@ -480,7 +433,7 @@ angular.module('oi.select')
                     var output = value instanceof Array ? value : value ? [value]: [],
                         promise = $q.when(output);
 
-                    adjustInput();
+                    modifyPlaceholder();
 
                     if (!multiple) {
                         restoreInput();
@@ -504,8 +457,6 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    adjustInput();
-
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -594,8 +545,6 @@ angular.module('oi.select')
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
                     scope.backspaceFocus = false;
-
-                    adjustInput();
                 };
 
                 scope.removeItem = function removeItem(position) {
@@ -623,8 +572,6 @@ angular.module('oi.select')
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
                     }
-
-                    adjustInput();
                 };
 
                 scope.setSelection = function(index) {
@@ -821,11 +768,9 @@ angular.module('oi.select')
                         });
                 }
 
-                function adjustInput() {
-                    var currentPlaceholder = ctrl.$modelValue && ctrl.$modelValue.length && multiple ? '' : placeholder;
+                function modifyPlaceholder() {
+                    var currentPlaceholder = multiple && ctrl.$modelValue && ctrl.$modelValue.length ? '' : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
-                    // expand input box width based on content
-                    scope.inputWidth = oiUtils.measureString(scope.query || currentPlaceholder, inputElement) + 4;
                 }
 
                 function trackBy(item) {

@@ -35,52 +35,6 @@ angular.module('oi.select')
 
 .factory('oiUtils', ['$document', '$timeout', function($document, $timeout) {
     /**
-     * Measures the width of a string within a
-     * parent element (in pixels).
-     *
-     * @param {string} str
-     * @param {object} $parent
-     * @returns {int}
-     */
-    function measureString(str, $parent) {
-        var $mirror = angular.element('<mirror>').css({
-            position: 'absolute',
-            width: 'auto',
-            padding: 0,
-            whiteSpace: 'pre',
-            visibility: 'hidden',
-            'z-index': -99999
-        }).text(str || '');
-
-        transferStyles($parent, $mirror, 'letterSpacing fontSize fontFamily fontWeight textTransform'.split(' '));
-
-        $document[0].body.appendChild($mirror[0]);
-
-        var width = $mirror[0].offsetWidth;
-        $mirror.remove();
-
-        return width;
-    }
-
-    /**
-     * Copies CSS properties from one element to another.
-     *
-     * @param {object} $from
-     * @param {object} $to
-     * @param {array} properties
-     */
-    function transferStyles($from, $to, properties) {
-        var stylesTo = {},
-            stylesFrom = getComputedStyle($from[0], '');
-
-        for (var i = 0, n = properties.length; i < n; i++) {
-            stylesTo[properties[i]] = stylesFrom[properties[i]];
-        }
-
-        $to.css(stylesTo);
-    }
-
-    /**
      * Check to see if a DOM element is a descendant of another DOM element.
      *
      * @param {DOM element} container
@@ -377,7 +331,6 @@ angular.module('oi.select')
 
     return {
         copyWidth: copyWidth,
-        measureString: measureString,
         contains: contains,
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
