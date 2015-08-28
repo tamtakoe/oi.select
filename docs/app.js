@@ -1,6 +1,6 @@
 var URL = 'docs/';
 
-angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs'])
+angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext'])
 
     .factory('ShopArr', function ($resource) {
         return $resource(URL + 'data/shopArr.json', {}, {
@@ -49,6 +49,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs'])
             {urlName: 'editableoptions', name: 'Editable options'},
             {urlName: 'customization',   name: 'Customization'},
             {urlName: 'validation',      name: 'Validation'},
+            {urlName: 'translate',       name: 'Translate'},
             {urlName: 'all',             name: 'All'}
         ];
 

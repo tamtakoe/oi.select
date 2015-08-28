@@ -22,6 +22,7 @@ module.exports = function(config) {
             'src/module.js',
             'src/*.js',
             'src/*.html',
+            'src/tests/*.js',
 
             // JSON fixture
             {pattern:  'docs/data/*.json', watched: true, served: true, included: false}

@@ -1,0 +1,23 @@
+<div ng-controller="selectTranslateController">
+    <h2>Translate</h2>
+    <p>Use of the <code>translate</code> and similar directives with <code>oi-options</code></p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="translate(item.name) group by translate(item.group) for item in items"
+                ng-model="item"
+                placeholder="Select"
+                ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="translate(item.name) group by translate(item.group) for item in items"
+ng-model="item"
+</div>
+<pre class="col-md-4">
+{{item}}
+</pre>
+</div>
+</div>

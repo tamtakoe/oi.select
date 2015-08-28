@@ -1,6 +1,11 @@
 <a name="0.2.9"></a>
 # 0.2.9
 
+## Features
+
+- **examples** added translate example
+- **tests** created test for some filters
+
 ## Bug Fixes
 
 - **dropdown** fixed a case where the list was closed before clicking on the item
