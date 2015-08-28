@@ -3,7 +3,7 @@
 
 ## Features
 
-- **examples** added translate example
+- **examples** added translate and funny examples
 - **tests** created test for some filters
 
 ## Bug Fixes

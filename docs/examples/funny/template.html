@@ -1,0 +1,28 @@
+<div ng-controller="selectFunnyController">
+    <h2>Are you a good programmer?</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select-old
+                oi-options="item for item in items"
+                ng-model="result"
+                placeholder="Select"
+                readonly
+                oi-select-old-options="{
+                    saveTrigger: ''
+                }"
+                ></oi-select-old>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn btn-link"
+                    ng-hide="isHistory"
+                    ng-click="isHistory = true">history</button>
+            <div class="well"
+                 ng-show="isHistory">
+                A bug in version 0.2.8 has funny consequences.
+                All good programmers can select from a list.
+                All others: managers, analysts, testers, 1C programmers could not do it in any situation.
+            </div>
+        </div>
+    </div>
+</div>

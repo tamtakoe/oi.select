@@ -50,6 +50,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext'])
             {urlName: 'customization',   name: 'Customization'},
             {urlName: 'validation',      name: 'Validation'},
             {urlName: 'translate',       name: 'Translate'},
+            {urlName: 'funny',           name: 'Funny'},
             {urlName: 'all',             name: 'All'}
         ];
 
