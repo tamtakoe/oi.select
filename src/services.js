@@ -96,7 +96,7 @@ angular.module('oi.select')
 
             //Hack for IE, FF, Opera which do not support relativeTarget
             $timeout(function() {
-                if (inputElement[0] !== document.activeElement) {
+                if (document.activeElement !== inputElement[0] && document.activeElement !== document.body) {
                     isFocused = false;
                     element.triggerHandler('blur');
                 }
