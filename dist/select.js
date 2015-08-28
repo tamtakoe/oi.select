@@ -701,7 +701,7 @@ angular.module('oi.select')
 
                     //limit is reached
                     if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
-                    
+
                     if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                     } else {
@@ -807,7 +807,7 @@ angular.module('oi.select')
                         scope.oldQuery = null;
                     }
 
-                    if (timeoutPromise && (values.$promise || angular.isFunction(values.then))) {
+                    if (timeoutPromise && (values.$promise && !values.$resolved || angular.isFunction(values.then))) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                         waitTime = options.debounce;
                     }
