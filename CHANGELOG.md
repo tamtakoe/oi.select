@@ -1,3 +1,10 @@
+<a name="0.2.9"></a>
+# 0.2.9
+
+## Bug Fixes
+
+- **dropdown** fixed a case where the list was closed before clicking on the item
+
 <a name="0.2.8"></a>
 # 0.2.8
 

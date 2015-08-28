@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.8',
+            full: '0.2.9',
             major: 0,
             minor: 2,
-            dot: 8
+            dot: 9
         },
         $get: function() {
             return {
@@ -97,7 +97,7 @@ angular.module('oi.select')
 
             //Hack for IE, FF, Opera which do not support relativeTarget
             $timeout(function() {
-                if (inputElement[0] !== document.activeElement) {
+                if (document.activeElement !== inputElement[0] && document.activeElement !== document.body) {
                     isFocused = false;
                     element.triggerHandler('blur');
                 }
@@ -807,7 +807,7 @@ angular.module('oi.select')
                         scope.oldQuery = null;
                     }
 
-                    if (timeoutPromise && (angular.isFunction(values.then) || angular.isFunction(values.$promise))) {
+                    if (timeoutPromise && (values.$promise || angular.isFunction(values.then))) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                         waitTime = options.debounce;
                     }
