@@ -472,7 +472,7 @@ angular.module('oi.select')
                         scope.oldQuery = null;
                     }
 
-                    if (timeoutPromise && (angular.isFunction(values.then) || angular.isFunction(values.$promise))) {
+                    if (timeoutPromise && (values.$promise || angular.isFunction(values.then))) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                         waitTime = options.debounce;
                     }
