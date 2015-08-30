@@ -84,7 +84,7 @@ angular.module('oi.select')
                     scope.inputHide = value;
                 });
 
-                scope.$on('destroy', unbindFocusBlur);
+                scope.$on('$destroy', unbindFocusBlur);
 
                 scope.$parent.$watch(attrs.ngModel, function(value) {
                     var output = value instanceof Array ? value : value ? [value]: [],
