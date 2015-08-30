@@ -1,3 +1,11 @@
+<a name="0.2.10"></a>
+# 0.2.10
+
+## Bug Fixes
+
+- **events** fixed unbind of event handlers after scope destroying
+
+
 <a name="0.2.9"></a>
 # 0.2.9
 
