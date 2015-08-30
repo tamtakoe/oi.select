@@ -1,61 +1,59 @@
-<a name="0.2.10"></a>
 ## 0.2.10
 
-### Bug Fixes
+#### Bug Fixes
 
 - **events** fixed unbind of event handlers after scope destroying
 
 
-<a name="0.2.9"></a>
 ## 0.2.9
 
-### Features
+#### Features
 
 - **examples** added translate and funny examples
 - **tests** created test for some filters
 
-### Bug Fixes
+#### Bug Fixes
 
 - **dropdown** fixed a case where the list was closed before clicking on the item
 
-<a name="0.2.8"></a>
+
 ## 0.2.8
 
-### Features
+#### Features
 
 - **styles** use flexbox. Remove measurement input text logic
 
-### Bug Fixes
+#### Bug Fixes
 
 - **blur** fixed blur trigger in IE, FF, Opera
 - **tests** fixed some tests
 - **input** fixed text selection behaviour
 
-<a name="0.2.7"></a>
+
 ## 0.2.7
 
-### Features
+#### Features
 
 - **version** added version info in `oiSelect` service
 - **tests** created test environment and added tests
 - **structure** file structure refactoring
 
-### Bug Fixes
+#### Bug Fixes
 
 - **compatibility** correct work with `ngAria`
 
-<a name="0.2.6"></a>
+
 ## 0.2.6
 
-### Bug Fixes
+#### Bug Fixes
 
 - **IE:** fixed disabled options and multiple limit in IE
 - **dropdown** fixed bug when the list does not close immediately when you select item
 
-<a name="0.2.5"></a>
+
 ## 0.2.5
 
-### Features
+#### Features
 
 - **multiple-limit:** add `limited` class
 
@@ -63,108 +61,108 @@
     - closeList (close dropdown list by default after choosing or removing item)
     - listFilter = "none" (add `filter('none', function() { return function(input) { return input; }})`)
     
-### Bug Fixes
+#### Bug Fixes
 
 - **input:** fix focus/blur
 - **default filters** correct work with search expression of several words
 
-<a name="0.2.4"></a>
+
 ## 0.2.4
 
-### Features
+#### Features
 
 - **oi-select-options:**
     - editItem = "correct" (allows you to edit the value of the deleted item except the first time)
 
-### Breaking Changes
+#### Breaking Changes
 
 - **oi-select-options:**
     - saveLastQuery rename to editItem
 
-<a name="0.2.3"></a>
+
 ## 0.2.3
 
-### Features
+#### Features
 
 - **oi-select-options:**
     - saveLastQuery (default function for `true` value. Add example)
     - newItem = "prompt" (`cleanEmpty = true` by default)
     - newItem = "autocomplete" (`cleanEmpty = false` by default)
 
-### Bug Fixes
+#### Bug Fixes
 
 - **dropdown:** stay item in the list if you use `saveLastQuery` in single mode
 - **search:** fix cyclic recovering of query while removing
 - **input:** correct work with backslash
 
-<a name="0.2.2"></a>
+
 ## 0.2.2
 
-### Bug Fixes
+#### Bug Fixes
 
 - **multiple:** fixed deletion of all items from the list
 
-<a name="0.2.1"></a>
+
 ## 0.2.1
 
-### Features
+#### Features
 
 - **oi-select-options:**
     - cleanModel [depricated] clean model on blur (old behaviour)
 
-### Bug Fixes
+#### Bug Fixes
 
 - **items:** use `trackBy` for labels if items are identified by IDs rather than by name
 - **oi-options:** use correct scope for getters
 - **select as** the order of chosen elements now equal the order of elements in the model
 
-### Breaking Changes
+#### Breaking Changes
 
 - **notempty** remove `notempty` (this behavior is the default now)
 - **classes** move `open`, `focused` and `loading` classes to `oi-select` element
 - **oi-select-options:**
     - autocomplete (rename `autoselect` to `autocomplete`)
 
-<a name="0.2.0"></a>
+
 ## 0.2.0
 
-### Features
+#### Features
 
 - **oi-select:** rename oi-multiselect to oi-select
 - **oi-options:** rename `ng-options` to `oi-options` (compatible with angular 1.4.x)
 - **disable when:** provide disabled expression for option
 - **build** Grunt replaced on Gulp
 
-### Bug Fixes
+#### Bug Fixes
 
 - **tabindex:** work with ngArea
 - **input:** prevent default event on enter (prevents accidental form submission)
 - **groupping** remove sort group indexes for angular 1.4.x
 
-<a name="0.1.7"></a>
+
 ## 0.1.7
 
-### Features
+#### Features
 
 - **demo:** new demo page
 - **events:** fire `focus` and `blur` event on multiselect element
 
-### Bug Fixes
+#### Bug Fixes
 
 - **dropdown:** ignore private keys starts with `$` (f.e. $promise and $resolved added by ngResource)
 - **input:** error where `position < 0`
 
-<a name="0.1.6"></a>
+
 ## 0.1.6
 
-### Features
+#### Features
 
 - do not select the highlighted option on blur (native select behavior)
 
-<a name="0.1.5"></a>
+
 ## 0.1.5
 
-### Features
+#### Features
 
 - select `as` support
 
@@ -174,23 +172,23 @@
     - newItemModel
     - newItemFn
 
-<a name="0.1.4"></a>
+
 ## 0.1.4
 
-### Bug Fixes
+#### Bug Fixes
 
 - **dropdown:** stay opened on click if query not empty
 - **demo:** remove broken example
 
-### Performance Improvements
+#### Performance Improvements
 
 - **oi-select-options:**
     - saveLastQuery
 
-<a name="0.1.3"></a>
+
 ## 0.1.3
 
-### Features
+#### Features
 
 - **oi-select-options:**
     - saveLastQuery
@@ -199,19 +197,19 @@
     - add loading class
     - add arrow icon in all types of single select
 
-<a name="0.1.2"></a>
+
 ## 0.1.2
 
-### Features
+#### Features
 
 - **oi-select-options:**
     - listFilter
 
 
-<a name="0.1.1"></a>
+
 ## 0.1.1
 
-### Features
+#### Features
 
 - **autofocus**
 - **oi-select-options:**
@@ -220,10 +218,9 @@
     - dropdownFilter
 
 
-<a name="0.1.0"></a>
 ## 0.1.0
 
-### Features
+#### Features
 
 - **provide input filter**
 - **provide input function**
@@ -232,7 +229,7 @@
 - **readonly**
 - **notempty**
 
-### Start
+#### Start
 
 - **module**
 - **documentation**
