@@ -1,0 +1,117 @@
+<div ng-controller="selectCreateitemsController">
+    <h2>Create items</h2>
+    <p>New items are created in two modes: <code>prompt</code> and <code>autocomplete</code> (default). See relevant examples.</p>
+    <p>You can set <code>enter</code> (default) and <code>blur</code> trigger for saving</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item for item in shopArrShort"
+                ng-model="bundle1"
+                multiple
+                oi-select-options="{
+                    newItem: true,
+                    saveTrigger: 'enter, blur'
+                }"
+                placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item for item in shopArrShort"
+ng-model="bundle1"
+multiple
+oi-select-options="{
+    newItem: true,
+    saveTrigger: 'enter, blur'
+}"
+</div>
+<pre class="col-md-4">
+{{bundle1}}
+</pre>
+</div>
+
+    <br/>
+
+    <p>You can describe model for new items by <code>newItemModel</code></p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle2"
+                    multiple
+                    oi-select-options="{
+                    newItem: true,
+                    newItemModel: {id: null, name: $query, category: 'shoes'}
+                }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr"
+ng-model="bundle2"
+multiple
+oi-select-options="{
+    newItem: true,
+    newItemModel: {id: null, name: $query, category: 'shoes'}
+}"
+</div>
+<pre class="col-md-4">
+{{bundle2}}
+</pre>
+</div>
+
+    <br/>
+
+    <p>or by <code>newItemFn</code> which returns new item or promise (it will be useful if you create items in DB)</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle3"
+                    multiple
+                    oi-select-options="{
+                    newItem: true,
+                    newItemFn: 'addItem($query)'
+                }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div class="col-md-8">
+<div hljs>
+oi-options="item.name for item in shopArr"
+ng-model="bundle3"
+multiple
+    oi-select-options="{
+    newItem: true,
+    newItemModel: 'addItem($query)'
+}"
+</div>
+<div hljs>
+var counter = 0;
+
+$scope.addItem = function(query) {
+    var id = counter++;
+
+    return {
+        id: id,
+        name: query + '-' + id,
+        category: "shoes"
+    };
+};
+</div>
+</div>
+
+<pre class="col-md-4">
+{{bundle3}}
+</pre>
+</div>
+
+</div>

@@ -43,6 +43,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext'])
             {urlName: 'readonly',        name: 'Read only'},
             {urlName: 'cleanmodel',      name: 'Clean model'},
             {urlName: 'multiplelimit',   name: 'Multiple limit'},
+            {urlName: 'createitems',     name: 'Create items'},
             {urlName: 'autocomplete',    name: 'Autocomplete'},
             {urlName: 'prompt',          name: 'Prompt'},
             {urlName: 'selectas',        name: 'Select as'},

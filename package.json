@@ -1,7 +1,7 @@
 {
     "name":    "oi.select",
     "license": "MIT",
-    "version": "0.2.9",
+    "version": "0.2.10",
     "repository": {
         "type": "git",
         "url": "git://github.com/tamtakoe/oi.select.git"
@@ -21,7 +21,6 @@
         "gulp-rename": "1.2.2",
         "stream-series": "0.1.1",
 
-        "through2": "0.6.3",
         "jasmine-core": "2.3.4",
         "karma": "0.13.9",
         "karma-jasmine": "0.3.6",

@@ -74,7 +74,7 @@ Use `oi-select` directive:
 ### oi-select directive
 * `oi-options` — see: [ngOptions](http://docs.angularjs.org/api/ng/directive/ngOptions)
   * `oi-options="item for item in shopArrShort | limitTo: 3"` — filter input list
-  * `oi-options="item for item in shopArrFn($query, $querySelectAs)"` — generate input list (expects array/object or promise)
+  * `oi-options="item for item in shopArrFn($query, $selectedAs)"` — generate input list (expects array/object or promise)
 * `ng-model` — chosen item/items
 * `ng-disabled` — specifies that a drop-down list should be disabled
 * `multiple` — specifies that multiple options can be selected at once
@@ -92,7 +92,7 @@ Use `oi-select` directive:
   * `closeList` — close dropdown list by default after choosing or removing item (default: true)
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
-  * `newItemFn` — function which get query and return new item object or promise
+  * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
 
 ### oiSelect service
  * `options` — default options which we can override in `oiSelectProvider.options`

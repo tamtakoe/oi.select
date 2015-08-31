@@ -1,8 +1,20 @@
 ## 0.2.10
 
+#### Features
+
+- **examples** added example of creating items
+
 #### Bug Fixes
 
 - **events** fixed unbind of event handlers after scope destroying
+
+#### Breaking Changes
+
+- **oi-options**
+    - `$querySelectAs` argument renamed to `$selectedAs`
+    
+- **oi-select-options:**
+    - newItemFn has new format: `'addItem($query)'` instead of `addItem`,
 
 
 ## 0.2.9

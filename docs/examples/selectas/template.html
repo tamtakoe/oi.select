@@ -3,13 +3,13 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                oi-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+                oi-options="item.id as item.name for item in shopArrFn($query, $selectedAs)"
                 ng-model="bundle"
                 multiple
                 placeholder="Select"
                 oi-select-options="{
-                    newItem: 'prompt',
-                    newItemFn: addItem,
+                    newItem: true,
+                    newItemFn: 'addItem($query)'
                 }"
                 ></oi-select>
         </div>
@@ -17,18 +17,19 @@
 <div class="row">
 <div class="col-md-8">
 <div hljs>
-oi-options="item.id as item.name for item in shopArrFn($query, $querySelectAs)"
+oi-options="item.id as item.name for item in shopArrFn($query, $selectedAs)"
 ng-model="bundle"
 multiple
 oi-select-options="{
-    newItem: 'prompt',
-    newItemFn: addItem,
+    newItem: true,
+    newItemFn: 'addItem($query)'
 }"
 </div>
+    <p>Example how to get elements by id and create new in database</p>
 <div hljs>
-$scope.shopArrFn = function(query, querySelectAs) {
+$scope.shopArrFn = function(query, selectedAs) {
     if (querySelectAs) {
-        return getOptionsById(querySelectAs);
+        return getOptionsById(selectedAs);
     } else {
         return findOptions(query);
     }
@@ -39,6 +40,7 @@ $scope.addItem = function(query) {
     return createOption(query);
 };
 </div>
+    <p>You can optimize this case and don't request all selected items when the new item has been added</p>
 </div>
 <pre class="col-md-4">
 {{bundle}}

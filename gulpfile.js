@@ -15,10 +15,6 @@ var autoprefixer  = require('autoprefixer-stylus')({
     browsers: ["ff >= 20", "chrome >= 35", "safari >= 7", "ios >= 7", "android >= 4", "opera >= 12.1", "ie >= 10"]
 });
 
-//var runSequence     = require('run-sequence');
-var through = require('through2');
-
-
 var paths = {
     root:     __dirname,
     src:      path.join(__dirname, '/src'),

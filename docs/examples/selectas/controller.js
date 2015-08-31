@@ -12,20 +12,25 @@ angular.module('selectDemo')
             }
         };
 
+        var counter = 15;
+        var newItems = [];
+
         $scope.addItem = function(query) {
             var deferred = $q.defer();
 
             $timeout(function() {
-                deferred.resolve(newItem);
-            }, 1000);
+                var id = counter++;
+                var item = {
+                    id: id,
+                    name: query,
+                    category: "shoes"
+                };
+                newItems.push(item);
+
+                deferred.resolve(item);
+            }, 500);
 
             return deferred.promise;
-        };
-
-        var newItem = {
-            id: 0,
-            name: "SavedItem",
-            category: "shoes"
         };
 
         function findOptions(query) {
@@ -34,20 +39,20 @@ angular.module('selectDemo')
             $timeout(function() {
                 $scope.shopArr.$promise
                     .then(deferred.resolve);
-            }, 1000);
+            }, 500);
 
             return deferred.promise;
         }
 
-        function getOptionsById(querySelectAs) {
+        function getOptionsById(selectedAs) {
             var deferred = $q.defer();
 
             $timeout(function() {
                 $scope.shopArr.$promise
                     .then(function(data) {
-                        deferred.resolve(data.concat(newItem))
+                        deferred.resolve(data.concat(newItems))
                     });
-            }, 1000);
+            }, 500);
 
             return deferred.promise;
         }
