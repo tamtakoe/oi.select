@@ -213,7 +213,7 @@ angular.module('oi.select')
                 scope.removeItem = function removeItem(position) {
                     var removedItem;
 
-                    if (attrs.disabled) return;
+                    if (attrs.disabled || !scope.inputHide) return;
 
                     if (multiple && position >= 0) {
                         removedItem = ctrl.$modelValue[position];
@@ -272,6 +272,9 @@ angular.module('oi.select')
                             keyUpDownWerePressed = true;
                             if (!scope.query.length && !scope.isOpen) {
                                 getMatches();
+                            }
+                            if (scope.inputHide) {
+                                cleanInput();
                             }
                             break;
 
@@ -364,6 +367,10 @@ angular.module('oi.select')
 
                     //limit is reached
                     if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
+
+                    if (scope.inputHide) {
+                        scope.removeItem(0); //because click on border but not on chosen item doesn't remove chosen element
+                    }
 
                     if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});

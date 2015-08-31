@@ -7,6 +7,7 @@
 #### Bug Fixes
 
 - **events** fixed unbind of event handlers after scope destroying
+- **single** fixed click on border of oi.select and pressing of key down
 
 #### Breaking Changes
 

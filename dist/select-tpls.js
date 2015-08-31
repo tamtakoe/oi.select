@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.9',
+            full: '0.2.10',
             major: 0,
             minor: 2,
-            dot: 9
+            dot: 10
         },
         $get: function() {
             return {
@@ -399,13 +399,19 @@ angular.module('oi.select')
                     options         = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
                     editItem        = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
                     editItemCorrect = options.editItem === 'correct',
-                    editItemFn      = editItem ? $injector.get(editItem) : function() {return ''};
+                    editItemFn      = editItem ? $injector.get(editItem) : function() {return ''},
+                    newItemFn;
 
                 var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
 
-                options.newItemModelFn = function (query) {
-                    return (optionsFn({$query: query}) || {}).newItemModel || query;
-                };
+                if (options.newItemFn) {
+                    newItemFn = $parse(options.newItemFn);
+
+                } else {
+                    newItemFn = function(scope, locals) {
+                        return (optionsFn(locals) || {}).newItemModel || locals.$query;
+                    };
+                }
 
                 if (angular.isDefined(attrs.autofocus)) {
                     $timeout(function() {
@@ -427,7 +433,7 @@ angular.module('oi.select')
                     scope.inputHide = value;
                 });
 
-                scope.$on('destroy', unbindFocusBlur);
+                scope.$on('$destroy', unbindFocusBlur);
 
                 scope.$parent.$watch(attrs.ngModel, function(value) {
                     var output = value instanceof Array ? value : value ? [value]: [],
@@ -550,7 +556,7 @@ angular.module('oi.select')
                 scope.removeItem = function removeItem(position) {
                     var removedItem;
 
-                    if (attrs.disabled) return;
+                    if (attrs.disabled || !scope.inputHide) return;
 
                     if (multiple && position >= 0) {
                         removedItem = ctrl.$modelValue[position];
@@ -609,6 +615,9 @@ angular.module('oi.select')
                             keyUpDownWerePressed = true;
                             if (!scope.query.length && !scope.isOpen) {
                                 getMatches();
+                            }
+                            if (scope.inputHide) {
+                                cleanInput();
                             }
                             break;
 
@@ -702,6 +711,10 @@ angular.module('oi.select')
                     //limit is reached
                     if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
 
+                    if (scope.inputHide) {
+                        scope.removeItem(0); //because click on border but not on chosen item doesn't remove chosen element
+                    }
+
                     if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                     } else {
@@ -741,13 +754,12 @@ angular.module('oi.select')
                         isNewItem      = options.newItem && scope.query,
                         isSelectedItem = angular.isNumber(scope.selectorPosition),
                         selectedOrder  = scope.order[scope.selectorPosition],
-                        newItemFn      = options.newItemFn || options.newItemModelFn,
                         itemPromise    = $q.reject(),
                         isItemSave     = triggerName !== 'blur' || scope.query || !options.newItem;
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.query));
+                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.$parent, {$query: scope.query}));
                     }
 
                     itemPromise
@@ -797,13 +809,13 @@ angular.module('oi.select')
                     return oiUtils.getValue(valuesName, list, scope.$parent, filteredValuesFn);
                 }
 
-                function getMatches(query, querySelectAs, exceptionItem) {
-                    var values = valuesFn(scope.$parent, {$query: query, $querySelectAs: querySelectAs}),
+                function getMatches(query, selectedAs) {
+                    var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}),
                         waitTime = 0;
 
                     scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
 
-                    if (!query && !querySelectAs) {
+                    if (!query && !selectedAs) {
                         scope.oldQuery = null;
                     }
 
@@ -817,7 +829,7 @@ angular.module('oi.select')
 
                         return $q.when(values.$promise || values)
                             .then(function(values) {
-                                if (!querySelectAs) {
+                                if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
                                     var withoutOverlap = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
@@ -866,13 +878,16 @@ angular.module('oi.select')
                 function resetMatches(options) {
                     options = options || {};
 
-                    if (!options.oldQuery)       scope.oldQuery = null;
-                    if (!options.backspaceFocus) scope.backspaceFocus = false; // clears focus on any chosen item for del
-                    if (!options.query)          scope.query = '';
-                    if (!options.groups)         scope.groups = {};
-                    if (!options.order)          scope.order = [];
-                    if (!options.showLoader)     scope.showLoader = false;
-                    if (!options.isOpen)         scope.isOpen   = false;
+                    scope.oldQuery = null;
+                    scope.backspaceFocus = false; // clears focus on any chosen item for del
+                    scope.groups = {};
+                    scope.order = [];
+                    scope.showLoader = false;
+                    scope.isOpen   = false;
+
+                    if (!options.query)   {
+                        scope.query = '';
+                    }
 
                     if (timeoutPromise) {
                         $timeout.cancel(timeoutPromise);//cancel previous timeout
