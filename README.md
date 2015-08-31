@@ -1,5 +1,7 @@
 #oi.select — AngularJS directive of select element
 
+**[Download 0.2.10](https://github.com/tamtakoe/oi.select/tree/master/dist)**
+
 ## Features
 
 * multiselect
@@ -11,7 +13,8 @@
 
 ## Demo
 
-Do you want to see module in action? Visit http://tamtakoe.github.io/oi.select/!
+Do you want to see module in action? Visit [tamtakoe.github.io/oi.select](//tamtakoe.github.io/oi.select/) or try [playground](//plnkr.co/edit/LnntLUdrAfz0DDlCGtGv?p=preview)
+
 
 ## Installation
 

@@ -4,6 +4,9 @@
 
 - **examples** added example of creating items
 
+- **oi-select-options:**
+    - listFilter: 'oiSelectAscSort' provide extra params for filtering by other fields
+
 #### Bug Fixes
 
 - **events** fixed unbind of event handlers after scope destroying
