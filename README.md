@@ -13,7 +13,7 @@
 
 ## Demo
 
-Do you want to see module in action? Visit [tamtakoe.github.io/oi.select](//tamtakoe.github.io/oi.select/) or try [playground](//plnkr.co/edit/LnntLUdrAfz0DDlCGtGv?p=preview)
+Do you want to see module in action? Visit [tamtakoe.github.io/oi.select](//tamtakoe.github.io/oi.select/) or try [playground](http://plnkr.co/edit/LnntLUdrAfz0DDlCGtGv?p=preview)
 
 
 ## Installation
