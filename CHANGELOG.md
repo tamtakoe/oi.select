@@ -1,3 +1,9 @@
+## 0.2.11
+
+#### Bug Fixes
+
+- **events** correct works in container with `tabindex`
+    
 ## 0.2.10
 
 #### Features
@@ -18,7 +24,7 @@
     - `$querySelectAs` argument renamed to `$selectedAs`
     
 - **oi-select-options:**
-    - newItemFn has new format: `'addItem($query)'` instead of `addItem`,
+    - newItemFn has new format: `'addItem($query)'` instead of `addItem`
 
 
 ## 0.2.9

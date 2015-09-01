@@ -10,8 +10,8 @@ angular.module('oi.select')
 
 .filter('oiSelectHighlight', ['$sce', function($sce) {
     return function(label, query) {
-
         var html;
+
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
             query = query.toString().replace(/\s+.*/, '').replace(/\\/g, '\\\\');

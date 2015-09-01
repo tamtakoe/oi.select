@@ -1,7 +1,7 @@
 {
     "name":    "oi.select",
     "license": "MIT",
-    "version": "0.2.10",
+    "version": "0.2.11",
     "repository": {
         "type": "git",
         "url": "git://github.com/tamtakoe/oi.select.git"
