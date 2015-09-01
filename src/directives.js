@@ -154,7 +154,7 @@ angular.module('oi.select')
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
                         scope.isFocused = true;
-                        oiUtils.copyWidth(element, listElement);
+                        //oiUtils.copyWidth(element, listElement);
                     }
                 });
 
