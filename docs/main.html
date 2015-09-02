@@ -1,32 +1,50 @@
 <style>
-    oi-select {
-        margin-bottom: 20px;
-    }
+oi-select {
+    margin-bottom: 20px;
+}
 
-    oi-select.ng-invalid {
-        border: 1px solid red;
-        border-radius: 5px;
-    }
+oi-select.ng-invalid {
+    border: 1px solid red;
+    border-radius: 5px;
+}
+
+.main {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+.menu {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    width: 200px;
+}
+.content {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -moz-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    margin-left: 30px;
+}
 </style>
 
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <h1 id="top">oi.select demo</h1>
-            <p><a href="//github.com/tamtakoe/oi.select">GitHub project</a></p>
-            <hr/>
-        </div>
+<div>
+    <div>
+        <h1 id="top">oi.select demo</h1>
+        <p><a href="//github.com/tamtakoe/oi.select">GitHub project</a></p>
+        <hr/>
     </div>
-    <div class="row">
-        <div class="col-xs-2">
-            <div class="list-group">
-                <a ng-repeat="item in demo.menu"
-                   href="#/select/#{{item.urlName}}"
-                   class="list-group-item capitalize"
-                   ng-class="{active: item.urlName == demo.name}">{{item.name}}</a>
-            </div>
+    <div class="main">
+        <div class="menu list-group">
+            <a ng-repeat="item in demo.menu"
+               href="#/select/#{{item.urlName}}"
+               class="list-group-item capitalize"
+               ng-class="{active: item.urlName == demo.name}">{{item.name}}</a>
         </div>
-        <div class="col-xs-10">
+        <div class="content">
             <div ng-include="demo.viewUrl"></div>
         </div>
     </div>
