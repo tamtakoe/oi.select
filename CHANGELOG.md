@@ -1,8 +1,17 @@
+## 0.2.11
+
+#### Bug Fixes
+
+- **events** correct works in container with `tabindex`
+    
 ## 0.2.10
 
 #### Features
 
 - **examples** added example of creating items
+
+- **oi-select-options:**
+    - listFilter: 'oiSelectAscSort' provide extra params for filtering by other fields
 
 #### Bug Fixes
 
@@ -15,7 +24,7 @@
     - `$querySelectAs` argument renamed to `$selectedAs`
     
 - **oi-select-options:**
-    - newItemFn has new format: `'addItem($query)'` instead of `addItem`,
+    - newItemFn has new format: `'addItem($query)'` instead of `addItem`
 
 
 ## 0.2.9

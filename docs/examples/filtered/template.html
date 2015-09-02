@@ -5,7 +5,7 @@
         <div class="col-md-8">
             <oi-select
                 oi-options="item for item in shopArrShort | limitTo: 3 | orderBy"
-                ng-model="bundle"
+                ng-model="bundle1"
                 multiple
                 placeholder="Select"
                 ></oi-select>
@@ -15,11 +15,40 @@
 <div class="row">
 <div hljs class="col-md-8">
 oi-options="item for item in shopArrShort | limitTo: 3 | orderBy"
-ng-model="bundle"
+ng-model="bundle1"
 multiple
 </div>
 <pre class="col-md-4">
-{{bundle}}
+{{bundle1}}
+</pre>
+</div>
+
+    <p>For filter by other fields use default <code>oiSelectAscSort</code> filter with extra params</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr track by item.id"
+                    ng-model="bundle2"
+                    oi-select-options="{
+                        listFilter: 'oiSelectAscSort:[\'id\', \'category\']'
+                    }"
+                    multiple
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle2"
+oi-select-options="{
+    listFilter: 'oiSelectAscSort:[\'id\', \'category\']'
+}"
+multiple
+</div>
+<pre class="col-md-4">
+{{bundle2}}
 </pre>
 </div>
 </div>

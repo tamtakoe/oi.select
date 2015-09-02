@@ -1,6 +1,6 @@
 var URL = 'docs/';
 
-angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext'])
+angular.module('selectDemo', ['oi.select', 'ngResource', 'ngTouch', 'hljs', 'gettext'])
 
     .factory('ShopArr', function ($resource) {
         return $resource(URL + 'data/shopArr.json', {}, {

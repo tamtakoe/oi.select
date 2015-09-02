@@ -3,12 +3,14 @@
     <p>Specifies that an input field should automatically get focus when the page loads</p>
     <div class="row">
         <div class="col-md-8">
-            <oi-select
-                oi-options="item.name for item in shopArr"
-                tabindex="2"
-                ng-model="bundle"
-                placeholder="Select"
-                ></oi-select>
+            <div tabindex="-1">
+                <oi-select
+                    oi-options="item.name for item in shopArr"
+                    tabindex="2"
+                    ng-model="bundle"
+                    placeholder="Select"
+                    ></oi-select>
+            </div>
             <oi-select
                 oi-options="item.name for item in shopArr"
                 autofocus

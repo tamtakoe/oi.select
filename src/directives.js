@@ -59,7 +59,17 @@ angular.module('oi.select')
                     editItemFn      = editItem ? $injector.get(editItem) : function() {return ''},
                     newItemFn;
 
-                var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
+                match = options.searchFilter.split(':');
+                var searchFilter = $filter(match[0]),
+                    searchFilterOptionsFn = $parse(match[1]);
+
+                match = options.dropdownFilter.split(':');
+                var dropdownFilter = $filter(match[0]),
+                    dropdownFilterOptionsFn = $parse(match[1]);
+
+                match = options.listFilter.split(':');
+                var listFilter = $filter(match[0]),
+                    listFilterOptionsFn = $parse(match[1]);
 
                 if (options.newItemFn) {
                     newItemFn = $parse(options.newItemFn);
@@ -69,6 +79,8 @@ angular.module('oi.select')
                         return (optionsFn(locals) || {}).newItemModel || locals.$query;
                     };
                 }
+
+                var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
 
                 if (angular.isDefined(attrs.autofocus)) {
                     $timeout(function() {
@@ -142,7 +154,7 @@ angular.module('oi.select')
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
                         scope.isFocused = true;
-                        oiUtils.copyWidth(element, listElement);
+                        //oiUtils.copyWidth(element, listElement);
                     }
                 });
 
@@ -213,7 +225,7 @@ angular.module('oi.select')
                 scope.removeItem = function removeItem(position) {
                     var removedItem;
 
-                    if (attrs.disabled || !scope.inputHide) return;
+                    if (attrs.disabled || !multiple && !scope.inputHide) return;
 
                     if (multiple && position >= 0) {
                         removedItem = ctrl.$modelValue[position];
@@ -319,19 +331,13 @@ angular.module('oi.select')
                 scope.getSearchLabel = function(option) {
                     var label = getLabel(option);
 
-                    if (options.searchFilter) {
-                        label = $filter(options.searchFilter)(label, scope.oldQuery || scope.query, option)
-                    }
-                    return label;
+                    return searchFilter(label, scope.oldQuery || scope.query, option, searchFilterOptionsFn(scope.$parent));
                 };
 
                 scope.getDropdownLabel = function(option) {
                     var label = getLabel(option);
 
-                    if (options.dropdownFilter) {
-                        label = $filter(options.dropdownFilter)(label, scope.oldQuery || scope.query, option)
-                    }
-                    return label;
+                    return dropdownFilter(label, scope.oldQuery || scope.query, option, dropdownFilterOptionsFn(scope.$parent));
                 };
 
                 scope.getDisableWhen = getDisableWhen;
@@ -451,7 +457,7 @@ angular.module('oi.select')
                 }
 
                 function getLabel(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, displayFn);
+                    return String(oiUtils.getValue(valueName, item, scope.$parent, displayFn));
                 }
 
                 function getDisableWhen(item) {
@@ -488,7 +494,7 @@ angular.module('oi.select')
                             .then(function(values) {
                                 if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList   = $filter(options.listFilter)(oiUtils.objToArr(values), query, getLabel);
+                                    var filteredList   = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
                                     var withoutOverlap = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutOverlap);
 

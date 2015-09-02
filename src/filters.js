@@ -10,8 +10,8 @@ angular.module('oi.select')
 
 .filter('oiSelectHighlight', ['$sce', function($sce) {
     return function(label, query) {
-
         var html;
+
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
             query = query.toString().replace(/\s+.*/, '').replace(/\\/g, '\\\\');
@@ -26,14 +26,24 @@ angular.module('oi.select')
 }])
 
 .filter('oiSelectAscSort', function() {
-    function ascSort(input, query, getLabel) {
-        var i, output, output1 = [], output2 = [], output3 = [];
+    function ascSort(input, query, getLabel, options) {
+        var i, j, isFound, output, output1 = [], output2 = [], output3 = [];
 
         if (query) {
-            query = query.toString().replace(/\s+.*/, '').replace(/\\/g, '\\\\');
+            query = String(query).replace(/\s+.*/, '').replace(/\\/g, '\\\\');
 
-            for (i = 0; i < input.length; i++) {
-                if (getLabel(input[i]).match(new RegExp(query, "i"))) {
+            for (i = 0, isFound = false; i < input.length; i++) {
+                isFound = getLabel(input[i]).match(new RegExp(query, "i"));
+
+                if (!isFound && options) {
+                    for (j = 0; j < options.length; j++) {
+                        if (isFound) break;
+
+                        isFound = String(input[i][options[j]]).match(new RegExp(query, "i"));
+                    }
+                }
+
+                if (isFound) {
                     output1.push(input[i]);
                 }
             }
