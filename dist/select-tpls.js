@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.10',
+            full: '0.2.11',
             major: 0,
             minor: 2,
-            dot: 10
+            dot: 11
         },
         $get: function() {
             return {
@@ -73,38 +73,27 @@ angular.module('oi.select')
      * @returns {function} deregistration function for listeners.
      */
     function bindFocusBlur(element, inputElement) {
-        var isFocused = false;
+        var isFocused, isMousedown, isBlur;
 
         $document[0].addEventListener('click', clickHandler, true);
+        element[0].addEventListener('mousedown', mousedownHandler, true);
         element[0].addEventListener('blur', blurHandler, true);
         inputElement.on('focus', focusHandler);
 
-        function blurHandler(event) {
-            var relatedTarget = event.relatedTarget; //TODO: get relativeTarget in IE, FF (event.explicitOriginalTarget || document.activeElement);
+        function blurHandler() {
+            isBlur = false;
 
-            if (relatedTarget === inputElement[0]) {
-                event.stopImmediatePropagation(); //cancel blur if focus to input element
+            if (isMousedown) {
+                isBlur = true;
                 return;
             }
 
-            if (relatedTarget && !contains(element[0], relatedTarget)) { //not triggered blur
-                isFocused = false;
-
-                $timeout(function () {
-                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
-                });
-            }
-
-            //Hack for IE, FF, Opera which do not support relativeTarget
-            $timeout(function() {
-                if (document.activeElement !== inputElement[0] && document.activeElement !== document.body) {
-                    isFocused = false;
-                    element.triggerHandler('blur');
-                }
-            }, 100);
+            $timeout(function () {
+                element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
+            });
         }
 
-        function focusHandler(event) {
+        function focusHandler() {
             if (!isFocused) {
                 isFocused = true;
 
@@ -114,9 +103,19 @@ angular.module('oi.select')
             }
         }
 
+        function mousedownHandler() {
+            isMousedown = true;
+        }
+
         function clickHandler(event) {
+            isMousedown = false;
+
             var activeElement = event.target;
             var isSelectElement = contains(element[0], activeElement);
+
+            if (isBlur && !isSelectElement) {
+                blurHandler();
+            }
 
             if (isSelectElement && activeElement.nodeName !== 'INPUT') {
                 $timeout(function () {
@@ -126,10 +125,6 @@ angular.module('oi.select')
 
             if (!isSelectElement && isFocused) {
                 isFocused = false;
-
-                $timeout(function () {
-                    element.triggerHandler('blur'); //conflict with current live cycle (case: multiple=none + tab)
-                });
             }
         }
 
@@ -497,7 +492,7 @@ angular.module('oi.select')
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
                         scope.isFocused = true;
-                        oiUtils.copyWidth(element, listElement);
+                        //oiUtils.copyWidth(element, listElement);
                     }
                 });
 
@@ -938,8 +933,8 @@ angular.module('oi.select')
 
 .filter('oiSelectHighlight', ['$sce', function($sce) {
     return function(label, query) {
-
         var html;
+
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
             query = query.toString().replace(/\s+.*/, '').replace(/\\/g, '\\\\');

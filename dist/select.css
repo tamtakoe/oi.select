@@ -55,8 +55,7 @@ oi-select .select-search-list-item_selection.focused .close {
   display: none;
 }
 oi-select .select-search-list-item_selection-remove {
-  float: right;
-  padding-left: 4px;
+  padding-left: 2px;
 }
 oi-select .select-search-list-item_loader {
   float: right;

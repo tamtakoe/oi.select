@@ -3,6 +3,7 @@
 #### Bug Fixes
 
 - **events** correct works in container with `tabindex`
+- **examples** correct works on mobile devices
     
 ## 0.2.10
 
