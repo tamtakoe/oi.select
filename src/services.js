@@ -269,10 +269,6 @@ angular.module('oi.select')
         return val + augmentWidthOrHeight(elem, name, extra || ( isBorderBox ? "border" : "content" ), valueIsBorderBox, styles);
     }
 
-    function copyWidth(srcElement, dstElement) {
-        dstElement.css('width', getWidthOrHeight(srcElement[0], 'width', 'margin') + 'px');
-    }
-
     function groupsIsEmpty(groups) {
         for (var k in groups) {
             if (groups.hasOwnProperty(k) && groups[k].length) {
@@ -325,7 +321,6 @@ angular.module('oi.select')
     }
 
     return {
-        copyWidth: copyWidth,
         contains: contains,
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,

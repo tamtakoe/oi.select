@@ -3,6 +3,7 @@
 #### Bug Fixes
 
 - **events** correct works in container with `tabindex`
+- **dropdown** open/close by click on empty input
 - **examples** correct works on mobile devices
     
 ## 0.2.10

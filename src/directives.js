@@ -154,7 +154,6 @@ angular.module('oi.select')
                     } else if (!scope.isOpen && !attrs.disabled) {
                         scope.isOpen = true;
                         scope.isFocused = true;
-                        //oiUtils.copyWidth(element, listElement);
                     }
                 });
 
@@ -375,11 +374,12 @@ angular.module('oi.select')
                     if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
 
                     if (scope.inputHide) {
-                        scope.removeItem(0); //because click on border but not on chosen item doesn't remove chosen element
+                        scope.removeItem(0); //because click on border (not on chosen item) doesn't remove chosen element
                     }
 
-                    if (scope.isOpen && options.closeList && event.target.nodeName !== 'INPUT') { //do not reset if you are editing the query
+                    if (scope.isOpen && (options.closeList && event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
+                        scope.$evalAsync();
                     } else {
                         getMatches(scope.query);
                     }
