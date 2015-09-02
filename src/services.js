@@ -129,6 +129,7 @@ angular.module('oi.select')
 
         return function () {
             $document[0].removeEventListener('click', clickHandler);
+            element[0].removeEventListener('mousedown', mousedownHandler, true);
             element[0].removeEventListener('blur', blurHandler, true);
             inputElement.off('focus', focusHandler);
         }

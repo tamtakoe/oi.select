@@ -86,19 +86,47 @@ describe('factory: oiUtils', function() {
             expect(inputElement[0].focus).toHaveBeenCalled();
         });
 
-        it('sets blur on element if other element was focused', function() {
+        it('sets blur on element if element was blurred', function() {
             spyOn(element, 'triggerHandler');
             oiUtils.bindFocusBlur(element, inputElement);
 
-            var event = $document[0].createEvent('MouseEvent');
-            event.initEvent('click', true, true);
-            element[0].dispatchEvent(event); //element focus
-            $timeout.flush();
-            otherInputElement[0].dispatchEvent(event); //element blur
+            var blur = $document[0].createEvent('Event');
+            blur.initEvent('blur', false, false);
+
+            //blur element
+            element[0].dispatchEvent(blur);
             $timeout.flush();
 
             expect(element.triggerHandler).toHaveBeenCalledWith('blur');
         });
+
+        it('sets blur on element if other element was focused`', function() {
+            spyOn(element, 'triggerHandler');
+            oiUtils.bindFocusBlur(element, inputElement);
+
+            var click = $document[0].createEvent('MouseEvent');
+            click.initEvent('click', true, true);
+
+            var mousedown = $document[0].createEvent('MouseEvent');
+            mousedown.initEvent('mousedown', true, true);
+
+            var blur = $document[0].createEvent('Event');
+            blur.initEvent('blur', false, false);
+
+            //element focus
+            element[0].dispatchEvent(click);
+            $timeout.flush();
+
+            //focus to other element
+            element[0].dispatchEvent(mousedown);
+            element[0].dispatchEvent(blur);
+            otherInputElement[0].dispatchEvent(click);
+            $timeout.flush();
+
+            expect(element.triggerHandler).toHaveBeenCalledWith('blur');
+        });
+
+        //TODO: chose element in container with tabindex
     });
 
     describe('groupsIsEmpty', function() {
