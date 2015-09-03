@@ -99,7 +99,11 @@ angular.module('oi.select')
 
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
-                    scope.inputHide = value;
+
+                    //hide empty string with input
+                    if (multiple && ctrl.$modelValue && ctrl.$modelValue.length) {
+                        scope.inputHide = value;
+                    }
                 });
 
                 scope.$on('$destroy', unbindFocusBlur);

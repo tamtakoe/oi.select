@@ -130,6 +130,7 @@ angular.module('oi.select')
 
         return function () {
             $document[0].removeEventListener('click', clickHandler);
+            element[0].removeEventListener('mousedown', mousedownHandler, true);
             element[0].removeEventListener('blur', blurHandler, true);
             inputElement.off('focus', focusHandler);
         }
@@ -432,7 +433,11 @@ angular.module('oi.select')
 
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
-                    scope.inputHide = value;
+
+                    //hide empty string with input
+                    if (multiple && ctrl.$modelValue && ctrl.$modelValue.length) {
+                        scope.inputHide = value;
+                    }
                 });
 
                 scope.$on('$destroy', unbindFocusBlur);

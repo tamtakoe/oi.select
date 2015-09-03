@@ -5,7 +5,6 @@ oi-select {
 }
 oi-select .select-search {
   cursor: text;
-  padding: 1px 0 1px 0;
   border: 1px solid #d9d9d9;
   background-color: #fff;
   overflow: hidden !important;
@@ -160,6 +159,7 @@ oi-select[disabled="disabled"] .select-search-list-item_selection-remove {
   visibility: hidden;
 }
 oi-select[disabled="disabled"] .select-search-list-item_input input:disabled {
+  cursor: not-allowed;
   background: none;
 }
 oi-select.focused .select-search {

@@ -19,7 +19,7 @@
     <ul ng-if="isOpen" class="select-dropdown-optgroup" ng-repeat="(group, options) in groups">
         <div class="select-dropdown-optgroup-header"
              ng-if="group && options.length"
-             ng-bind="group"></div><!-- we use fast getElementsByTagName('li')-->
+             ng-bind="group"></div>
         <li class="select-dropdown-optgroup-option"
             ng-init="isDisabled = getDisableWhen(option)"
             ng-repeat="option in options"

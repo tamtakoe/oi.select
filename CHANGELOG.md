@@ -10,8 +10,9 @@
 #### Bug Fixes
 
 - **events** correct works in container with `tabindex`
-- **dropdown** open/close by click on empty input
+- **dropdown** open/close by click on empty input; adapted for window resize
 - **examples** correct works on mobile devices
+- **disabled** fixed zero width if no chosen elements in disabled mode
     
 ## 0.2.10
 
