@@ -22,4 +22,35 @@ multiple
 {{bundle}}
 </pre></div>
 </div>
+
+    <br/>
+
+    <p>Use <code>closeList</code> if you need stay dropdown list open after choosing or removing item</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr track by item.id"
+                    ng-model="bundle2"
+                    multiple
+                    oi-select-options="{
+                        closeList: false
+                    }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle2"
+multiple
+oi-select-options="{
+    closeList: false
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle2}}
+</pre></div>
+</div>
 </div>

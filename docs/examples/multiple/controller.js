@@ -12,4 +12,6 @@ angular.module('selectDemo')
             "name": "shoes",
             "category": "shoes"
         }];
+
+        $scope.bundle2 = [];
     });
