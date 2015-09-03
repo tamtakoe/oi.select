@@ -1,3 +1,10 @@
+## 0.2.12
+
+#### Bug Fixes
+
+- **oi-select-options:**
+    - closeList: fixed
+
 ## 0.2.11
 
 #### Bug Fixes

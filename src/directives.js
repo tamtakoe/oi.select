@@ -377,7 +377,7 @@ angular.module('oi.select')
                         scope.removeItem(0); //because click on border (not on chosen item) doesn't remove chosen element
                     }
 
-                    if (scope.isOpen && (options.closeList && event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
+                    if (scope.isOpen && options.closeList && (event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                         scope.$evalAsync();
                     } else {

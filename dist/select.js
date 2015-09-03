@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.11',
+            full: '0.2.12',
             major: 0,
             minor: 2,
-            dot: 11
+            dot: 12
         },
         $get: function() {
             return {
@@ -710,7 +710,7 @@ angular.module('oi.select')
                         scope.removeItem(0); //because click on border (not on chosen item) doesn't remove chosen element
                     }
 
-                    if (scope.isOpen && (options.closeList && event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
+                    if (scope.isOpen && options.closeList && (event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
                         resetMatches({query: options.editItem && !editItemCorrect});
                         scope.$evalAsync();
                     } else {
