@@ -1,5 +1,10 @@
 ## 0.2.12
 
+#### Features
+
+- **oi-select-options:**
+    - cleanModel: changed behavior (clean model by click)
+
 #### Bug Fixes
 
 - **oi-select-options:**

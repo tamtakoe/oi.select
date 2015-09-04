@@ -376,11 +376,11 @@ angular.module('oi.select')
                 placeholderFn        = $interpolate(attrs.placeholder || ''),
                 optionsFn            = $parse(attrs.oiSelectOptions),
                 keyUpDownWerePressed = false,
-                matchesWereReset     = false,
-                cleanModel           = true;
+                matchesWereReset     = false;
 
             var timeoutPromise,
-                lastQuery;
+                lastQuery,
+                removedItem;
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement    = element.find('input'),
@@ -412,6 +412,10 @@ angular.module('oi.select')
                     newItemFn = function(scope, locals) {
                         return (optionsFn(locals) || {}).newItemModel || locals.$query;
                     };
+                }
+
+                if (options.cleanModel) {
+                    element.addClass('cleanMode');
                 }
 
                 var unbindFocusBlur = oiUtils.bindFocusBlur(element, inputElement);
@@ -553,15 +557,12 @@ angular.module('oi.select')
                         resetMatches({query: true});
                     }
 
-                    cleanModel = false;
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
                     scope.backspaceFocus = false;
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    var removedItem;
-
                     if (attrs.disabled || !multiple && !scope.inputHide) return;
 
                     if (multiple && position >= 0) {
@@ -573,6 +574,10 @@ angular.module('oi.select')
                     if (!multiple) {
                         removedItem = ctrl.$modelValue;
                         cleanInput();
+
+                        if (options.cleanModel) {
+                            ctrl.$setViewValue(undefined);
+                        }
                     }
 
                     if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
@@ -639,6 +644,10 @@ angular.module('oi.select')
                         case 27: /* esc */
                             if (!multiple) {
                                 restoreInput();
+
+                                if (options.cleanModel) {
+                                    ctrl.$setViewValue(removedItem);
+                                }
                             }
                             resetMatches();
                             break;
@@ -665,16 +674,16 @@ angular.module('oi.select')
                     }
                 };
 
-                scope.getSearchLabel = function(option) {
-                    var label = getLabel(option);
+                scope.getSearchLabel = function(item) {
+                    var label = getLabel(item);
 
-                    return searchFilter(label, scope.oldQuery || scope.query, option, searchFilterOptionsFn(scope.$parent));
+                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent));
                 };
 
-                scope.getDropdownLabel = function(option) {
-                    var label = getLabel(option);
+                scope.getDropdownLabel = function(item) {
+                    var label = getLabel(item);
 
-                    return dropdownFilter(label, scope.oldQuery || scope.query, option, dropdownFilterOptionsFn(scope.$parent));
+                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent));
                 };
 
                 scope.getDisableWhen = getDisableWhen;
@@ -738,13 +747,8 @@ angular.module('oi.select')
                     scope.isFocused = false;
 
                     if (!multiple) {
-                        if (options.cleanModel && !scope.inputHide) {
-                            ctrl.$setViewValue(undefined);
-                        }
                         restoreInput();
                     }
-
-                    cleanModel = true;
 
                     saveOn('blur');
                     scope.$evalAsync();
@@ -767,7 +771,6 @@ angular.module('oi.select')
                         .then(function(data) {
                             if (isItemSave) {
                                 scope.addItem(data);
-                                cleanModel = true;
                             }
                         })
                         .finally(function() {

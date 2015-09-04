@@ -118,11 +118,17 @@ oi-select
               border-color #fff
               text-align left
 
-              &-remove
-                display none
-
               &:not(:active)
                 background none
+
+  &:not([multiple]):not(.cleanMode)
+    .select
+      &-search
+        &-list
+          &-item
+            &_selection
+              &-remove
+                display none
 
         &:after
           content ""
