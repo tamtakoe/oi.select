@@ -331,16 +331,16 @@ angular.module('oi.select')
                     }
                 };
 
-                scope.getSearchLabel = function(option) {
-                    var label = getLabel(option);
+                scope.getSearchLabel = function(item) {
+                    var label = getLabel(item);
 
-                    return searchFilter(label, scope.oldQuery || scope.query, option, searchFilterOptionsFn(scope.$parent));
+                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent));
                 };
 
-                scope.getDropdownLabel = function(option) {
-                    var label = getLabel(option);
+                scope.getDropdownLabel = function(item) {
+                    var label = getLabel(item);
 
-                    return dropdownFilter(label, scope.oldQuery || scope.query, option, dropdownFilterOptionsFn(scope.$parent));
+                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent));
                 };
 
                 scope.getDisableWhen = getDisableWhen;
