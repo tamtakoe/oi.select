@@ -79,7 +79,9 @@ angular.module('oi.select')
         element[0].addEventListener('blur', blurHandler, true);
         inputElement.on('focus', focusHandler);
 
-        function blurHandler() {
+        function blurHandler(event) {
+            if (event.target.nodeName !== 'INPUT') return; //for IE
+
             isBlur = false;
 
             if (isMousedown) {

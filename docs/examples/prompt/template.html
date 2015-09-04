@@ -6,7 +6,6 @@
             <oi-select
                 oi-options="item.name for (key, item) in shopObj"
                 ng-model="bundle"
-                multiple
                 oi-select-options="{
                     newItem: 'prompt',
                     newItemModel: {id: null, name: $query, category: 'shoes'},
@@ -20,7 +19,6 @@
 <div hljs class="col-md-8">
 oi-options="item.name for (key, item) in shopObj"
 ng-model="bundle"
-multiple
 oi-select-options="{
     newItem: 'prompt',
     newItemModel: {id: null, name: $query, category: 'shoes'},

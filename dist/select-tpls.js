@@ -80,7 +80,9 @@ angular.module('oi.select')
         element[0].addEventListener('blur', blurHandler, true);
         inputElement.on('focus', focusHandler);
 
-        function blurHandler() {
+        function blurHandler(event) {
+            if (event.target.nodeName !== 'INPUT') return; //for IE
+
             isBlur = false;
 
             if (isMousedown) {
@@ -414,7 +416,7 @@ angular.module('oi.select')
                     };
                 }
 
-                if (options.cleanModel) {
+                if (options.cleanModel && (!editItem || editItemCorrect)) {
                     element.addClass('cleanMode');
                 }
 
@@ -584,7 +586,10 @@ angular.module('oi.select')
                         scope.query = editItemFn(removedItem, lastQuery, getLabel);
                     }
 
-                    editItemCorrect = false;
+                    if (editItem) {
+                        editItemCorrect = false;
+                        element.removeClass('cleanMode');
+                    }
 
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
@@ -669,6 +674,9 @@ angular.module('oi.select')
                                 break;
                             }
                         default: /* any key */
+                            if (scope.inputHide) {
+                                cleanInput();
+                            }
                             scope.backspaceFocus = false;
                             return false; //preventDefaults
                     }

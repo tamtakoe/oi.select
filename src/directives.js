@@ -80,7 +80,7 @@ angular.module('oi.select')
                     };
                 }
 
-                if (options.cleanModel) {
+                if (options.cleanModel && (!editItem || editItemCorrect)) {
                     element.addClass('cleanMode');
                 }
 
@@ -250,7 +250,10 @@ angular.module('oi.select')
                         scope.query = editItemFn(removedItem, lastQuery, getLabel);
                     }
 
-                    editItemCorrect = false;
+                    if (editItem) {
+                        editItemCorrect = false;
+                        element.removeClass('cleanMode');
+                    }
 
                     if (multiple && options.closeList) {
                         resetMatches({query: true});
@@ -335,6 +338,9 @@ angular.module('oi.select')
                                 break;
                             }
                         default: /* any key */
+                            if (scope.inputHide) {
+                                cleanInput();
+                            }
                             scope.backspaceFocus = false;
                             return false; //preventDefaults
                     }

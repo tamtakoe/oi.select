@@ -3,10 +3,10 @@
 #### Features
 
 - **oi-select-options:**
-    - cleanModel: changed behavior (clean model by click)
+    - cleanModel: changed behavior (clean model by click). It affected `newItem: 'prompt'`
 
 #### Bug Fixes
-
+- **dropdown** fixed dropdown opening in IE, open dropdown by pushing on letter keys (for single select)
 - **oi-select-options:**
     - closeList: fixed
 
