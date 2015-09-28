@@ -433,29 +433,29 @@ angular.module('oi.select')
                         isNewItem      = options.newItem && scope.query,
                         isSelectedItem = angular.isNumber(scope.selectorPosition),
                         selectedOrder  = scope.order[scope.selectorPosition],
-                        itemPromise    = $q.reject(),
-                        isItemSave     = triggerName !== 'blur' || scope.query || !options.newItem;
+                        isItemSave     = triggerName !== 'blur' || scope.query || !options.newItem,
+                        itemPromise;
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
                         itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.$parent, {$query: scope.query}));
+
+                        itemPromise
+                            .then(function(data) {
+                                if (isItemSave) {
+                                    scope.addItem(data);
+                                }
+                            })
+                            .finally(function() {
+                                var bottom = scope.order.length - 1;
+
+                                if (scope.selectorPosition === bottom) {
+                                    setOption(listElement, 0); //TODO optimise when list will be closed
+                                }
+                                options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
+                                resetMatches();
+                            });
                     }
-
-                    itemPromise
-                        .then(function(data) {
-                            if (isItemSave) {
-                                scope.addItem(data);
-                            }
-                        })
-                        .finally(function() {
-                            var bottom = scope.order.length - 1;
-
-                            if (scope.selectorPosition === bottom) {
-                                setOption(listElement, 0); //TODO optimise when list will be closed
-                            }
-                            options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
-                            resetMatches();
-                        });
                 }
 
                 function modifyPlaceholder() {
