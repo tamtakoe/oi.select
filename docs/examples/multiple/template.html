@@ -53,4 +53,31 @@ oi-select-options="{
 {{bundle2}}
 </pre></div>
 </div>
+
+    <br/>
+
+    <p>Use <code>multiple-placeholder</code> if you need to set placeholder if model not empty</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr track by item.id"
+                    ng-model="bundle3"
+                    multiple
+                    multiple-placeholder="add"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle3"
+multiple
+multiple-placeholder="add"
+</div>
+<div class="col-md-4"><pre>
+{{bundle3}}
+</pre></div>
+</div>
 </div>

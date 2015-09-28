@@ -14,4 +14,5 @@ angular.module('selectDemo')
         }];
 
         $scope.bundle2 = [];
+        $scope.bundle3 = [];
     });

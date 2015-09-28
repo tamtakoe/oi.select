@@ -13,10 +13,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.12',
+            full: '0.2.13',
             major: 0,
             minor: 2,
-            dot: 12
+            dot: 13
         },
         $get: function() {
             return {

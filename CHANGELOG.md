@@ -1,3 +1,9 @@
+## 0.2.13
+
+#### Features
+
+- **multiple-placeholder:** placeholder for multiple select if items were chosen
+
 ## 0.2.12
 
 #### Features

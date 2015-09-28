@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.12',
+            full: '0.2.13',
             major: 0,
             minor: 2,
-            dot: 12
+            dot: 13
         },
         $get: function() {
             return {
@@ -353,46 +353,48 @@ angular.module('oi.select')
                 throw new Error("Expected expression in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'");
             }
 
-            var selectAsName         = / as /.test(match[0]) && match[1],    //item.modelValue
-                displayName          = match[2] || match[1],                 //item.label
-                valueName            = match[5] || match[7],                 //item
-                groupByName          = match[3] || '',                       //item.groupName
-                disableWhenName      = match[4] || '',                       //item.disableWhenName
-                trackByName          = match[9] || displayName,              //item.id
-                valueMatches         = match[8].match(VALUES_REGEXP);        //collection
+            var selectAsName          = / as /.test(match[0]) && match[1],    //item.modelValue
+                displayName           = match[2] || match[1],                 //item.label
+                valueName             = match[5] || match[7],                 //item
+                groupByName           = match[3] || '',                       //item.groupName
+                disableWhenName       = match[4] || '',                       //item.disableWhenName
+                trackByName           = match[9] || displayName,              //item.id
+                valueMatches          = match[8].match(VALUES_REGEXP);        //collection
 
-            var valuesName           = valueMatches[1],                      //collection
-                filteredValuesName   = valuesName + (valueMatches[3] || ''), //collection | filter
-                valuesFnName         = valuesName + (valueMatches[2] || ''); //collection()
+            var valuesName            = valueMatches[1],                      //collection
+                filteredValuesName    = valuesName + (valueMatches[3] || ''), //collection | filter
+                valuesFnName          = valuesName + (valueMatches[2] || ''); //collection()
 
-            var selectAsFn           = selectAsName && $parse(selectAsName),
-                displayFn            = $parse(displayName),
-                groupByFn            = $parse(groupByName),
-                disableWhenFn        = $parse(disableWhenName),
-                filteredValuesFn     = $parse(filteredValuesName),
-                valuesFn             = $parse(valuesFnName),
-                trackByFn            = $parse(trackByName);
+            var selectAsFn            = selectAsName && $parse(selectAsName),
+                displayFn             = $parse(displayName),
+                groupByFn             = $parse(groupByName),
+                disableWhenFn         = $parse(disableWhenName),
+                filteredValuesFn      = $parse(filteredValuesName),
+                valuesFn              = $parse(valuesFnName),
+                trackByFn             = $parse(trackByName);
 
-            var multiple             = angular.isDefined(attrs.multiple),
-                multipleLimit        = Number(attrs.multipleLimit) || Infinity,
-                placeholderFn        = $interpolate(attrs.placeholder || ''),
-                optionsFn            = $parse(attrs.oiSelectOptions),
-                keyUpDownWerePressed = false,
-                matchesWereReset     = false;
+            var multiple              = angular.isDefined(attrs.multiple),
+                multipleLimit         = Number(attrs.multipleLimit) || Infinity,
+                multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
+                placeholderFn         = $interpolate(attrs.placeholder || ''),
+                optionsFn             = $parse(attrs.oiSelectOptions),
+                keyUpDownWerePressed  = false,
+                matchesWereReset      = false;
 
             var timeoutPromise,
                 lastQuery,
                 removedItem;
 
             return function(scope, element, attrs, ctrl) {
-                var inputElement    = element.find('input'),
-                    listElement     = angular.element(element[0].querySelector('.select-dropdown')),
-                    placeholder     = placeholderFn(scope),
-                    elementOptions  = optionsFn(scope.$parent) || {},
-                    options         = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
-                    editItem        = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
-                    editItemCorrect = options.editItem === 'correct',
-                    editItemFn      = editItem ? $injector.get(editItem) : function() {return ''},
+                var inputElement        = element.find('input'),
+                    listElement         = angular.element(element[0].querySelector('.select-dropdown')),
+                    placeholder         = placeholderFn(scope),
+                    multiplePlaceholder = multiplePlaceholderFn(scope),
+                    elementOptions      = optionsFn(scope.$parent) || {},
+                    options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
+                    editItem            = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
+                    editItemCorrect     = options.editItem === 'correct',
+                    editItemFn          = editItem ? $injector.get(editItem) : function() {return ''},
                     newItemFn;
 
                 match = options.searchFilter.split(':');
@@ -793,7 +795,7 @@ angular.module('oi.select')
                 }
 
                 function modifyPlaceholder() {
-                    var currentPlaceholder = multiple && ctrl.$modelValue && ctrl.$modelValue.length ? '' : placeholder;
+                    var currentPlaceholder = multiple && ctrl.$modelValue && ctrl.$modelValue.length ? multiplePlaceholder : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                 }
 
