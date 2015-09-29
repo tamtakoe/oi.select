@@ -395,6 +395,7 @@ angular.module('oi.select')
                     editItem            = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
                     editItemCorrect     = options.editItem === 'correct',
                     editItemFn          = editItem ? $injector.get(editItem) : function() {return ''},
+                    removeItemFn        = $parse(options.removeItemFn),
                     newItemFn;
 
                 match = options.searchFilter.split(':');
@@ -571,35 +572,37 @@ angular.module('oi.select')
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    if (attrs.disabled || !multiple && !scope.inputHide) return;
+                    if (attrs.disabled || !multiple && !scope.inputHide || multiple && position < 0) return;
 
-                    if (multiple && position >= 0) {
-                        removedItem = ctrl.$modelValue[position];
-                        ctrl.$modelValue.splice(position, 1);
-                        ctrl.$setViewValue([].concat(ctrl.$modelValue));
-                    }
+                    removedItem = multiple ? ctrl.$modelValue[position] : ctrl.$modelValue;
 
-                    if (!multiple) {
-                        removedItem = ctrl.$modelValue;
-                        cleanInput();
+                    $q.when(removeItemFn(scope.$parent, {$item: removedItem}))
+                        .then(function() {
+                            if (multiple) {
+                                ctrl.$modelValue.splice(position, 1);
+                                ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
-                        if (options.cleanModel) {
-                            ctrl.$setViewValue(undefined);
-                        }
-                    }
+                            } else  {
+                                cleanInput();
 
-                    if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
-                        scope.query = editItemFn(removedItem, lastQuery, getLabel);
-                    }
+                                if (options.cleanModel) {
+                                    ctrl.$setViewValue(undefined);
+                                }
+                            }
 
-                    if (editItem) {
-                        editItemCorrect = false;
-                        element.removeClass('cleanMode');
-                    }
+                            if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
+                                scope.query = editItemFn(removedItem, lastQuery, getLabel);
+                            }
 
-                    if (multiple && options.closeList) {
-                        resetMatches({query: true});
-                    }
+                            if (editItem) {
+                                editItemCorrect = false;
+                                element.removeClass('cleanMode');
+                            }
+
+                            if (multiple && options.closeList) {
+                                resetMatches({query: true});
+                            }
+                        })
                 };
 
                 scope.setSelection = function(index) {

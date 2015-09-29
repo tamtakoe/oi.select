@@ -33,6 +33,16 @@ angular.module('selectDemo')
             return deferred.promise;
         };
 
+        $scope.removeItem = function(item) {
+            var deferred = $q.defer();
+
+            $timeout(function() {
+                deferred.resolve()
+            }, 500);
+
+            return deferred.promise;
+        };
+
         function findOptions(query) {
             var deferred = $q.defer();
 

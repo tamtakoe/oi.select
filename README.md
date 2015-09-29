@@ -96,6 +96,7 @@ Use `oi-select` directive:
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
+  * `removeItemFn` — function which get removed item model and return any value or promise. If promise was rejected, item wouldn't removed. F.e. `'removeItem($item)'`
 
 ### oiSelect service
  * `options` — default options which we can override in `oiSelectProvider.options`

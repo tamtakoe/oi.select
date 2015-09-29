@@ -6,6 +6,7 @@
 
 - **oi-select-options:**
     - saveTrigger provides `space` and any chars (`,`, `;` etc.)
+    - removeItemFn removes item if promise was resolved
     
 #### Bug Fixes
 - **oi-select-options:**

@@ -9,7 +9,8 @@
                 placeholder="Select"
                 oi-select-options="{
                     newItem: true,
-                    newItemFn: 'addItem($query)'
+                    newItemFn: 'addItem($query)',
+                    removeItemFn: 'removeItem($item)'
                 }"
                 ></oi-select>
         </div>
@@ -22,22 +23,28 @@ ng-model="bundle"
 multiple
 oi-select-options="{
     newItem: true,
-    newItemFn: 'addItem($query)'
+    newItemFn: 'addItem($query)',
+    removeItemFn: 'removeItem($item)'
 }"
 </div>
     <p>Example how to get elements by id and create new in database</p>
 <div hljs>
 $scope.shopArrFn = function(query, selectedAs) {
     if (querySelectAs) {
-        return getOptionsById(selectedAs);
+        return getOptionsById(selectedAs); //promise
     } else {
-        return findOptions(query);
+        return findOptions(query); //promise
     }
 };
 </div>
 <div hljs>
 $scope.addItem = function(query) {
-    return createOption(query);
+    return createOption(query); //promise
+};
+</div>
+<div hljs>
+$scope.removeItem = function(item) {
+    return removeOption(item); //promise
 };
 </div>
     <p>You can optimize this case and don't request all selected items when the new item has been added</p>
