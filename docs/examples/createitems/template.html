@@ -43,8 +43,8 @@ oi-select-options="{
                     multiple
                     oi-select-options="{
                     newItem: true,
-                    newItemModel: {id: null, name: $query, category: 'shoes'}
-                }"
+                        newItemModel: {id: null, name: $query, category: 'shoes'}
+                    }"
                     placeholder="Select"
                     ></oi-select>
         </div>
@@ -111,6 +111,35 @@ $scope.addItem = function(query) {
 
 <div class="col-md-4"><pre>
 {{bundle3}}
+</pre></div>
+</div>
+
+    <br/>
+
+    <p>You can use <i>oi-select</i> without <code>oi-options</code> for simple situations or use <code>item.name for item in []</code> if you need item model but needn't options list</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    ng-model="bundle4"
+                    multiple
+                    oi-select-options="{
+                        newItem: true
+                    }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+ng-model="bundle4"
+multiple
+oi-select-options="{
+    newItem: true
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle4}}
 </pre></div>
 </div>
 

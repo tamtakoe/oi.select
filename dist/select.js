@@ -347,9 +347,9 @@ angular.module('oi.select')
         scope: {},
         compile: function (element, attrs) {
             var optionsExp = attrs.oiOptions,
-                match;
+                match = optionsExp ? optionsExp.match(NG_OPTIONS_REGEXP) : ['', 'i', '', '', '', 'i', '', '', ''];
 
-            if (!(match = optionsExp.match(NG_OPTIONS_REGEXP))) {
+            if (!match) {
                 throw new Error("Expected expression in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'");
             }
 
@@ -850,7 +850,7 @@ angular.module('oi.select')
                 }
 
                 function getMatches(query, selectedAs) {
-                    var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}),
+                    var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '',
                         waitTime = 0;
 
                     scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
@@ -869,6 +869,12 @@ angular.module('oi.select')
 
                         return $q.when(values.$promise || values)
                             .then(function(values) {
+                                if (!values) {
+                                    scope.groups = [];
+                                    updateGroupPos();
+                                    return;
+                                }
+
                                 if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList   = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
@@ -876,7 +882,6 @@ angular.module('oi.select')
                                     var filteredOutput = filter(withoutOverlap);
 
                                     scope.groups = group(filteredOutput);
-
                                     updateGroupPos();
                                 }
                                 return values;

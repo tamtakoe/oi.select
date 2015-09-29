@@ -2,6 +2,8 @@
 
 #### Features
 
+- **oi-select:** is optional (useful for new item case)
+
 - **multiple-placeholder:** placeholder for multiple select if items were chosen
 
 - **oi-select-options:**
@@ -9,6 +11,7 @@
     - removeItemFn removes item if promise was resolved
     
 #### Bug Fixes
+
 - **oi-select-options:**
     - editItem: fixed restoring last deleted editable option in multiple mode
 

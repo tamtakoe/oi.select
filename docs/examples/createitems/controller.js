@@ -5,6 +5,7 @@ angular.module('selectDemo')
         $scope.shopArr = ShopArr.query();
 
         $scope.bundle1 =['boots'];
+        $scope.bundle4 =['smth'];
 
         $scope.shopArr.$promise.then(function(data) {
             $scope.bundle2 = [data[5]];
