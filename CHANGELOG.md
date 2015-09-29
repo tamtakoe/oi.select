@@ -4,6 +4,14 @@
 
 - **multiple-placeholder:** placeholder for multiple select if items were chosen
 
+- **oi-select-options:**
+    - saveTrigger provides `space` and any chars (`,`, `;` etc.)
+
+#### Breaking Changes
+
+- **oi-select-options:**
+    - saveTrigger  has new format: `'blur space ; , /'`. Characters separated by spaces
+
 ## 0.2.12
 
 #### Features

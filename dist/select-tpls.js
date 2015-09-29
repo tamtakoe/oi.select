@@ -478,6 +478,10 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
+                    if (saveOn(inputValue, true)) {
+                        return;
+                    }
+
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -648,6 +652,10 @@ angular.module('oi.select')
                             event.preventDefault(); // Prevent the event from bubbling up as it might otherwise cause a form submission
                             break;
 
+                        case 32: /* space */
+                            saveOn('space');
+                            break;
+
                         case 27: /* esc */
                             if (!multiple) {
                                 restoreInput();
@@ -764,34 +772,49 @@ angular.module('oi.select')
                     scope.$evalAsync();
                 }
 
-                function saveOn(triggerName) {
-                    var isTriggered    = (new RegExp(triggerName)).test(options.saveTrigger),
-                        isNewItem      = options.newItem && scope.query,
+                function saveOn(triggerName, isQueryLastChar) {
+                    var isEmptyQuery, query = scope.query;
+
+                    if (isQueryLastChar) {
+                        query        = triggerName.slice(0, -1);
+                        isEmptyQuery = triggerName.length == 1;
+                        triggerName  = triggerName.slice(-1);
+                    }
+
+                    var isTriggered    = options.saveTrigger.split(' ').indexOf(triggerName) + 1, //(new RegExp(triggerName)).test(options.saveTrigger),
+                        isNewItem      = options.newItem && query,
                         isSelectedItem = angular.isNumber(scope.selectorPosition),
                         selectedOrder  = scope.order[scope.selectorPosition],
-                        itemPromise    = $q.reject(),
-                        isItemSave     = triggerName !== 'blur' || scope.query || !options.newItem;
+                        isItemSave     = triggerName !== 'blur' || query || !options.newItem,
+                        itemPromise;
+
+                    if (isTriggered && isEmptyQuery) {
+                        scope.query = query;
+                        return;
+                    }
 
                     if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || scope.query && newItemFn(scope.$parent, {$query: scope.query}));
+                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || query && newItemFn(scope.$parent, {$query: query}));
+
+                        itemPromise
+                            .then(function(data) {
+                                if (isItemSave) {
+                                    scope.addItem(data);
+                                }
+                            })
+                            .finally(function() {
+                                var bottom = scope.order.length - 1;
+
+                                if (scope.selectorPosition === bottom) {
+                                    setOption(listElement, 0); //TODO optimise when list will be closed
+                                }
+                                options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
+                                resetMatches();
+                            });
+
+                        return true;
                     }
-
-                    itemPromise
-                        .then(function(data) {
-                            if (isItemSave) {
-                                scope.addItem(data);
-                            }
-                        })
-                        .finally(function() {
-                            var bottom = scope.order.length - 1;
-
-                            if (scope.selectorPosition === bottom) {
-                                setOption(listElement, 0); //TODO optimise when list will be closed
-                            }
-                            options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
-                            resetMatches();
-                        });
                 }
 
                 function modifyPlaceholder() {
