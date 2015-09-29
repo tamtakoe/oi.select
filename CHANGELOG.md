@@ -6,6 +6,10 @@
 
 - **oi-select-options:**
     - saveTrigger provides `space` and any chars (`,`, `;` etc.)
+    
+#### Bug Fixes
+- **oi-select-options:**
+    - editItem: fixed restoring last deleted editable option in multiple mode
 
 #### Breaking Changes
 

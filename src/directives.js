@@ -336,7 +336,7 @@ angular.module('oi.select')
                                 if (!multiple || editItem) {
                                     scope.backspaceFocus = true;
                                 }
-                                if (scope.backspaceFocus && scope.output) {
+                                if (scope.backspaceFocus && scope.output && (!multiple || scope.output.length)) { //prevent restoring last deleted option
                                     scope.removeItem(scope.output.length - 1);
 
                                     if (editItem) {
