@@ -9,6 +9,7 @@
 - **oi-select-options:**
     - saveTrigger provides `space` and any chars (`,`, `;` etc.)
     - removeItemFn removes item if promise was resolved
+    - newItemFn allows validate new item. Returns `undefined` or rejqcted promise to prevent adding
     
 #### Bug Fixes
 

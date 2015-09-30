@@ -26,4 +26,55 @@ errors: {{demoForm.select.$error}}
 {{bundle}}
 </pre></div>
 </div>
+
+    <br/>
+
+    <p>Also you can validate new items if return <code>undefined</code> or <code>rejected promise</code> from <code>newItemFn</code></p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for item in shopArr"
+                    ng-model="bundle2"
+                    multiple
+                    oi-select-options="{
+                        newItem: 'prompt',
+                        newItemFn: 'addItem($query)'
+                    }"
+                    placeholder="Select"
+                    ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div class="col-md-8">
+<div hljs>
+oi-options="item.name for item in shopArr"
+ng-model="bundle2"
+multiple
+oi-select-options="{
+    newItem: true,
+    newItemFn: 'addItem($query)'
+}"
+</div>
+<div hljs>
+var counter = 0;
+
+$scope.addItem = function(query) {
+var id = counter++;
+
+    return {
+        id: id,
+        name: query + '-' + id,
+        category: "shoes"
+    };
+};
+</div>
+</div>
+
+<div class="col-md-4"><pre>
+{{bundle2}}
+</pre></div>
+    </div>
+
+</div>
 </form>

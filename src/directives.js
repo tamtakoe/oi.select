@@ -198,11 +198,7 @@ angular.module('oi.select')
 
                     //limit is reached
                     if (scope.output.length >= multipleLimit) {
-                        element.addClass('limited');
-
-                        $timeout(function() {
-                            element.removeClass('limited');
-                        }, 150);
+                        blinkClass('limited');
 
                         return;
                     }
@@ -387,6 +383,16 @@ angular.module('oi.select')
                 element.on('focus', focus);
                 element.on('blur', blur);
 
+                function blinkClass(name, delay) {
+                    delay = delay || 150;
+
+                    element.addClass(name);
+
+                    $timeout(function() {
+                        element.removeClass(name);
+                    }, delay);
+                }
+
                 function cleanInput() {
                     scope.listItemHide = true;
                     scope.inputHide = false;
@@ -466,11 +472,13 @@ angular.module('oi.select')
 
                         itemPromise
                             .then(function(data) {
+                                if (data === undefined) {
+                                   return $q.reject();
+                                }
                                 if (isItemSave) {
                                     scope.addItem(data);
                                 }
-                            })
-                            .finally(function() {
+
                                 var bottom = scope.order.length - 1;
 
                                 if (scope.selectorPosition === bottom) {
@@ -478,6 +486,10 @@ angular.module('oi.select')
                                 }
                                 options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
                                 resetMatches();
+                            })
+                            .catch(function() {
+                                blinkClass('invalid-item');
+                                scope.showLoader = false;
                             });
 
                         return true;
