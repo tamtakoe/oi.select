@@ -7,7 +7,7 @@ angular.module('selectDemo')
         });
 
         $scope.addItem = function(query) {
-            if (/[a-z]/.test(query)) {
+            if (/\D/.test(query)) {
                 return;
             }
 

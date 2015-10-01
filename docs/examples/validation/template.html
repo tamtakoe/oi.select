@@ -43,6 +43,9 @@ errors: {{demoForm.select.$error}}
                     placeholder="Select"
                     ></oi-select>
         </div>
+        <div class="col-md-4">
+            <i>You can use only digit characters for new item names</i>
+        </div>
     </div>
 
 <div class="row">
@@ -57,16 +60,12 @@ oi-select-options="{
 }"
 </div>
 <div hljs>
-var counter = 0;
-
 $scope.addItem = function(query) {
-var id = counter++;
+    if (/\D/.test(query)) {
+        return;
+    }
 
-    return {
-        id: id,
-        name: query + '-' + id,
-        category: "shoes"
-    };
+    return {name: query};
 };
 </div>
 </div>
@@ -74,7 +73,7 @@ var id = counter++;
 <div class="col-md-4"><pre>
 {{bundle2}}
 </pre></div>
-    </div>
+</div>
 
 </div>
 </form>
