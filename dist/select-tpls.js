@@ -81,6 +81,7 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
+            console.log('blurHandler');
             if (event.target.nodeName !== 'INPUT') return; //for IE
 
             isBlur = false;
@@ -455,8 +456,8 @@ angular.module('oi.select')
                      multipleLimit = Number(value) || Infinity;
                 });
 
-                scope.$parent.$watch(attrs.multiple, function(value) {
-                    multiple = value === undefined ? angular.isDefined(attrs.multiple) : value;
+                scope.$parent.$watch(attrs.multiple, function(multipleValue) {
+                    multiple = multipleValue === undefined ? angular.isDefined(attrs.multiple) : multipleValue;
 
                     if (multiple) {
                         element.addClass('multiple');
@@ -586,17 +587,19 @@ angular.module('oi.select')
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    if (attrs.disabled || !multiple && !scope.inputHide || multiple && position < 0) return;
-
-                    removedItem = multiple ? ctrl.$modelValue[position] : ctrl.$modelValue;
+                    if (attrs.disabled || multiple && position < 0) return;
 
                     $q.when(removeItemFn(scope.$parent, {$item: removedItem}))
                         .then(function() {
+                            if (!multiple && !scope.inputHide) return;
+
                             if (multiple) {
+                                removedItem = ctrl.$modelValue[position];
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                             } else  {
+                                removedItem = ctrl.$modelValue;
                                 cleanInput();
 
                                 if (options.cleanModel) {
@@ -754,6 +757,7 @@ angular.module('oi.select')
 
 
                 function click(event) {
+                    console.log('click');
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
@@ -790,7 +794,9 @@ angular.module('oi.select')
                         restoreInput();
                     }
 
-                    saveOn('blur');
+                    if (!saveOn('blur')) {
+                        resetMatches();
+                    }
                     scope.$evalAsync();
                 }
 

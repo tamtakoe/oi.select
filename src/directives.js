@@ -420,6 +420,7 @@ angular.module('oi.select')
 
 
                 function click(event) {
+                    console.log('click');
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
@@ -456,7 +457,9 @@ angular.module('oi.select')
                         restoreInput();
                     }
 
-                    saveOn('blur');
+                    if (!saveOn('blur')) {
+                        resetMatches();
+                    }
                     scope.$evalAsync();
                 }
 
