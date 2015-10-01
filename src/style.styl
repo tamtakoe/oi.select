@@ -107,7 +107,7 @@ oi-select
           &.disabled
             color #aaa
 
-  &:not([multiple])
+  &:not(.multiple)
     .select
       &-search
         &-list
@@ -121,7 +121,7 @@ oi-select
               &:not(:active)
                 background none
 
-  &:not([multiple]):not(.cleanMode)
+  &:not(.multiple):not(.cleanMode)
     .select
       &-search
         &-list
@@ -182,11 +182,11 @@ oi-select
       border-radius 4px 4px 0 0
       border-bottom 1px solid rgba(0,0,0,.075)
 
-  &.open:not([multiple])
+  &.open:not(.multiple)
     .select-search:after
       border-color transparent transparent #000 transparent
       border-width 0 5px 5px 5px
 
-  &.loading:not([multiple])
+  &.loading:not(.multiple)
     .select-search:after
       border-width 0

@@ -37,9 +37,7 @@ angular.module('oi.select')
                 valuesFn              = $parse(valuesFnName),
                 trackByFn             = $parse(trackByName);
 
-            var multiple              = angular.isDefined(attrs.multiple),
-                multipleLimit         = Number(attrs.multipleLimit) || Infinity,
-                multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
+            var multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
                 placeholderFn         = $interpolate(attrs.placeholder || ''),
                 optionsFn             = $parse(attrs.oiSelectOptions),
                 keyUpDownWerePressed  = false,
@@ -47,7 +45,10 @@ angular.module('oi.select')
 
             var timeoutPromise,
                 lastQuery,
-                removedItem;
+                removedItem,
+                multiple,
+                multipleLimit,
+                newItemFn;
 
             return function(scope, element, attrs, ctrl) {
                 var inputElement        = element.find('input'),
@@ -59,8 +60,7 @@ angular.module('oi.select')
                     editItem            = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
                     editItemCorrect     = options.editItem === 'correct',
                     editItemFn          = editItem ? $injector.get(editItem) : function() {return ''},
-                    removeItemFn        = $parse(options.removeItemFn),
-                    newItemFn;
+                    removeItemFn        = $parse(options.removeItemFn);
 
                 match = options.searchFilter.split(':');
                 var searchFilter = $filter(match[0]),
@@ -114,6 +114,24 @@ angular.module('oi.select')
                 });
 
                 scope.$on('$destroy', unbindFocusBlur);
+
+                scope.$parent.$watch(attrs.multipleLimit, function(value) {
+                     multipleLimit = Number(value) || Infinity;
+                });
+
+                scope.$parent.$watch(attrs.multiple, function(value) {
+                    multiple = value === undefined ? angular.isDefined(attrs.multiple) : value;
+
+                    if (multiple) {
+                        element.addClass('multiple');
+                        // Override the standard $isEmpty because an empty array means the input is empty.
+                        ctrl.$isEmpty = function(value) {
+                            return !value || !value.length;
+                        };
+                    } else {
+                        element.removeClass('multiple');
+                    }
+                });
 
                 scope.$parent.$watch(attrs.ngModel, function(value) {
                     var output = value instanceof Array ? value : value ? [value]: [],
@@ -370,12 +388,7 @@ angular.module('oi.select')
                 scope.getDisableWhen = getDisableWhen;
 
 
-                if (multiple) {
-                    // Override the standard $isEmpty because an empty array means the input is empty.
-                    ctrl.$isEmpty = function(value) {
-                        return !value || !value.length;
-                    };
-                }
+
 
                 resetMatches();
 

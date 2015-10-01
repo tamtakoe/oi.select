@@ -2,8 +2,10 @@
 
 #### Features
 
-- **oi-select:** is optional (useful for new item case)
 
+- **oi-select:** is optional (useful for new item case)
+- **multiple:** is observable
+- **multiple-limit:** is observable
 - **multiple-placeholder:** placeholder for multiple select if items were chosen
 
 - **oi-select-options:**
