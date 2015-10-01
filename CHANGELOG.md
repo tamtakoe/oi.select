@@ -7,7 +7,6 @@
 - **multiple:** is observable
 - **multiple-limit:** is observable
 - **multiple-placeholder:** placeholder for multiple select if items were chosen
-
 - **oi-select-options:**
     - saveTrigger provides `space` and any chars (`,`, `;` etc.)
     - removeItemFn removes item if promise was resolved
