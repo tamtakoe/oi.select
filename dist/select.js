@@ -81,7 +81,6 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
-            console.log('blurHandler');
             if (event.target.nodeName !== 'INPUT') return; //for IE
 
             isBlur = false;
@@ -757,7 +756,6 @@ angular.module('oi.select')
 
 
                 function click(event) {
-                    console.log('click');
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
