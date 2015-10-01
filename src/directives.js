@@ -119,8 +119,8 @@ angular.module('oi.select')
                      multipleLimit = Number(value) || Infinity;
                 });
 
-                scope.$parent.$watch(attrs.multiple, function(value) {
-                    multiple = value === undefined ? angular.isDefined(attrs.multiple) : value;
+                scope.$parent.$watch(attrs.multiple, function(multipleValue) {
+                    multiple = multipleValue === undefined ? angular.isDefined(attrs.multiple) : multipleValue;
 
                     if (multiple) {
                         element.addClass('multiple');
@@ -250,17 +250,19 @@ angular.module('oi.select')
                 };
 
                 scope.removeItem = function removeItem(position) {
-                    if (attrs.disabled || !multiple && !scope.inputHide || multiple && position < 0) return;
-
-                    removedItem = multiple ? ctrl.$modelValue[position] : ctrl.$modelValue;
+                    if (attrs.disabled || multiple && position < 0) return;
 
                     $q.when(removeItemFn(scope.$parent, {$item: removedItem}))
                         .then(function() {
+                            if (!multiple && !scope.inputHide) return;
+
                             if (multiple) {
+                                removedItem = ctrl.$modelValue[position];
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                             } else  {
+                                removedItem = ctrl.$modelValue;
                                 cleanInput();
 
                                 if (options.cleanModel) {
