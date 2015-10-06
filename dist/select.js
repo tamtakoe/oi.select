@@ -81,7 +81,7 @@ angular.module('oi.select')
         inputElement.on('focus', focusHandler);
 
         function blurHandler(event) {
-            if (event.target.nodeName !== 'INPUT') return; //for IE
+            if (event && event.target.nodeName !== 'INPUT') return; //for IE
 
             isBlur = false;
 
@@ -497,7 +497,7 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    if (saveOn(inputValue, true)) {
+                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) {
                         return;
                     }
 
@@ -564,13 +564,11 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-                        //updateGroupPos();
+                        
                     } else {
                         ctrl.$setViewValue(modelOption);
                         restoreInput();
                     }
-
-                    //resetMatches();
 
                     if (oiUtils.groupsIsEmpty(scope.groups)) {
                         scope.groups = {}; //it is necessary for groups watcher
@@ -633,7 +631,6 @@ angular.module('oi.select')
                     switch (event.keyCode) {
                         case 8: /* backspace */
                             if (!scope.query.length && (!multiple || !scope.output.length)) {
-                                //getMatches();
                                 resetMatches();
                             }
                     }
@@ -660,6 +657,7 @@ angular.module('oi.select')
                             if (scope.inputHide) {
                                 cleanInput();
                             }
+
                             break;
 
                         case 37: /* left */
@@ -798,46 +796,39 @@ angular.module('oi.select')
                     scope.$evalAsync();
                 }
 
-                function saveOn(triggerName, isQueryLastChar) {
-                    var isEmptyQuery, query = scope.query;
+                function isTriggeredOn(triggerName) {
+                    return options.saveTrigger.split(' ').indexOf(triggerName) + 1
+                }
 
-                    if (isQueryLastChar) {
-                        query        = triggerName.slice(0, -1);
-                        isEmptyQuery = triggerName.length == 1;
-                        triggerName  = triggerName.slice(-1);
+                function saveOn(query, triggerName) {
+                    if (!triggerName) {
+                        triggerName = query;
+                        query = scope.query;
                     }
 
-                    var isTriggered    = options.saveTrigger.split(' ').indexOf(triggerName) + 1, //(new RegExp(triggerName)).test(options.saveTrigger),
+                    var isTriggered    = isTriggeredOn(triggerName), //(new RegExp(triggerName)).test(options.saveTrigger),
                         isNewItem      = options.newItem && query,
-                        isSelectedItem = angular.isNumber(scope.selectorPosition),
                         selectedOrder  = scope.order[scope.selectorPosition],
-                        isItemSave     = triggerName !== 'blur' || query || !options.newItem,
                         itemPromise;
 
-                    if (isTriggered && isEmptyQuery) {
-                        scope.query = query;
-                        return;
-                    }
-
-                    if (isTriggered && (isNewItem || isSelectedItem && selectedOrder)) {
+                    if (isTriggered && (isNewItem || selectedOrder)) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(triggerName !== 'blur' && selectedOrder || query && newItemFn(scope.$parent, {$query: query}));
+                        itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
 
                         itemPromise
                             .then(function(data) {
                                 if (data === undefined) {
                                    return $q.reject();
                                 }
-                                if (isItemSave) {
-                                    scope.addItem(data);
-                                }
+
+                                scope.addItem(data);
 
                                 var bottom = scope.order.length - 1;
 
                                 if (scope.selectorPosition === bottom) {
                                     setOption(listElement, 0); //TODO optimise when list will be closed
                                 }
-                                options.newItemFn && !isSelectedItem || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
+                                options.newItemFn && !selectedOrder || $timeout(angular.noop); //TODO $applyAsync work since Angular 1.3
                                 resetMatches();
                             })
                             .catch(function() {
@@ -899,7 +890,7 @@ angular.module('oi.select')
                         return $q.when(values.$promise || values)
                             .then(function(values) {
                                 if (!values) {
-                                    scope.groups = [];
+                                    scope.groups = {};
                                     updateGroupPos();
                                     return;
                                 }
@@ -907,8 +898,8 @@ angular.module('oi.select')
                                 if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList   = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
-                                    var withoutOverlap = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
-                                    var filteredOutput = filter(withoutOverlap);
+                                    var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
+                                    var filteredOutput = filter(withoutIntersection);
 
                                     scope.groups = group(filteredOutput);
                                     updateGroupPos();
@@ -917,6 +908,12 @@ angular.module('oi.select')
                             })
                             .finally(function(){
                                 scope.showLoader = false;
+
+                                if (options.closeList) {
+                                    $timeout(function() {
+                                        setOption(listElement, 0);
+                                    });
+                                }
                             });
                     }, waitTime);
 
