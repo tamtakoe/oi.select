@@ -28,8 +28,8 @@ angular.module('oi.select')
 })
 
 .factory('oiSelectEditItem', function() {
-    return function(removedItem, lastQuery, getLabel) {
-        return getLabel(removedItem);
+    return function(removedItem, lastQuery, getLabel, itemIsCorrected) {
+        return itemIsCorrected ? '' : getLabel(removedItem);
     };
 })
 

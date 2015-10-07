@@ -15,6 +15,7 @@
 
 - **oi-select-options:**
     - editItem: fixed restoring last deleted editable option in multiple mode
+    - editItem = 'correct': restore item if model was not changed
 
 #### Breaking Changes
 

@@ -29,8 +29,8 @@ angular.module('oi.select')
 })
 
 .factory('oiSelectEditItem', function() {
-    return function(removedItem, lastQuery, getLabel) {
-        return getLabel(removedItem);
+    return function(removedItem, lastQuery, getLabel, itemIsCorrected) {
+        return itemIsCorrected ? '' : getLabel(removedItem);
     };
 })
 
@@ -393,10 +393,14 @@ angular.module('oi.select')
                     multiplePlaceholder = multiplePlaceholderFn(scope),
                     elementOptions      = optionsFn(scope.$parent) || {},
                     options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
-                    editItem            = options.editItem === true || options.editItem === 'correct' ? 'oiSelectEditItem' : options.editItem,
-                    editItemCorrect     = options.editItem === 'correct',
-                    editItemFn          = editItem ? $injector.get(editItem) : function() {return ''},
-                    removeItemFn        = $parse(options.removeItemFn);
+                    editItem            = options.editItem,
+                    editItemIsCorrected = editItem === 'correct';
+
+                if (editItem === true || editItem === 'correct') {
+                    editItem = 'oiSelectEditItem';
+                }
+                var editItemFn   = editItem ? $injector.get(editItem) : angular.noop,
+                    removeItemFn = $parse(options.removeItemFn);
 
                 match = options.searchFilter.split(':');
                 var searchFilter = $filter(match[0]),
@@ -419,7 +423,7 @@ angular.module('oi.select')
                     };
                 }
 
-                if (options.cleanModel && (!editItem || editItemCorrect)) {
+                if (options.cleanModel && (!editItem || editItemIsCorrected)) {
                     element.addClass('cleanMode');
                 }
 
@@ -469,11 +473,16 @@ angular.module('oi.select')
                     }
                 });
 
-                scope.$parent.$watch(attrs.ngModel, function(value) {
+                scope.$parent.$watch(attrs.ngModel, function(value, oldValue) {
                     var output = value instanceof Array ? value : value ? [value]: [],
                         promise = $q.when(output);
 
                     modifyPlaceholder();
+
+                    if (value !== oldValue) {
+                        editItemIsCorrected = false;
+                        element.removeClass('cleanMode');
+                    }
 
                     if (!multiple) {
                         restoreInput();
@@ -564,7 +573,7 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-                        
+
                     } else {
                         ctrl.$setViewValue(modelOption);
                         restoreInput();
@@ -604,13 +613,8 @@ angular.module('oi.select')
                                 }
                             }
 
-                            if (!editItemCorrect && (multiple || !scope.backspaceFocus)) {
-                                scope.query = editItemFn(removedItem, lastQuery, getLabel);
-                            }
-
-                            if (editItem) {
-                                editItemCorrect = false;
-                                element.removeClass('cleanMode');
+                            if (multiple || !scope.backspaceFocus) {
+                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected);
                             }
 
                             if (multiple && options.closeList) {
@@ -765,7 +769,7 @@ angular.module('oi.select')
                     }
 
                     if (scope.isOpen && options.closeList && (event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
-                        resetMatches({query: options.editItem && !editItemCorrect});
+                        resetMatches({query: options.editItem && !editItemIsCorrected});
                         scope.$evalAsync();
                     } else {
                         getMatches(scope.query);
