@@ -6,8 +6,8 @@
     "version": "0.2.13",
     "main": ["./dist/select-tpls.min.js", "./dist/select.min.css"],
     "dependencies": {
-        "angular": ">=1.4.7",
-        "angular-sanitize": ">=1.4.7",
-        "angular-mocks": ">=1.4.7"
+        "angular": ">=1.2",
+        "angular-sanitize": ">=1.2",
+        "angular-mocks": ">=1.2"
     }
 }
