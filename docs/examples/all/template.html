@@ -6,6 +6,8 @@
                 ng-model="bundle"
                 placeholder="Select"
                 oi-select-options="{
+                    newItem: 'prompt',
+                    newItemModel: {id: null, name: $query, category: 'shoes'},
                     editItem: 'correct',
                     saveTrigger: 'enter blur'
                 }"

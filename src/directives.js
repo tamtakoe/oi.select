@@ -278,7 +278,7 @@ angular.module('oi.select')
                             }
 
                             if (multiple || !scope.backspaceFocus) {
-                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected);
+                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected) || '';
                             }
 
                             if (multiple && options.closeList) {
