@@ -20,7 +20,6 @@
         "gulp-minify-html": "1.0.0",
         "gulp-rename": "1.2.2",
         "stream-series": "0.1.1",
-
         "jasmine-core": "2.3.4",
         "karma": "0.13.9",
         "karma-jasmine": "0.3.6",
@@ -31,9 +30,14 @@
         "karma-ie-launcher": "0.2.0",
         "karma-phantomjs-launcher": "0.2.1",
         "karma-sauce-launcher": "0.2.14",
-
         "jasmine-jquery": "2.1.0",
         "karma-jasmine-jquery": "0.1.1",
         "karma-ng-html2js-preprocessor": "0.1.2"
+    },
+    "browser": "index.js",
+    "style": "dist/select.min.css",
+    "peerDependencies": {
+        "angular": ">=1.2",
+        "angular-sanitize": ">=1.2"
     }
 }
