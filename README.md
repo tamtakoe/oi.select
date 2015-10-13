@@ -25,6 +25,11 @@ npm install -g bower
 bower install oi.select
 ```
 
+or use npm:
+```
+npm install --save oi.select
+```
+
 or use local:
 
 ```
