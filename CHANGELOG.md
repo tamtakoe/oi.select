@@ -5,6 +5,8 @@
 - **oi-select-options:**
     - saveTrigger: added `tab` value
     
+- **npm:** added commonjs + npm support
+    
 #### Breaking Changes
 
 - **oi-select-options:**
