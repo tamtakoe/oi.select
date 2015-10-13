@@ -1,6 +1,6 @@
 <div ng-controller="selectAutocompleteController">
     <h2>Autocomplete</h2>
-    <p>Priority save matches on save trigger</p>
+    <p>Priority save matches</p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
@@ -8,8 +8,7 @@
                 ng-model="bundle"
                 oi-select-options="{
                     newItem: 'autocomplete',
-                    newItemModel: {id: null, name: $query, category: 'shoes'},
-                    saveTrigger: 'enter blur'
+                    newItemModel: {id: null, name: $query, category: 'shoes'}
                 }"
                 placeholder="Select"
                     ></oi-select>
@@ -22,8 +21,7 @@ oi-options="item.name for (key, item) in shopObj"
 ng-model="bundle"
 oi-select-options="{
     newItem: 'autocomplete',
-    newItemModel: {id: null, name: $query, category: 'shoes'},
-    saveTrigger: 'enter blur'
+    newItemModel: {id: null, name: $query, category: 'shoes'}
 }"
 </div>
 <div class="col-md-4"><pre>

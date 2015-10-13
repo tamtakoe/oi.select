@@ -11,13 +11,13 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
-            saveTrigger:    'enter'
+            saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.14',
+            full: '0.2.15',
             major: 0,
             minor: 2,
-            dot: 14
+            dot: 15
         },
         $get: function() {
             return {
@@ -676,6 +676,10 @@ angular.module('oi.select')
                         case 39: /* right */
                             break;
 
+                        case 9: /* tab */
+                            saveOn('tab');
+                            break;
+
                         case 13: /* enter */
                             saveOn('enter');
                             event.preventDefault(); // Prevent the event from bubbling up as it might otherwise cause a form submission
@@ -808,19 +812,15 @@ angular.module('oi.select')
                     scope.$evalAsync();
                 }
 
-                function isTriggeredOn(triggerName) {
-                    return options.saveTrigger.split(' ').indexOf(triggerName) + 1
-                }
-
                 function saveOn(query, triggerName) {
                     if (!triggerName) {
                         triggerName = query;
                         query = scope.query;
                     }
 
-                    var isTriggered    = isTriggeredOn(triggerName), //(new RegExp(triggerName)).test(options.saveTrigger),
+                    var isTriggered    = options.saveTrigger.split(' ').indexOf(triggerName) + 1,
                         isNewItem      = options.newItem && query,
-                        selectedOrder  = scope.order[scope.selectorPosition],
+                        selectedOrder  = triggerName !== 'blur' ? scope.order[scope.selectorPosition] : null, //do not save selected element in dropdown list on blur
                         itemPromise;
 
                     if (isTriggered && (isNewItem || selectedOrder)) {

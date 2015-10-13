@@ -1,4 +1,16 @@
-## 0.2.13
+## 0.2.15
+    
+#### Features
+
+- **oi-select-options:**
+    - saveTrigger: added `tab` value
+    
+#### Breaking Changes
+
+- **oi-select-options:**
+    - saveTrigger has new default format: `enter tab blur`
+
+## 0.2.14
     
 #### Bug Fixes
 
