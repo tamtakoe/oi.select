@@ -1,4 +1,11 @@
 ## 0.2.13
+    
+#### Bug Fixes
+
+- **oi-select-options:**
+    - newItem = "prompt": fixed items saving
+    
+## 0.2.13
 
 #### Features
 

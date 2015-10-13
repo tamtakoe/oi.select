@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter'
         },
         version: {
-            full: '0.2.13',
+            full: '0.2.14',
             major: 0,
             minor: 2,
-            dot: 13
+            dot: 14
         },
         $get: function() {
             return {
@@ -473,15 +473,21 @@ angular.module('oi.select')
                     }
                 });
 
+                function valueChangedManually() { //case: clean model; prompt + editItem: 'correct'; initial value = defined/undefined
+                    if (editItemIsCorrected) {
+                        element.removeClass('cleanMode');
+                    }
+                    editItemIsCorrected = false;
+                }
+
                 scope.$parent.$watch(attrs.ngModel, function(value, oldValue) {
                     var output = value instanceof Array ? value : value ? [value]: [],
                         promise = $q.when(output);
 
                     modifyPlaceholder();
 
-                    if (value !== oldValue) {
-                        editItemIsCorrected = false;
-                        element.removeClass('cleanMode');
+                    if (oldValue && value !== oldValue) {
+                        valueChangedManually();
                     }
 
                     if (!multiple) {
@@ -586,6 +592,8 @@ angular.module('oi.select')
                     if (!multiple && !options.closeList) {
                         resetMatches({query: true});
                     }
+
+                    valueChangedManually();
 
                     scope.oldQuery = scope.oldQuery || scope.query;
                     scope.query = '';
@@ -913,7 +921,7 @@ angular.module('oi.select')
                             .finally(function(){
                                 scope.showLoader = false;
 
-                                if (options.closeList) {
+                                if (options.closeList && !options.cleanModel) { //case: prompt
                                     $timeout(function() {
                                         setOption(listElement, 0);
                                     });

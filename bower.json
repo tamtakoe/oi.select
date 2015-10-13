@@ -3,7 +3,7 @@
         "name": "https://github.com/tamtakoe"
     },
     "name": "oi.select",
-    "version": "0.2.13",
+    "version": "0.2.14",
     "main": ["./dist/select-tpls.min.js", "./dist/select.min.css"],
     "dependencies": {
         "angular": ">=1.2",
