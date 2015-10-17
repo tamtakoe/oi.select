@@ -1,3 +1,9 @@
+## 0.2.16
+    
+#### Bug Fixes
+
+- **animate:** correct work in Angular 1.2.x
+
 ## 0.2.15
     
 #### Features

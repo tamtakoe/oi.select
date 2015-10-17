@@ -40,10 +40,11 @@ angular.module('oi.select')
             var multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
                 placeholderFn         = $interpolate(attrs.placeholder || ''),
                 optionsFn             = $parse(attrs.oiSelectOptions),
-                keyUpDownWerePressed  = false,
-                matchesWereReset      = false;
+                isOldAngular          = angular.version.major <= 1 && angular.version.minor <= 3;
 
-            var timeoutPromise,
+            var keyUpDownWerePressed,
+                matchesWereReset,
+                timeoutPromise,
                 lastQuery,
                 removedItem,
                 multiple,
@@ -206,19 +207,19 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('isFocused', function(isFocused) {
-                    $animate[isFocused ? 'addClass' : 'removeClass'](element, 'focused', {
+                    $animate[isFocused ? 'addClass' : 'removeClass'](element, 'focused', !isOldAngular && {
                         tempClasses: 'focused-animate'
                     });
                 });
 
                 scope.$watch('isOpen', function(isOpen) {
-                    $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open', {
+                    $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open', !isOldAngular && {
                         tempClasses: 'open-animate'
                     });
                 });
 
                 scope.$watch('showLoader', function(isLoading) {
-                    $animate[isLoading ? 'addClass' : 'removeClass'](element, 'loading', {
+                    $animate[isLoading ? 'addClass' : 'removeClass'](element, 'loading', !isOldAngular && {
                         tempClasses: 'loading-animate'
                     });
                 });
@@ -608,7 +609,7 @@ angular.module('oi.select')
                         }
                     }
 
-                    if (angular.version.major <= 1 && angular.version.minor <= 3) {
+                    if (isOldAngular) {
                         collectionKeys.sort(); //TODO: Think of a way which does not depend on the order in which Angular displays objects by ngRepeat
                     }
 
