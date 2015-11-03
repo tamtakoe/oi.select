@@ -168,6 +168,10 @@ angular.module('oi.select')
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
 
+                    if (multiple && attrs.disabled && !value.length) { //case: multiple, disabled=true + remove all items
+                        scope.inputHide = false;
+                    }
+
                     promise.then(function(collection) {
                         scope.output = collection;
 

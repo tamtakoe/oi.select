@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.16',
+            full: '0.2.17',
             major: 0,
             minor: 2,
-            dot: 16
+            dot: 17
         },
         $get: function() {
             return {
@@ -395,7 +395,8 @@ angular.module('oi.select')
                     elementOptions      = optionsFn(scope.$parent) || {},
                     options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
                     editItem            = options.editItem,
-                    editItemIsCorrected = editItem === 'correct';
+                    editItemIsCorrected = editItem === 'correct',
+                    waitTime            = 0;
 
                 if (editItem === true || editItem === 'correct') {
                     editItem = 'oiSelectEditItem';
@@ -503,6 +504,10 @@ angular.module('oi.select')
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
 
+                    if (multiple && attrs.disabled && !value.length) { //case: multiple, disabled=true + remove all items
+                        scope.inputHide = false;
+                    }
+
                     promise.then(function(collection) {
                         scope.output = collection;
 
@@ -604,17 +609,17 @@ angular.module('oi.select')
                 scope.removeItem = function removeItem(position) {
                     if (attrs.disabled || multiple && position < 0) return;
 
+                    removedItem = multiple ? ctrl.$modelValue[position] : ctrl.$modelValue;
+
                     $q.when(removeItemFn(scope.$parent, {$item: removedItem}))
                         .then(function() {
                             if (!multiple && !scope.inputHide) return;
 
                             if (multiple) {
-                                removedItem = ctrl.$modelValue[position];
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                             } else  {
-                                removedItem = ctrl.$modelValue;
                                 cleanInput();
 
                                 if (options.cleanModel) {
@@ -883,21 +888,23 @@ angular.module('oi.select')
                 }
 
                 function getMatches(query, selectedAs) {
-                    var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '',
-                        waitTime = 0;
-
-                    scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
-
-                    if (!query && !selectedAs) {
-                        scope.oldQuery = null;
-                    }
-
-                    if (timeoutPromise && (values.$promise && !values.$resolved || angular.isFunction(values.then))) {
+                    if (timeoutPromise && waitTime) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
-                        waitTime = options.debounce;
                     }
 
                     timeoutPromise = $timeout(function() {
+                        var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '';
+
+                        scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+
+                        if (!query && !selectedAs) {
+                            scope.oldQuery = null;
+                        }
+
+                        if (values.$promise && !values.$resolved || angular.isFunction(values.then)) {
+                            waitTime = options.debounce;
+                        }
+
                         scope.showLoader = true;
 
                         return $q.when(values.$promise || values)
@@ -910,7 +917,7 @@ angular.module('oi.select')
 
                                 if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList   = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
+                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 
@@ -967,7 +974,8 @@ angular.module('oi.select')
                     scope.groups = {};
                     scope.order = [];
                     scope.showLoader = false;
-                    scope.isOpen   = false;
+                    scope.isOpen = false;
+                    waitTime = 0;
 
                     if (!options.query)   {
                         scope.query = '';

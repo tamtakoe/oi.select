@@ -2,6 +2,8 @@
     
 #### Bug Fixes
 
+- **disable:** correct work if all items were removed
+
 - **oi-select-options:**
     - debounce works correct
     - removeItemFn get item in attribute
