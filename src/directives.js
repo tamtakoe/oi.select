@@ -269,17 +269,17 @@ angular.module('oi.select')
                 scope.removeItem = function removeItem(position) {
                     if (attrs.disabled || multiple && position < 0) return;
 
+                    removedItem = multiple ? ctrl.$modelValue[position] : ctrl.$modelValue;
+
                     $q.when(removeItemFn(scope.$parent, {$item: removedItem}))
                         .then(function() {
                             if (!multiple && !scope.inputHide) return;
 
                             if (multiple) {
-                                removedItem = ctrl.$modelValue[position];
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
                             } else  {
-                                removedItem = ctrl.$modelValue;
                                 cleanInput();
 
                                 if (options.cleanModel) {

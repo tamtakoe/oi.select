@@ -4,6 +4,7 @@
 
 - **oi-select-options:**
     - debounce works correct
+    - removeItemFn get item in attribute
 
 ## 0.2.16
     
