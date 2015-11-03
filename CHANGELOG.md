@@ -1,3 +1,10 @@
+## 0.2.17
+    
+#### Bug Fixes
+
+- **oi-select-options:**
+    - debounce works correct
+
 ## 0.2.16
     
 #### Bug Fixes

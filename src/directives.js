@@ -59,7 +59,8 @@ angular.module('oi.select')
                     elementOptions      = optionsFn(scope.$parent) || {},
                     options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
                     editItem            = options.editItem,
-                    editItemIsCorrected = editItem === 'correct';
+                    editItemIsCorrected = editItem === 'correct',
+                    waitTime            = 0;
 
                 if (editItem === true || editItem === 'correct') {
                     editItem = 'oiSelectEditItem';
@@ -547,21 +548,23 @@ angular.module('oi.select')
                 }
 
                 function getMatches(query, selectedAs) {
-                    var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '',
-                        waitTime = 0;
-
-                    scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
-
-                    if (!query && !selectedAs) {
-                        scope.oldQuery = null;
-                    }
-
-                    if (timeoutPromise && (values.$promise && !values.$resolved || angular.isFunction(values.then))) {
+                    if (timeoutPromise && waitTime) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
-                        waitTime = options.debounce;
                     }
 
                     timeoutPromise = $timeout(function() {
+                        var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '';
+
+                        scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+
+                        if (!query && !selectedAs) {
+                            scope.oldQuery = null;
+                        }
+
+                        if (values.$promise && !values.$resolved || angular.isFunction(values.then)) {
+                            waitTime = options.debounce;
+                        }
+
                         scope.showLoader = true;
 
                         return $q.when(values.$promise || values)
@@ -574,7 +577,7 @@ angular.module('oi.select')
 
                                 if (!selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList   = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
+                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 
@@ -631,7 +634,8 @@ angular.module('oi.select')
                     scope.groups = {};
                     scope.order = [];
                     scope.showLoader = false;
-                    scope.isOpen   = false;
+                    scope.isOpen = false;
+                    waitTime = 0;
 
                     if (!options.query)   {
                         scope.query = '';
