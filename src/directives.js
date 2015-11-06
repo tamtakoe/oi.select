@@ -52,6 +52,9 @@ angular.module('oi.select')
                 newItemFn;
 
             return function(scope, element, attrs, ctrl) {
+                // Override the standard $isEmpty because an empty array means the input is empty.
+                ctrl.$isEmpty = function(value) { return !exists(value) };
+
                 var inputElement        = element.find('input'),
                     listElement         = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder         = placeholderFn(scope),
@@ -128,15 +131,7 @@ angular.module('oi.select')
                 scope.$parent.$watch(attrs.multiple, function(multipleValue) {
                     multiple = multipleValue === undefined ? angular.isDefined(attrs.multiple) : multipleValue;
 
-                    if (multiple) {
-                        element.addClass('multiple');
-                        // Override the standard $isEmpty because an empty array means the input is empty.
-                        ctrl.$isEmpty = function(value) {
-                            return !value || !value.length;
-                        };
-                    } else {
-                        element.removeClass('multiple');
-                    }
+                    element[multiple ? 'addClass' : 'removeClass']('multiple');
                 });
 
                 function valueChangedManually() { //case: clean model; prompt + editItem: 'correct'; initial value = defined/undefined
@@ -147,12 +142,12 @@ angular.module('oi.select')
                 }
 
                 scope.$parent.$watch(attrs.ngModel, function(value, oldValue) {
-                    var output = value instanceof Array ? value : value ? [value]: [],
+                    var output = compact(value),
                         promise = $q.when(output);
 
                     modifyPlaceholder();
 
-                    if (oldValue && value !== oldValue) {
+                    if (exists(oldValue) && value !== oldValue) {
                         valueChangedManually();
                     }
 
@@ -160,7 +155,7 @@ angular.module('oi.select')
                         restoreInput();
                     }
 
-                    if (selectAsFn && value) {
+                    if (selectAsFn && exists(value)) {
                         promise = getMatches(null, value)
                             .then(function(collection) {
                                 return oiUtils.intersection(output, collection, null, selectAs);
@@ -168,7 +163,7 @@ angular.module('oi.select')
                         timeoutPromise = null; //`resetMatches` should not cancel the `promise`
                     }
 
-                    if (multiple && attrs.disabled && !value.length) { //case: multiple, disabled=true + remove all items
+                    if (multiple && attrs.disabled && !exists(value)) { //case: multiple, disabled=true + remove all items
                         scope.inputHide = false;
                     }
 
@@ -410,8 +405,6 @@ angular.module('oi.select')
                 scope.getDisableWhen = getDisableWhen;
 
 
-
-
                 resetMatches();
 
                 element[0].addEventListener('click', click, true); //triggered before add or delete item event
@@ -434,10 +427,10 @@ angular.module('oi.select')
                 }
 
                 function restoreInput() {
-                    scope.listItemHide = !ctrl.$modelValue;
-                    scope.inputHide = !!ctrl.$modelValue;
+                    var modelExists = exists(ctrl.$modelValue);
+                    scope.listItemHide = !modelExists;
+                    scope.inputHide = modelExists;
                 }
-
 
                 function click(event) {
                     //option is disabled
@@ -523,7 +516,7 @@ angular.module('oi.select')
                 }
 
                 function modifyPlaceholder() {
-                    var currentPlaceholder = multiple && ctrl.$modelValue && ctrl.$modelValue.length ? multiplePlaceholder : placeholder;
+                    var currentPlaceholder = multiple && exists(ctrl.$modelValue) ? multiplePlaceholder : placeholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                 }
 
@@ -536,7 +529,7 @@ angular.module('oi.select')
                 }
 
                 function getLabel(item) {
-                    return String(oiUtils.getValue(valueName, item, scope.$parent, displayFn));
+                    return oiUtils.getValue(valueName, item, scope.$parent, displayFn);
                 }
 
                 function getDisableWhen(item) {
@@ -549,6 +542,18 @@ angular.module('oi.select')
 
                 function filter(list) {
                     return oiUtils.getValue(valuesName, list, scope.$parent, filteredValuesFn);
+                }
+
+                function compact(value) {
+                    value = value instanceof Array ? value : value ? [value]: [];
+
+                    return value.filter(function(item) {
+                        return item && (item instanceof Array && item.length || selectAsFn || getLabel(item));
+                    });
+                }
+
+                function exists(value) {
+                    return !!compact(value).length;
                 }
 
                 function getMatches(query, selectedAs) {
@@ -573,21 +578,18 @@ angular.module('oi.select')
 
                         return $q.when(values.$promise || values)
                             .then(function(values) {
-                                if (!values) {
-                                    scope.groups = {};
-                                    updateGroupPos();
-                                    return;
-                                }
+                                scope.groups = {};
 
-                                if (!selectedAs) {
+                                if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 
                                     scope.groups = group(filteredOutput);
-                                    updateGroupPos();
                                 }
+                                updateGroupPos();
+
                                 return values;
                             })
                             .finally(function(){

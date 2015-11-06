@@ -1,3 +1,16 @@
+var regexpEscape = (function () {
+    // cache escapable characters RegExp
+    var rEscapableCharacters = /[-\/\\^$*+?.()|[\]{}]/g;
+
+    // cache escape + match String
+    var sEscapeMatch = '\\$&';
+
+    // RegExp.escape
+    return function escape(string) {
+        return String(string).replace(rEscapableCharacters, sEscapeMatch);
+    };
+})();
+
 angular.module('oi.select')
 
 .filter('oiSelectCloseIcon', ['$sce', function($sce) {
@@ -14,7 +27,7 @@ angular.module('oi.select')
 
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
-            query = query.toString().replace(/\s+.*/, '').replace(/\\/g, '\\\\');
+            query = regexpEscape(query.toString());
 
             html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
@@ -30,7 +43,7 @@ angular.module('oi.select')
         var i, j, isFound, output, output1 = [], output2 = [], output3 = [];
 
         if (query) {
-            query = String(query).replace(/\s+.*/, '').replace(/\\/g, '\\\\');
+            query = regexpEscape(String(query));
 
             for (i = 0, isFound = false; i < input.length; i++) {
                 isFound = getLabel(input[i]).match(new RegExp(query, "i"));

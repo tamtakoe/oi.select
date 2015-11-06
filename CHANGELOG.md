@@ -1,4 +1,8 @@
 ## 0.2.17
+
+#### Features
+
+- **oi-select:** item with empty label equivalent undefined
     
 #### Bug Fixes
 

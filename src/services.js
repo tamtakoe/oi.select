@@ -16,7 +16,7 @@ angular.module('oi.select')
             full: '0.2.17',
             major: 0,
             minor: 2,
-            dot: 17
+            dot: 16
         },
         $get: function() {
             return {
