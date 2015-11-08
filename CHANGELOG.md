@@ -6,11 +6,15 @@
     
 #### Bug Fixes
 
+- **oiSelectAscSort, oiSelectHighlight:** escape regexp
+
 - **disable:** correct work if all items were removed
 
 - **oi-select-options:**
     - debounce works correct
     - removeItemFn get item in attribute
+    
+- **translate example:** fixed output
 
 ## 0.2.16
     

@@ -32,5 +32,5 @@ angular.module('selectDemo')
             "group" : "Group 2"
         }];
 
-        $scope.item = $scope.items[0];
+        $scope.bundle = $scope.items[0];
     });

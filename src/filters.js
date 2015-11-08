@@ -1,16 +1,3 @@
-var regexpEscape = (function () {
-    // cache escapable characters RegExp
-    var rEscapableCharacters = /[-\/\\^$*+?.()|[\]{}]/g;
-
-    // cache escape + match String
-    var sEscapeMatch = '\\$&';
-
-    // RegExp.escape
-    return function escape(string) {
-        return String(string).replace(rEscapableCharacters, sEscapeMatch);
-    };
-})();
-
 angular.module('oi.select')
 
 .filter('oiSelectCloseIcon', ['$sce', function($sce) {
@@ -21,13 +8,13 @@ angular.module('oi.select')
     };
 }])
 
-.filter('oiSelectHighlight', ['$sce', function($sce) {
+.filter('oiSelectHighlight', ['$sce', 'oiSelectEscape', function($sce, oiSelectEscape) {
     return function(label, query) {
         var html;
 
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
-            query = regexpEscape(query.toString());
+            query = oiSelectEscape(query.toString());
 
             html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
@@ -38,12 +25,12 @@ angular.module('oi.select')
     };
 }])
 
-.filter('oiSelectAscSort', function() {
+.filter('oiSelectAscSort', ['oiSelectEscape', function(oiSelectEscape) {
     function ascSort(input, query, getLabel, options) {
         var i, j, isFound, output, output1 = [], output2 = [], output3 = [];
 
         if (query) {
-            query = regexpEscape(String(query));
+            query = oiSelectEscape(String(query));
 
             for (i = 0, isFound = false; i < input.length; i++) {
                 isFound = getLabel(input[i]).match(new RegExp(query, "i"));
@@ -76,7 +63,7 @@ angular.module('oi.select')
     }
 
     return ascSort;
-})
+}])
 
 .filter('none', function() {
     return function(input) {

@@ -5,7 +5,7 @@
         <div class="col-md-8">
             <oi-select
                 oi-options="translate(item.name) group by translate(item.group) for item in items"
-                ng-model="item"
+                ng-model="bundle"
                 placeholder="Select"
                 ></oi-select>
         </div>
@@ -14,7 +14,7 @@
 <div class="row">
 <div hljs class="col-md-8">
 oi-options="translate(item.name) group by translate(item.group) for item in items"
-ng-model="item"
+ng-model="bundle"
 </div>
 <div class="col-md-4"><pre>
 {{bundle}}

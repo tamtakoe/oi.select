@@ -27,6 +27,15 @@ angular.module('oi.select')
     };
 })
 
+.factory('oiSelectEscape', function() {
+    var rEscapableCharacters = /[-\/\\^$*+?.()|[\]{}]/g;  // cache escape + match String
+    var sEscapeMatch = '\\$&';
+
+    return function(string) {
+        return String(string).replace(rEscapableCharacters, sEscapeMatch);
+    };
+})
+
 .factory('oiSelectEditItem', function() {
     return function(removedItem, lastQuery, getLabel, itemIsCorrected) {
         return itemIsCorrected ? '' : getLabel(removedItem);
