@@ -13,10 +13,10 @@ angular.module('oi.select')
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.17',
+            full: '0.2.18',
             major: 0,
             minor: 2,
-            dot: 17
+            dot: 18
         },
         $get: function() {
             return {
@@ -59,7 +59,7 @@ angular.module('oi.select')
                 if (current === container) {
                     return false;
                 }
-                if (current.classList.contains(className)) {
+                if (current.className.indexOf(className) >= 0) { //current.classList.contains(className) doesn't work in IE9
                     return true;
                 }
             } else {

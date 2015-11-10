@@ -1,3 +1,9 @@
+## 0.2.18
+
+#### Bug Fixes
+
+- **oi-select:** correct works in IE9
+    
 ## 0.2.17
 
 #### Features
