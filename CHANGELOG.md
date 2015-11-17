@@ -1,3 +1,13 @@
+## 0.2.19
+
+#### Features
+
+- **oi-select:** `maxlength` translate maxlength attribute on input
+
+- **oi-select-options:**
+    - maxlength is maximum number of characters allowed in the input
+    - groupFilter for customizing group header
+
 ## 0.2.18
 
 #### Bug Fixes

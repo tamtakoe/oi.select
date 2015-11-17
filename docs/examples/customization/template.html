@@ -34,7 +34,7 @@ oi-select-options="{
 </div>
 <div hljs>
 .filter('mySearchFilter', function($sce) {
-    return function(label, query, item, options) {
+    return function(label, query, item, options, element) {
 
         var html = '<i>' + label + '</i>';
 
@@ -44,7 +44,7 @@ oi-select-options="{
 </div>
 <div hljs>
 .filter('myDropdownFilter', function($sce) {
-    return function(label, query, item, options) {
+    return function(label, query, item, options, element) {
 
         var html = '<kbd>#' + item.id + '</kbd> ' + label;
 
@@ -54,14 +54,14 @@ oi-select-options="{
 </div>
 <div hljs>
 .filter('myListFilter', function() {
-    return function (list, query, getLabel, options) {
+    return function (list, query, getLabel, options, element) {
         return list;
     }
 });
 </div>
 <div hljs>
 .factory('myEditItem', function() {
-    return function(removedValue, lastQuery, getLabel) {
+    return function(removedValue, lastQuery, getLabel, isCorrected, element) {
         return removedValue ? getLabel(removedValue) + ' :-)' : '';
     };
 })
@@ -70,5 +70,89 @@ oi-select-options="{
 <div class="col-md-4"><pre>
 {{bundle}}
 </pre></div>
+</div>
+    <br/>
+
+    <style>
+        oi-select.collapsed-groups .select-dropdown {
+            max-height: none;
+        }
+        oi-select.collapsed-groups .group-header {
+            cursor: pointer;
+        }
+        oi-select.collapsed-groups.show .select-dropdown .group-header-plus,
+        oi-select.collapsed-groups .select-dropdown li:not(.ungroup) {
+            display: none;
+        }
+        oi-select.collapsed-groups.show .select-dropdown li,
+        oi-select.collapsed-groups .select-dropdown li.show {
+            display: block;
+        }
+    </style>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    class="collapsed-groups"
+                    oi-options="item.name group by item.category for item in shopArr"
+                    oi-select-options="{
+                        closeList: false,
+                        groupFilter: 'myGroupFilter'
+                    }"
+                    ng-model="bundle2"
+                    placeholder="Select"
+            ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+
+<div class="col-md-8">
+<div hljs>
+oi-options="item.name group by item.category for item in shopArr"
+ng-model="bundle2"
+oi-select-options="{
+    closeList: false,
+    groupFilter: 'myGroupFilter'
+}"
+</div>
+<div hljs>
+.filter('myGroupFilter', function($sce) {
+    return function(label, query, items, options, element) {
+
+        element[query ? 'addClass' : 'removeClass']('show');
+
+        function toggle(element){
+            angular.element(element).parent().parent().find('li').toggleClass('show');
+            var iconElement = angular.element(element).find('span');
+            iconElement.html(iconElement.html() === '&plus;' ? '&minus;' : '&plus;');
+        }
+
+        var html = '<div class="group-header" onclick="(' + toggle.toString() + ')(this)"><span class="group-header-plus">&plus;</span> ' + label + '</div>';
+
+        return $sce.trustAsHtml(html);
+    };
+});
+</div>
+<div hljs>
+oi-select .select-dropdown {
+    max-height: none;
+}
+oi-select .group-header {
+    cursor: pointer;
+}
+oi-select.show .select-dropdown .group-header-plus,
+oi-select .select-dropdown li:not(.ungroup) {
+    display: none;
+}
+oi-select.show .select-dropdown li,
+oi-select .select-dropdown li.show {
+    display: block;
+}
+</div>
+</div>
+<div class="col-md-4"><pre>
+{{bundle2}}
+</pre></div>
+
 </div>
 </div>

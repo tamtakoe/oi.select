@@ -29,7 +29,7 @@ errors: {{demoForm.select.$error}}
 
     <br/>
 
-    <p>Also you can validate new items if return <code>undefined</code> or <code>rejected promise</code> from <code>newItemFn</code></p>
+    <p>You can validate new items if return <code>undefined</code> or <code>rejected promise</code> from <code>newItemFn</code></p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
@@ -72,6 +72,35 @@ $scope.addItem = function(query) {
 
 <div class="col-md-4"><pre>
 {{bundle2}}
+</pre></div>
+</div>
+
+<br/>
+
+<p>Also you can set maximum number of characters allowed in the input</p>
+<div class="row">
+    <div class="col-md-8">
+        <oi-select
+                oi-options="item.name for item in shopArr"
+                ng-model="bundle3"
+                oi-select-options="{
+                    maxlength: 3
+                }"
+                placeholder="Select"
+        ></oi-select>
+    </div>
+</div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr"
+ng-model="bundle3"
+oi-select-options="{
+    maxlength: 3
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle3}}
 </pre></div>
 </div>
 

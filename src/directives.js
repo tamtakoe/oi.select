@@ -83,6 +83,10 @@ angular.module('oi.select')
                 var listFilter = $filter(match[0]),
                     listFilterOptionsFn = $parse(match[1]);
 
+                match = options.groupFilter.split(':');
+                var groupFilter = $filter(match[0]),
+                    groupFilterOptionsFn = $parse(match[1]);
+
                 if (options.newItemFn) {
                     newItemFn = $parse(options.newItemFn);
 
@@ -111,6 +115,10 @@ angular.module('oi.select')
                 if (angular.isDefined(attrs.tabindex)) {
                     inputElement.attr('tabindex', attrs.tabindex);
                     element[0].removeAttribute('tabindex');
+                }
+
+                if (options.maxlength) {
+                    inputElement.attr('maxlength', options.maxlength);
                 }
 
                 attrs.$observe('disabled', function(value) {
@@ -287,7 +295,7 @@ angular.module('oi.select')
                             }
 
                             if (multiple || !scope.backspaceFocus) {
-                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected) || '';
+                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected, element) || '';
                             }
 
                             if (multiple && options.closeList) {
@@ -393,13 +401,17 @@ angular.module('oi.select')
                 scope.getSearchLabel = function(item) {
                     var label = getLabel(item);
 
-                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent));
+                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent), element);
                 };
 
                 scope.getDropdownLabel = function(item) {
                     var label = getLabel(item);
 
-                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent));
+                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent), element);
+                };
+
+                scope.getGroupLabel = function(group, items) {
+                    return groupFilter(group, scope.oldQuery || scope.query, items, groupFilterOptionsFn(scope.$parent), element);
                 };
 
                 scope.getDisableWhen = getDisableWhen;
@@ -582,7 +594,7 @@ angular.module('oi.select')
 
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
+                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 

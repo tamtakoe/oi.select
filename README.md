@@ -1,6 +1,6 @@
 #oi.select — AngularJS directive of select element
 
-**[Download 0.2.18](https://github.com/tamtakoe/oi.select/tree/master/dist)**
+**[Download 0.2.19](https://github.com/tamtakoe/oi.select/tree/master/dist)**
 
 ## Features
 
@@ -93,6 +93,7 @@ Use `oi-select` directive:
   * `debounce` — timeout of debounced input field (default: 500). Set only if `value` is function which return promise
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
+  * `groupFilter` — filter name for group header
   * `listFilter` — filter name for items order in dropdown. Use `none` to disable filtering
   * `editItem` — function which get `lastQuery`, `removedItem` and `getLabel(item)` and return string for input after element was removed (default: ''). `editItem = true` allows you to edit a deleted item. `editItem = 'correct'` same as `true` but does not edit the first time
   * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `blur`, `space`, `tab` and any characters devided by spaces (default: `enter tab blur`)
@@ -102,6 +103,7 @@ Use `oi-select` directive:
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
   * `removeItemFn` — function which get removed item model and return any value or promise. If promise was rejected, item wouldn't removed. F.e. `'removeItem($item)'`
+  * `maxlength` — maximum number of characters allowed in the input
 
 ### oiSelect service
  * `options` — default options which we can override in `oiSelectProvider.options`

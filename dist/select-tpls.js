@@ -8,16 +8,17 @@ angular.module('oi.select')
             searchFilter:   'oiSelectCloseIcon',
             dropdownFilter: 'oiSelectHighlight',
             listFilter:     'oiSelectAscSort',
+            groupFilter:    'oiSelectGroup',
             editItem:       false,
             newItem:        false,
             closeList:      true,
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.18',
+            full: '0.2.19',
             major: 0,
             minor: 2,
-            dot: 18
+            dot: 19
         },
         $get: function() {
             return {
@@ -60,7 +61,7 @@ angular.module('oi.select')
                 if (current === container) {
                     return false;
                 }
-                if (current.className.indexOf(className) >= 0) {
+                if (current.className.indexOf(className) >= 0) { //current.classList.contains(className) doesn't work in IE9
                     return true;
                 }
             } else {
@@ -428,6 +429,10 @@ angular.module('oi.select')
                 var listFilter = $filter(match[0]),
                     listFilterOptionsFn = $parse(match[1]);
 
+                match = options.groupFilter.split(':');
+                var groupFilter = $filter(match[0]),
+                    groupFilterOptionsFn = $parse(match[1]);
+
                 if (options.newItemFn) {
                     newItemFn = $parse(options.newItemFn);
 
@@ -456,6 +461,10 @@ angular.module('oi.select')
                 if (angular.isDefined(attrs.tabindex)) {
                     inputElement.attr('tabindex', attrs.tabindex);
                     element[0].removeAttribute('tabindex');
+                }
+
+                if (options.maxlength) {
+                    inputElement.attr('maxlength', options.maxlength);
                 }
 
                 attrs.$observe('disabled', function(value) {
@@ -632,7 +641,7 @@ angular.module('oi.select')
                             }
 
                             if (multiple || !scope.backspaceFocus) {
-                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected) || '';
+                                scope.query = editItemFn(removedItem, lastQuery, getLabel, editItemIsCorrected, element) || '';
                             }
 
                             if (multiple && options.closeList) {
@@ -738,13 +747,17 @@ angular.module('oi.select')
                 scope.getSearchLabel = function(item) {
                     var label = getLabel(item);
 
-                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent));
+                    return searchFilter(label, scope.oldQuery || scope.query, item, searchFilterOptionsFn(scope.$parent), element);
                 };
 
                 scope.getDropdownLabel = function(item) {
                     var label = getLabel(item);
 
-                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent));
+                    return dropdownFilter(label, scope.oldQuery || scope.query, item, dropdownFilterOptionsFn(scope.$parent), element);
+                };
+
+                scope.getGroupLabel = function(group, items) {
+                    return groupFilter(group, scope.oldQuery || scope.query, items, groupFilterOptionsFn(scope.$parent), element);
                 };
 
                 scope.getDisableWhen = getDisableWhen;
@@ -927,7 +940,7 @@ angular.module('oi.select')
 
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent));
+                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 
@@ -1025,6 +1038,12 @@ angular.module('oi.select')
 
 angular.module('oi.select')
 
+.filter('oiSelectGroup', ['$sce', function($sce) {
+    return function(label) {
+        return $sce.trustAsHtml(label);
+    };
+}])
+
 .filter('oiSelectCloseIcon', ['$sce', function($sce) {
     return function(label) {
         var closeIcon = '<span class="close select-search-list-item_selection-remove">×</span>';
@@ -1095,4 +1114,4 @@ angular.module('oi.select')
         return input;
     };
 });
-angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=group></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);
+angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind-html=\"getGroupLabel(group, options)\"></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled, \'ungroup\': !group}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);

@@ -7,16 +7,17 @@ angular.module('oi.select')
             searchFilter:   'oiSelectCloseIcon',
             dropdownFilter: 'oiSelectHighlight',
             listFilter:     'oiSelectAscSort',
+            groupFilter:    'oiSelectGroup',
             editItem:       false,
             newItem:        false,
             closeList:      true,
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.18',
+            full: '0.2.19',
             major: 0,
             minor: 2,
-            dot: 18
+            dot: 19
         },
         $get: function() {
             return {
