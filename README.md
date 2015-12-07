@@ -1,6 +1,6 @@
 #oi.select — AngularJS directive of select element
 
-**[Download 0.2.19](https://github.com/tamtakoe/oi.select/tree/master/dist)**
+**[Download 0.2.20](https://github.com/tamtakoe/oi.select/tree/master/dist)**
 
 ## Features
 
@@ -94,7 +94,7 @@ Use `oi-select` directive:
   * `searchFilter` — filter name for items in search field
   * `dropdownFilter` — filter name for items in dropdown
   * `groupFilter` — filter name for group header
-  * `listFilter` — filter name for items order in dropdown. Use `none` to disable filtering
+  * `listFilter` — filter name for items order in dropdown. Use `none` to disable filtering. You can set special options (see Filtered example)
   * `editItem` — function which get `lastQuery`, `removedItem` and `getLabel(item)` and return string for input after element was removed (default: ''). `editItem = true` allows you to edit a deleted item. `editItem = 'correct'` same as `true` but does not edit the first time
   * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `blur`, `space`, `tab` and any characters devided by spaces (default: `enter tab blur`)
   * `cleanModel` — Clean model on click for single select.

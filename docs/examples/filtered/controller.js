@@ -11,4 +11,6 @@ angular.module('selectDemo')
             "name": "shirt",
             "category": "clothes"
         }];
+
+        $scope.bundle3 = [];
     });

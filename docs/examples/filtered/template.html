@@ -51,4 +51,35 @@ multiple
 {{bundle2}}
 </pre></div>
 </div>
+
+<p>You can use <code>oiSelectAscSort:true</code> for show original list sorted by ASC</p>
+<div class="row">
+    <div class="col-md-8">
+        <oi-select
+                oi-options="item.name for item in shopArr track by item.id"
+                ng-model="bundle3"
+                oi-select-options="{
+                    listFilter: 'oiSelectAscSort:true'
+                }"
+                multiple
+                placeholder="Select"
+        ></oi-select>
+    </div>
+</div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle3"
+oi-select-options="{
+    listFilter: 'oiSelectAscSort:true'
+}"
+multiple
+</div>
+<div class="col-md-4"><pre>
+{{bundle3}}
+</pre></div>
+</div>
+
+<p>Also you can use both of variants <code>oiSelectAscSort:{fields: [\'id\', \'category\'], all: true}</code></p>
 </div>

@@ -1,3 +1,10 @@
+## 0.2.20
+
+#### Features
+
+- **oi-select-options:**
+    - listFilter: 'oiSelectAscSort:true' shows sorted original list
+
 ## 0.2.19
 
 #### Features

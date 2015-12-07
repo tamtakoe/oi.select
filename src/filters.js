@@ -33,7 +33,7 @@ angular.module('oi.select')
 
 .filter('oiSelectAscSort', ['oiSelectEscape', function(oiSelectEscape) {
     function ascSort(input, query, getLabel, options) {
-        var i, j, isFound, output, output1 = [], output2 = [], output3 = [];
+        var i, j, isFound, output, output1 = [], output2 = [], output3 = [], output4 = [];
 
         if (query) {
             query = oiSelectEscape(String(query));
@@ -41,7 +41,7 @@ angular.module('oi.select')
             for (i = 0, isFound = false; i < input.length; i++) {
                 isFound = getLabel(input[i]).match(new RegExp(query, "i"));
 
-                if (!isFound && options) {
+                if (!isFound && options && (options.length || options.fields)) {
                     for (j = 0; j < options.length; j++) {
                         if (isFound) break;
 
@@ -61,6 +61,18 @@ angular.module('oi.select')
                 }
             }
             output = output2.concat(output3);
+
+            if (options && (options === true || options.all)) {
+                inputLabel: for (i = 0; i < input.length; i++) {
+                    for (j = 0; j < output.length; j++) {
+                        if (input[i] === output[j]) {
+                            continue inputLabel;
+                        }
+                    }
+                    output4.push(input[i]);
+                }
+                output = output.concat(output4);
+            }
         } else {
             output = [].concat(input);
         }

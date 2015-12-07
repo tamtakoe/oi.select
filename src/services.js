@@ -14,10 +14,10 @@ angular.module('oi.select')
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.19',
+            full: '0.2.20',
             major: 0,
             minor: 2,
-            dot: 19
+            dot: 20
         },
         $get: function() {
             return {
