@@ -18,7 +18,7 @@ angular.module('oi.select')
     return function(label, query) {
         var html;
 
-        if (query.length > 0 || angular.isNumber(query)) {
+        if (label && (query.length > 0 || angular.isNumber(query))) {
             label = label.toString();
             query = oiSelectEscape(query.toString());
 

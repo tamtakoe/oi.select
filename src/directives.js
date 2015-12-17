@@ -51,6 +51,8 @@ angular.module('oi.select')
                 multipleLimit,
                 newItemFn;
 
+            var emptyElement          = {'__empty': true}; // will be added in front of the array
+
             return function(scope, element, attrs, ctrl) {
                 // Override the standard $isEmpty because an empty array means the input is empty.
                 ctrl.$isEmpty = function(value) { return !exists(value) };
@@ -252,9 +254,12 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-
                     } else {
-                        ctrl.$setViewValue(modelOption);
+                        if(modelOption === emptyElement) {
+                            ctrl.$setViewValue(undefined);
+                        } else {
+                            ctrl.$setViewValue(modelOption);
+                        }
                         restoreInput();
                     }
 
@@ -682,6 +687,11 @@ angular.module('oi.select')
                             optionGroup = optionGroups[optionGroupName] = [];
                         }
                         optionGroup.push(input[i]);
+                    }
+
+                    // prepend empty element
+                    if (options.prependEmptyItem && !multiple && scope.query.length == 0) {
+                        optionGroup.unshift(emptyElement);
                     }
 
                     return optionGroups;

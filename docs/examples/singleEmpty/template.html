@@ -1,0 +1,29 @@
+<div ng-controller="selectSingleEmptyController">
+    <h2>Single - Prepend empty item</h2>
+    <p>Specifies that single option can be selected at once. Additional an empty element is prepended to the dropdown.</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item.name for (key, item) in shopObjShort"
+                ng-model="bundle"
+                placeholder="Select"
+                oi-select-options="{
+                    prependEmptyItem: true
+                }"
+                ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item for (key, item) in shopObjShort"
+ng-model="bundle"
+oi-select-options="{
+    prependEmptyItem: true
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle}}
+</pre></div>
+</div>
+</div>
