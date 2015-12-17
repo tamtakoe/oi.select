@@ -529,6 +529,7 @@ angular.module('oi.select')
 
                 function modifyPlaceholder() {
                     var currentPlaceholder = multiple && exists(ctrl.$modelValue) ? multiplePlaceholder : placeholder;
+                    currentPlaceholder = !multiple && exists(ctrl.$modelValue) ? scope.getDropdownLabel(ctrl.$modelValue) : currentPlaceholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                 }
 
