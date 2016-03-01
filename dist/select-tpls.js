@@ -12,13 +12,14 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
+            cleanModelOnOpen: true,
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.20',
+            full: '0.2.9_iso',
             major: 0,
             minor: 2,
-            dot: 20
+            dot: 9 
         },
         $get: function() {
             return {
@@ -476,8 +477,6 @@ angular.module('oi.select')
                     }
                 });
 
-                scope.$on('$destroy', unbindFocusBlur);
-
                 scope.$parent.$watch(attrs.multipleLimit, function(value) {
                      multipleLimit = Number(value) || Infinity;
                 });
@@ -635,7 +634,7 @@ angular.module('oi.select')
                             } else  {
                                 cleanInput();
 
-                                if (options.cleanModel) {
+                                if (options.cleanModel && options.cleanModelOnOpen) {
                                     ctrl.$setViewValue(undefined);
                                 }
                             }
@@ -649,6 +648,12 @@ angular.module('oi.select')
                             }
                         })
                 };
+
+                function clean(event){
+                    if (angular.element(event.target).hasClass('select-search-list-item_selection-remove')) {
+                        ctrl.$setViewValue(undefined);
+                    }
+                }
 
                 scope.setSelection = function(index) {
                     if (!keyUpDownWerePressed && scope.selectorPosition !== index) {
@@ -762,12 +767,19 @@ angular.module('oi.select')
 
                 scope.getDisableWhen = getDisableWhen;
 
-
                 resetMatches();
 
-                element[0].addEventListener('click', click, true); //triggered before add or delete item event
-                element.on('focus', focus);
-                element.on('blur', blur);
+                addListeners();
+
+                function addListeners() {
+                    if (options.cleanModelOnOpen === false) {
+                        element.on('click', clean);
+                    }
+                    element[0].addEventListener('click', click, true); //triggered before add or delete item event
+                    element.on('focus', focus);
+                    element.on('blur', blur);
+                    scope.$on('$destroy', unbindFocusBlur);
+                }
 
                 function blinkClass(name, delay) {
                     delay = delay || 150;
@@ -1035,7 +1047,6 @@ angular.module('oi.select')
         }
     }
 }]);
-
 angular.module('oi.select')
 
 .filter('oiSelectGroup', ['$sce', function($sce) {

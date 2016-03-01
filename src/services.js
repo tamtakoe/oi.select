@@ -11,13 +11,14 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
+            cleanModelOnOpen: true,
             saveTrigger:    'enter tab blur'
         },
         version: {
-            full: '0.2.20',
+            full: '0.2.9_iso',
             major: 0,
             minor: 2,
-            dot: 20
+            dot: 9 
         },
         $get: function() {
             return {
