@@ -629,6 +629,7 @@ angular.module('oi.select')
                             if (!multiple && !scope.inputHide) return;
 
                             if (multiple) {
+                                ctrl.$modelValue = [].concat(ctrl.$modelValue);
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
