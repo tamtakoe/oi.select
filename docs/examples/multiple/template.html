@@ -57,6 +57,7 @@ oi-select-options="{
     <br/>
 
     <p>Use <code>multiple-placeholder</code> if you need to set placeholder if model not empty</p>
+    <p>Use <code>list-placeholder</code> if you need to set label for empty list</p>
     <div class="row">
         <div class="col-md-8">
             <oi-select
@@ -64,6 +65,7 @@ oi-select-options="{
                     ng-model="bundle3"
                     multiple
                     multiple-placeholder="add"
+                    list-placeholder="not found"
                     placeholder="Select"
                     ></oi-select>
         </div>
@@ -75,6 +77,7 @@ oi-options="item.name for item in shopArr track by item.id"
 ng-model="bundle3"
 multiple
 multiple-placeholder="add"
+list-placeholder="not found"
 </div>
 <div class="col-md-4"><pre>
 {{bundle3}}

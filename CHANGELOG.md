@@ -4,6 +4,8 @@
 
 - **oi-select:** `select as`  works correct with object data source
 
+- **list-placeholder:** placeholder for dropdown list if no items found
+
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)
 
 ## 0.2.20

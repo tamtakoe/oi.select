@@ -185,3 +185,6 @@ oi-select.open:not(.multiple) .select-search:after {
 oi-select.loading:not(.multiple) .select-search:after {
   border-width: 0;
 }
+oi-select.emptyList .select-dropdown-optgroup-option strong {
+  font-weight: normal;
+}

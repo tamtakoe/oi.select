@@ -51,6 +51,7 @@ angular.module('oi.select')
                 trackByFn             = $parse(trackByName);
 
             var multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
+                listPlaceholderFn     = $interpolate(attrs.listPlaceholder || ''),
                 placeholderFn         = $interpolate(attrs.placeholder || ''),
                 optionsFn             = $parse(attrs.oiSelectOptions),
                 isOldAngular          = angular.version.major <= 1 && angular.version.minor <= 3;
@@ -72,6 +73,7 @@ angular.module('oi.select')
                     listElement         = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder         = placeholderFn(scope),
                     multiplePlaceholder = multiplePlaceholderFn(scope),
+                    listPlaceholder     = listPlaceholderFn(scope),
                     elementOptions      = optionsFn(scope.$parent) || {},
                     options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
                     editItem            = options.editItem,
@@ -236,6 +238,12 @@ angular.module('oi.select')
                 scope.$watch('isOpen', function(isOpen) {
                     $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open', !isOldAngular && {
                         tempClasses: 'open-animate'
+                    });
+                });
+
+                scope.$watch('isEmptyList', function(isEmptyList) {
+                    $animate[isEmptyList ? 'addClass' : 'removeClass'](element, 'emptyList', !isOldAngular && {
+                        tempClasses: 'emptyList-animate'
                     });
                 });
 
@@ -558,7 +566,7 @@ angular.module('oi.select')
                 }
 
                 function getDisableWhen(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
+                    return scope.isEmptyList || oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
                 }
 
                 function getGroupName(option) {
@@ -582,6 +590,8 @@ angular.module('oi.select')
                 }
 
                 function getMatches(query, selectedAs) {
+                    scope.isEmptyList = false;
+
                     if (timeoutPromise && waitTime) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                     }
@@ -628,6 +638,18 @@ angular.module('oi.select')
                                     var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
+
+                                    //add element with placeholder to empty list
+                                    if (!filteredOutput.length) {
+                                        scope.isEmptyList = true;
+
+                                        if (listPlaceholder) {
+                                            var context = {};
+
+                                            displayFn.assign(context, listPlaceholder);
+                                            filteredOutput = [context[valueName]]
+                                        }
+                                    }
 
                                     scope.groups = group(filteredOutput);
                                 }
