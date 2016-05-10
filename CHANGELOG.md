@@ -15,10 +15,6 @@
 
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)
 
-- **oi-select-options:**
-    - maxlength is maximum number of characters allowed in the input
-    - groupFilter for customizing group header
-
 ## 0.2.20
 
 #### Features
