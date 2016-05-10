@@ -77,14 +77,15 @@ $scope.addItem = function(query) {
 
 <br/>
 
-<p>Also you can set maximum number of characters allowed in the input</p>
+<p>Also you can set maximum number of characters allowed in the input and minimum number of characters to prevent searching if query is too small</p>
 <div class="row">
     <div class="col-md-8">
         <oi-select
                 oi-options="item.name for item in shopArr"
                 ng-model="bundle3"
                 oi-select-options="{
-                    maxlength: 3
+                    maxlength: 4,
+                    minlength: 2
                 }"
                 placeholder="Select"
         ></oi-select>
@@ -96,7 +97,8 @@ $scope.addItem = function(query) {
 oi-options="item.name for item in shopArr"
 ng-model="bundle3"
 oi-select-options="{
-    maxlength: 3
+    maxlength: 4,
+    minlength: 2
 }"
 </div>
 <div class="col-md-4"><pre>

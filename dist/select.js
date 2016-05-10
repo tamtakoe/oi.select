@@ -12,7 +12,8 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
-            saveTrigger:    'enter tab blur'
+            saveTrigger:    'enter tab blur',
+            minlength:      0
         },
         version: {
             full: '0.2.21',
@@ -533,9 +534,11 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) {
+                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1)) || //terminated symbol
+                        String(inputValue).length < options.minlength) { //length less then minlength
                         return;
                     }
+
 
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
@@ -799,6 +802,9 @@ angular.module('oi.select')
                 }
 
                 function click(event) {
+                    //query length less then minlength
+                    if (scope.query.length < options.minlength) return;
+                    
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 

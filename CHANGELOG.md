@@ -2,7 +2,9 @@
 
 #### Bug Fixes
 
-- **oi-select:** `select as`  works correct with object data source
+- **oi-select:**
+    - `select as` works correct with object data source
+    - `minlength` is minimum length of query for searching
 
 - **list-placeholder:** placeholder for dropdown list if no items found
 

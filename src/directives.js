@@ -200,10 +200,12 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) {
-                        return;
-                    }
+                    //terminated symbol
+                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) return;
 
+                    //length less then minlength
+                    if (String(inputValue).length < options.minlength) return;
+                    
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -466,6 +468,9 @@ angular.module('oi.select')
                 }
 
                 function click(event) {
+                    //query length less then minlength
+                    if (scope.query.length < options.minlength) return;
+                    
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 

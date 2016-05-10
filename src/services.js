@@ -11,7 +11,8 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
-            saveTrigger:    'enter tab blur'
+            saveTrigger:    'enter tab blur',
+            minlength:      0
         },
         version: {
             full: '0.2.21',

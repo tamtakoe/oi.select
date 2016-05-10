@@ -107,6 +107,7 @@ Use `oi-select` directive:
   * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
   * `removeItemFn` — function which get removed item model and return any value or promise. If promise was rejected, item wouldn't removed. F.e. `'removeItem($item)'`
   * `maxlength` — maximum number of characters allowed in the input
+  * `minlength` — minimum number of characters for searching
 
 ### oiSelect service
  * `options` — default options which we can override in `oiSelectProvider.options`
