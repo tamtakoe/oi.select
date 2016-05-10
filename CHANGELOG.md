@@ -15,6 +15,8 @@
 
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)
 
+- **oi-select** fix memory leak
+
 ## 0.2.20
 
 #### Features
