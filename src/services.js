@@ -291,18 +291,6 @@ angular.module('oi.select')
         return true;
     }
 
-    function objToArr(obj) {
-        var arr = [];
-
-        angular.forEach(obj, function (value, key) {
-            if (key.toString().charAt(0) !== '$') {
-                arr.push(value);
-            }
-        });
-
-        return arr;
-    }
-
     //lodash _.intersection + filter + invert
     function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -325,7 +313,10 @@ angular.module('oi.select')
     function getValue(valueName, item, scope, getter) {
         var locals = {};
 
-        locals[valueName] = item;
+        //'name.subname' -> {name: {subname: item}} -> locals'
+        valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
+            return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
+        }, locals);
 
         return getter(scope, locals);
     }
@@ -335,7 +326,6 @@ angular.module('oi.select')
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
         groupsIsEmpty: groupsIsEmpty,
-        objToArr: objToArr,
         getValue: getValue,
         intersection: intersection
     }

@@ -2,6 +2,8 @@
 
 #### Bug Fixes
 
+- **oi-select:** `select as`  works correct with object data source
+
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)
 
 ## 0.2.20

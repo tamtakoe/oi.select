@@ -20,7 +20,7 @@ angular.module('oi.select')
 
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
-            query = oiSelectEscape(query.toString());
+            query = oiSelectEscape(query);
 
             html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
@@ -36,7 +36,7 @@ angular.module('oi.select')
         var i, j, isFound, output, output1 = [], output2 = [], output3 = [], output4 = [];
 
         if (query) {
-            query = oiSelectEscape(String(query)).toLocaleLowerCase();
+            query = oiSelectEscape(query).toLocaleLowerCase();
 
             for (i = 0, isFound = false; i < input.length; i++) {
                 isFound = getLabel(input[i]).toLocaleLowerCase().match(new RegExp(query));

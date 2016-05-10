@@ -24,7 +24,19 @@ angular.module('oi.select')
                 groupByName           = match[3] || '',                       //item.groupName
                 disableWhenName       = match[4] || '',                       //item.disableWhenName
                 trackByName           = match[9] || displayName,              //item.id
-                valueMatches          = match[8].match(VALUES_REGEXP);        //collection
+                valueMatches          = match[8].match(VALUES_REGEXP),        //collection
+                valueTitle            = valueName,
+                keyTitle              = keyName;
+
+            if (keyName) { //convert object data sources format to array data sources format
+                valueName             = 'i';
+                selectAsName          = valueName + '.' + (selectAsName || valueTitle);
+                trackByName           = valueName + '.' + keyName;
+                displayName           = valueName + '.' + displayName;
+                keyName               = valueName + '.' + keyName;
+                groupByName           = groupByName     ? valueName + '.' + groupByName: undefined;
+                disableWhenName       = disableWhenName ? valueName + '.' + disableWhenName: undefined;
+            }
 
             var valuesName            = valueMatches[1],                      //collection
                 filteredValuesName    = valuesName + (valueMatches[3] || ''), //collection | filter
@@ -591,11 +603,29 @@ angular.module('oi.select')
 
                         return $q.when(values.$promise || values)
                             .then(function(values) {
+
                                 scope.groups = {};
+
+                                if (values && keyName) {
+                                    //convert object data sources format to array data sources format
+                                    var arr = [];
+
+                                    angular.forEach(values, function (value, key) {
+                                        if (key.toString().charAt(0) !== '$') {
+                                            var item = {};
+
+                                            item[keyTitle] = key;
+                                            item[valueTitle] = value;
+                                            arr.push(item);
+                                        }
+                                    });
+
+                                    values = arr;
+                                }
 
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent), element);
+                                    var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 

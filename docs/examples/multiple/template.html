@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                oi-options="key for (key, value) in shopObj"
+                oi-options="key as value for (key, value) in shopObjShort"
                 ng-model="bundle"
                 multiple
                 placeholder="Select"
