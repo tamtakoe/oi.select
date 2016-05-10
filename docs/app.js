@@ -35,6 +35,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext' /*, '
             {urlName: 'autofocus',       name: 'Autofocus'},
             {urlName: 'multiple',        name: 'Multiple'},
             {urlName: 'single',          name: 'Single'},
+            {urlName: 'singleEmpty',     name: 'Single Empty'},
             {urlName: 'grouping',        name: 'Grouping'},
             {urlName: 'filtered',        name: 'Filtered'},
             {urlName: 'lazyloading',     name: 'Lazy loading'},

@@ -4,15 +4,16 @@ angular.module('oi.select')
 .provider('oiSelect', function() {
     return {
         options: {
-            debounce:       500,
-            searchFilter:   'oiSelectCloseIcon',
-            dropdownFilter: 'oiSelectHighlight',
-            listFilter:     'oiSelectAscSort',
-            groupFilter:    'oiSelectGroup',
-            editItem:       false,
-            newItem:        false,
-            closeList:      true,
-            saveTrigger:    'enter tab blur'
+            debounce:           500,
+            searchFilter:       'oiSelectCloseIcon',
+            dropdownFilter:     'oiSelectHighlight',
+            listFilter:         'oiSelectAscSort',
+            groupFilter:        'oiSelectGroup',
+            editItem:           false,
+            newItem:            false,
+            closeList:          true,
+            saveTrigger:        'enter tab blur',
+            prependEmptyItem:   false
         },
         version: {
             full: '0.2.20',
@@ -344,6 +345,7 @@ angular.module('oi.select')
         intersection: intersection
     }
 }]);
+
 angular.module('oi.select')
 
 .directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', '$animate', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, $animate, oiUtils, oiSelect) {
@@ -396,6 +398,8 @@ angular.module('oi.select')
                 multiple,
                 multipleLimit,
                 newItemFn;
+
+            var emptyElement          = {'__empty': true}; // will be added in front of the array
 
             return function(scope, element, attrs, ctrl) {
                 // Override the standard $isEmpty because an empty array means the input is empty.
@@ -598,9 +602,12 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-
                     } else {
-                        ctrl.$setViewValue(modelOption);
+                        if(modelOption === emptyElement) {
+                            ctrl.$setViewValue(undefined);
+                        } else {
+                            ctrl.$setViewValue(modelOption);
+                        }
                         restoreInput();
                     }
 
@@ -875,6 +882,7 @@ angular.module('oi.select')
 
                 function modifyPlaceholder() {
                     var currentPlaceholder = multiple && exists(ctrl.$modelValue) ? multiplePlaceholder : placeholder;
+                    currentPlaceholder = !multiple && exists(ctrl.$modelValue) ? scope.getDropdownLabel(ctrl.$modelValue) : currentPlaceholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                 }
 
@@ -1029,6 +1037,11 @@ angular.module('oi.select')
                         optionGroup.push(input[i]);
                     }
 
+                    // prepend empty element
+                    if (options.prependEmptyItem && !multiple && scope.query.length == 0) {
+                        optionGroup.unshift(emptyElement);
+                    }
+
                     return optionGroups;
                 }
             }
@@ -1056,7 +1069,7 @@ angular.module('oi.select')
     return function(label, query) {
         var html;
 
-        if (query.length > 0 || angular.isNumber(query)) {
+        if (label && (query.length > 0 || angular.isNumber(query))) {
             label = label.toString();
             query = oiSelectEscape(query.toString());
 
@@ -1126,4 +1139,5 @@ angular.module('oi.select')
         return input;
     };
 });
+
 angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind-html=\"getGroupLabel(group, options)\"></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled, \'ungroup\': !group}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div>");}]);

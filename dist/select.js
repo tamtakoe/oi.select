@@ -4,15 +4,16 @@ angular.module('oi.select')
 .provider('oiSelect', function() {
     return {
         options: {
-            debounce:       500,
-            searchFilter:   'oiSelectCloseIcon',
-            dropdownFilter: 'oiSelectHighlight',
-            listFilter:     'oiSelectAscSort',
-            groupFilter:    'oiSelectGroup',
-            editItem:       false,
-            newItem:        false,
-            closeList:      true,
-            saveTrigger:    'enter tab blur'
+            debounce:           500,
+            searchFilter:       'oiSelectCloseIcon',
+            dropdownFilter:     'oiSelectHighlight',
+            listFilter:         'oiSelectAscSort',
+            groupFilter:        'oiSelectGroup',
+            editItem:           false,
+            newItem:            false,
+            closeList:          true,
+            saveTrigger:        'enter tab blur',
+            prependEmptyItem:   false
         },
         version: {
             full: '0.2.20',
@@ -344,6 +345,7 @@ angular.module('oi.select')
         intersection: intersection
     }
 }]);
+
 angular.module('oi.select')
 
 .directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', '$animate', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, $animate, oiUtils, oiSelect) {
@@ -396,6 +398,8 @@ angular.module('oi.select')
                 multiple,
                 multipleLimit,
                 newItemFn;
+
+            var emptyElement          = {'__empty': true}; // will be added in front of the array
 
             return function(scope, element, attrs, ctrl) {
                 // Override the standard $isEmpty because an empty array means the input is empty.
@@ -598,9 +602,12 @@ angular.module('oi.select')
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
-
                     } else {
-                        ctrl.$setViewValue(modelOption);
+                        if(modelOption === emptyElement) {
+                            ctrl.$setViewValue(undefined);
+                        } else {
+                            ctrl.$setViewValue(modelOption);
+                        }
                         restoreInput();
                     }
 
@@ -875,6 +882,7 @@ angular.module('oi.select')
 
                 function modifyPlaceholder() {
                     var currentPlaceholder = multiple && exists(ctrl.$modelValue) ? multiplePlaceholder : placeholder;
+                    currentPlaceholder = !multiple && exists(ctrl.$modelValue) ? scope.getDropdownLabel(ctrl.$modelValue) : currentPlaceholder;
                     inputElement.attr('placeholder', currentPlaceholder);
                 }
 
@@ -1029,6 +1037,11 @@ angular.module('oi.select')
                         optionGroup.push(input[i]);
                     }
 
+                    // prepend empty element
+                    if (options.prependEmptyItem && !multiple && scope.query.length == 0) {
+                        optionGroup.unshift(emptyElement);
+                    }
+
                     return optionGroups;
                 }
             }
@@ -1056,7 +1069,7 @@ angular.module('oi.select')
     return function(label, query) {
         var html;
 
-        if (query.length > 0 || angular.isNumber(query)) {
+        if (label && (query.length > 0 || angular.isNumber(query))) {
             label = label.toString();
             query = oiSelectEscape(query.toString());
 

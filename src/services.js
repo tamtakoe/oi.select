@@ -3,15 +3,16 @@ angular.module('oi.select')
 .provider('oiSelect', function() {
     return {
         options: {
-            debounce:       500,
-            searchFilter:   'oiSelectCloseIcon',
-            dropdownFilter: 'oiSelectHighlight',
-            listFilter:     'oiSelectAscSort',
-            groupFilter:    'oiSelectGroup',
-            editItem:       false,
-            newItem:        false,
-            closeList:      true,
-            saveTrigger:    'enter tab blur'
+            debounce:           500,
+            searchFilter:       'oiSelectCloseIcon',
+            dropdownFilter:     'oiSelectHighlight',
+            listFilter:         'oiSelectAscSort',
+            groupFilter:        'oiSelectGroup',
+            editItem:           false,
+            newItem:            false,
+            closeList:          true,
+            saveTrigger:        'enter tab blur',
+            prependEmptyItem:   false
         },
         version: {
             full: '0.2.20',
