@@ -291,6 +291,18 @@ angular.module('oi.select')
         return true;
     }
 
+    function objToArr(obj) {
+        var arr = [];
+
+        angular.forEach(obj, function (value, key) {
+            if (key.toString().charAt(0) !== '$') {
+                arr.push(value);
+            }
+        });
+
+        return arr;
+    }
+
     //lodash _.intersection + filter + invert
     function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -310,75 +322,12 @@ angular.module('oi.select')
         return out;
     }
 
-    var keysMap = Map();
-
-    function getValue(valueName, item, scope, getter, keyName) {
-        // console.log(keysMap.get(keyName));
-        console.log(scope);
+    function getValue(valueName, item, scope, getter) {
         var locals = {};
 
         locals[valueName] = item;
 
-        if (keyName !== undefined) {
-            locals[keyName] = keysMap.get(keyName);
-        }
-
-        // var key = Object.keys(obj).filter(function(key) {return obj[key] === value})[0];
-
-        //'name.subname' -> {name: {subname: item}} -> locals'
-        // valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
-        //     return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
-        // }, locals);
-
         return getter(scope, locals);
-    }
-
-    function objToArr(obj, saveKeysMap) {
-        var arr = [];
-
-        angular.forEach(obj, function (value, key) {
-            if (key.toString().charAt(0) !== '$') {
-                arr.push(value);
-
-                if (saveKeysMap) {
-                    keysMap.clear().set(value, key);
-                }
-            }
-        });
-
-        return arr;
-    }
-
-    function Map() {
-        var i;
-
-        function SimpleMap(){
-            this._keys = [];
-            this._values = [];
-        }
-
-        SimpleMap.prototype.has = function(key) {
-            var list = this._keys;
-            if (key != key || key === 0) for (i = list.length; i-- && list[i] !== key;){}
-            else i = list.indexOf(key);
-            return -1 < i;
-        };
-
-        SimpleMap.prototype.get = function(key) {
-            return this.has(key) ? this._values[i] : undefined;
-        };
-
-        SimpleMap.prototype.set = function(key, value) {
-            this.has(key) ? this._values[i] = value : this._values[this._keys.push(key) - 1] = value;
-            return this;
-        };
-
-        SimpleMap.prototype.clear = function() {
-            (this._keys || 0).length = this._values.length = 0;
-            return this;
-        };
-
-        return new SimpleMap();
     }
 
     return {

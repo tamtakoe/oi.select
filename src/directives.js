@@ -234,10 +234,6 @@ angular.module('oi.select')
                 });
 
                 scope.addItem = function addItem(option) {
-
-                    // var key = Object.keys(obj).filter(function(key) {return obj[key] === value})[0];
-
-                    console.log(option);
                     lastQuery = scope.query;
 
                     //duplicate
@@ -252,9 +248,6 @@ angular.module('oi.select')
 
                     var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
-
-                    // selectAsFn = $parse('key'),
-                    // console.log(selectAsFn(option));
 
                     optionGroup.splice(optionGroup.indexOf(option), 1);
 
@@ -291,7 +284,6 @@ angular.module('oi.select')
                             if (!multiple && !scope.inputHide) return;
 
                             if (multiple) {
-                                ctrl.$modelValue = [].concat(ctrl.$modelValue);
                                 ctrl.$modelValue.splice(position, 1);
                                 ctrl.$setViewValue([].concat(ctrl.$modelValue));
 
@@ -542,42 +534,27 @@ angular.module('oi.select')
                 }
 
                 function trackBy(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, trackByFn, keyName);
+                    return oiUtils.getValue(valueName, item, scope.$parent, trackByFn);
                 }
 
                 function selectAs(item) {
-                    // console.log(keyName);
-                    // function getValue(valueName, item, scope, getter, keyName) {
-                    //     console.log(valueName, item, scope, getter, keyName);
-                    //     var locals = {};
-                    //
-                    //     locals[valueName] = item;
-                    //     locals[keyName] = item;
-                    //
-                    //     //'name.subname' -> {name: {subname: item}}'
-                    //     // valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
-                    //     //     return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
-                    //     // }, locals);
-                    //
-                    //     return getter(scope, locals);
-                    // }
-                    return oiUtils.getValue(valueName, item, scope.$parent, selectAsFn, keyName);
+                    return oiUtils.getValue(valueName, item, scope.$parent, selectAsFn);
                 }
 
                 function getLabel(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, displayFn, keyName);
+                    return oiUtils.getValue(valueName, item, scope.$parent, displayFn);
                 }
 
                 function getDisableWhen(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn, keyName);
+                    return oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
                 }
 
                 function getGroupName(option) {
-                    return oiUtils.getValue(valueName, option, scope.$parent, groupByFn, keyName) || '';
+                    return oiUtils.getValue(valueName, option, scope.$parent, groupByFn) || '';
                 }
 
                 function filter(list) {
-                    return oiUtils.getValue(valuesName, list, scope.$parent, filteredValuesFn, keyName);
+                    return oiUtils.getValue(valuesName, list, scope.$parent, filteredValuesFn);
                 }
 
                 function compact(value) {
@@ -618,7 +595,7 @@ angular.module('oi.select')
 
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(oiUtils.objToArr(values, !!keyName), query, getLabel, listFilterOptionsFn(scope.$parent), element);
+                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
 
