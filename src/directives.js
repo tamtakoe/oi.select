@@ -420,6 +420,9 @@ angular.module('oi.select')
                 resetMatches();
 
                 element[0].addEventListener('click', click, true); //triggered before add or delete item event
+                scope.$on('$destroy', function() {
+                  element[0].removeEventListener('click', click, true);
+                });
                 element.on('focus', focus);
                 element.on('blur', blur);
 
