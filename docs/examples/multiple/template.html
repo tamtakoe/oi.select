@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                oi-options="item.name for item in shopArr track by item.id"
+                oi-options="key for (key, value) in shopObj"
                 ng-model="bundle"
                 multiple
                 placeholder="Select"
@@ -14,7 +14,7 @@
 
 <div class="row">
 <div hljs class="col-md-8">
-oi-options="item.name for item in shopArr track by item.id"
+oi-options="key as value for (key, value) in shopObj"
 ng-model="bundle"
 multiple
 </div>

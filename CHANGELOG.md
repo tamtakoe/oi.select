@@ -1,3 +1,9 @@
+## 0.2.21
+
+#### Bug Fixes
+
+- **oiSelectAscSort** works correct with different locales (f.e. Turkish)
+
 ## 0.2.20
 
 #### Features
