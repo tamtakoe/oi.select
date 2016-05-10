@@ -10,7 +10,7 @@
 #### Bug Fixes
 
 - **oi-options:**
-    - `select as` works correct with object data source
+    - `select as` works correct with object data source, and with zero id
     - `disable when` items don't add on click `enter`
 
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)

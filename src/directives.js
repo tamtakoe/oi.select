@@ -586,7 +586,7 @@ angular.module('oi.select')
                     value = value instanceof Array ? value : value ? [value]: [];
 
                     return value.filter(function(item) {
-                        return item && (item instanceof Array && item.length || selectAsFn || getLabel(item));
+                        return item !== undefined && (item instanceof Array && item.length || selectAsFn || getLabel(item));
                     });
                 }
 

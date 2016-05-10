@@ -534,12 +534,12 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1)) || //terminated symbol
-                        String(inputValue).length < options.minlength) { //length less then minlength
-                        return;
-                    }
+                    //terminated symbol
+                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) return;
 
-
+                    //length less then minlength
+                    if (String(inputValue).length < options.minlength) return;
+                    
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -858,7 +858,7 @@ angular.module('oi.select')
                         selectedOrder  = triggerName !== 'blur' ? scope.order[scope.selectorPosition] : null, //do not save selected element in dropdown list on blur
                         itemPromise;
 
-                    if (isTriggered && (isNewItem || selectedOrder)) {
+                    if (isTriggered && (isNewItem || selectedOrder && !getDisableWhen(selectedOrder))) {
                         scope.showLoader = true;
                         itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
 
@@ -920,7 +920,7 @@ angular.module('oi.select')
                     value = value instanceof Array ? value : value ? [value]: [];
 
                     return value.filter(function(item) {
-                        return item && (item instanceof Array && item.length || selectAsFn || getLabel(item));
+                        return item !== undefined && (item instanceof Array && item.length || selectAsFn || getLabel(item));
                     });
                 }
 
