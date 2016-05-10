@@ -1,3 +1,22 @@
+## 0.2.21
+
+#### Features
+
+- **oi-select-options:**
+    - `minlength` is minimum length of query for searching
+
+- **list-placeholder:** placeholder for dropdown list if no items found
+
+#### Bug Fixes
+
+- **oi-options:**
+    - `select as` works correct with object data source, and with zero id
+    - `disable when` items don't add on click `enter`
+
+- **oiSelectAscSort** works correct with different locales (f.e. Turkish)
+
+- **oi-select** fix memory leak
+
 ## 0.2.20
 
 #### Features

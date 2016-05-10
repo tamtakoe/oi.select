@@ -11,13 +11,14 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
-            saveTrigger:    'enter tab blur'
+            saveTrigger:    'enter tab blur',
+            minlength:      0
         },
         version: {
-            full: '0.2.20',
+            full: '0.2.21',
             major: 0,
             minor: 2,
-            dot: 20
+            dot: 21
         },
         $get: function() {
             return {
@@ -291,18 +292,6 @@ angular.module('oi.select')
         return true;
     }
 
-    function objToArr(obj) {
-        var arr = [];
-
-        angular.forEach(obj, function (value, key) {
-            if (key.toString().charAt(0) !== '$') {
-                arr.push(value);
-            }
-        });
-
-        return arr;
-    }
-
     //lodash _.intersection + filter + invert
     function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -325,7 +314,7 @@ angular.module('oi.select')
     function getValue(valueName, item, scope, getter) {
         var locals = {};
 
-        //'name.subname' -> {name: {subname: list}}'
+        //'name.subname' -> {name: {subname: item}} -> locals'
         valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
             return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
         }, locals);
@@ -338,7 +327,6 @@ angular.module('oi.select')
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
         groupsIsEmpty: groupsIsEmpty,
-        objToArr: objToArr,
         getValue: getValue,
         intersection: intersection
     }

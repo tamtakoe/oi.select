@@ -1,13 +1,13 @@
 {
     "name":    "oi.select",
     "license": "MIT",
-    "version": "0.2.20",
+    "version": "0.2.21",
     "repository": {
         "type": "git",
         "url": "git://github.com/tamtakoe/oi.select.git"
     },
     "devDependencies": {
-        "gulp": "3.9.0",
+        "gulp": "3.9.1",
         "gulp-watch": "4.2.4",
         "gulp-webserver": "0.8.7",
         "gulp-stylus": "2.0.1",

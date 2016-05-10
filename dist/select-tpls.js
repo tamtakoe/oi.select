@@ -12,13 +12,14 @@ angular.module('oi.select')
             editItem:       false,
             newItem:        false,
             closeList:      true,
-            saveTrigger:    'enter tab blur'
+            saveTrigger:    'enter tab blur',
+            minlength:      0
         },
         version: {
-            full: '0.2.20',
+            full: '0.2.21',
             major: 0,
             minor: 2,
-            dot: 20
+            dot: 21
         },
         $get: function() {
             return {
@@ -141,7 +142,7 @@ angular.module('oi.select')
         }
 
         return function () {
-            $document[0].removeEventListener('click', clickHandler);
+            $document[0].removeEventListener('click', clickHandler, true);
             element[0].removeEventListener('mousedown', mousedownHandler, true);
             element[0].removeEventListener('blur', blurHandler, true);
             inputElement.off('focus', focusHandler);
@@ -292,18 +293,6 @@ angular.module('oi.select')
         return true;
     }
 
-    function objToArr(obj) {
-        var arr = [];
-
-        angular.forEach(obj, function (value, key) {
-            if (key.toString().charAt(0) !== '$') {
-                arr.push(value);
-            }
-        });
-
-        return arr;
-    }
-
     //lodash _.intersection + filter + invert
     function intersection(xArr, yArr, xFilter, yFilter, invert) {
         var i, j, n, filteredX, filteredY, out = invert ? [].concat(xArr) : [];
@@ -326,7 +315,7 @@ angular.module('oi.select')
     function getValue(valueName, item, scope, getter) {
         var locals = {};
 
-        //'name.subname' -> {name: {subname: list}}'
+        //'name.subname' -> {name: {subname: item}} -> locals'
         valueName.split('.').reduce(function (previousValue, currentItem, index, arr) {
             return previousValue[currentItem] = index < arr.length - 1 ? {} : item;
         }, locals);
@@ -339,11 +328,11 @@ angular.module('oi.select')
         bindFocusBlur: bindFocusBlur,
         scrollActiveOption: scrollActiveOption,
         groupsIsEmpty: groupsIsEmpty,
-        objToArr: objToArr,
         getValue: getValue,
         intersection: intersection
     }
 }]);
+
 angular.module('oi.select')
 
 .directive('oiSelect', ['$document', '$q', '$timeout', '$parse', '$interpolate', '$injector', '$filter', '$animate', 'oiUtils', 'oiSelect', function($document, $q, $timeout, $parse, $interpolate, $injector, $filter, $animate, oiUtils, oiSelect) {
@@ -365,11 +354,24 @@ angular.module('oi.select')
 
             var selectAsName          = / as /.test(match[0]) && match[1],    //item.modelValue
                 displayName           = match[2] || match[1],                 //item.label
-                valueName             = match[5] || match[7],                 //item
+                valueName             = match[5] || match[7],                 //item (value)
+                keyName               = match[6],                             //(key)
                 groupByName           = match[3] || '',                       //item.groupName
                 disableWhenName       = match[4] || '',                       //item.disableWhenName
                 trackByName           = match[9] || displayName,              //item.id
-                valueMatches          = match[8].match(VALUES_REGEXP);        //collection
+                valueMatches          = match[8].match(VALUES_REGEXP),        //collection
+                valueTitle            = valueName,
+                keyTitle              = keyName;
+
+            if (keyName) { //convert object data sources format to array data sources format
+                valueName             = 'i';
+                selectAsName          = valueName + '.' + (selectAsName || valueTitle);
+                trackByName           = valueName + '.' + keyName;
+                displayName           = valueName + '.' + displayName;
+                keyName               = valueName + '.' + keyName;
+                groupByName           = groupByName     ? valueName + '.' + groupByName: undefined;
+                disableWhenName       = disableWhenName ? valueName + '.' + disableWhenName: undefined;
+            }
 
             var valuesName            = valueMatches[1],                      //collection
                 filteredValuesName    = valuesName + (valueMatches[3] || ''), //collection | filter
@@ -384,6 +386,7 @@ angular.module('oi.select')
                 trackByFn             = $parse(trackByName);
 
             var multiplePlaceholderFn = $interpolate(attrs.multiplePlaceholder || ''),
+                listPlaceholderFn     = $interpolate(attrs.listPlaceholder || ''),
                 placeholderFn         = $interpolate(attrs.placeholder || ''),
                 optionsFn             = $parse(attrs.oiSelectOptions),
                 isOldAngular          = angular.version.major <= 1 && angular.version.minor <= 3;
@@ -405,6 +408,7 @@ angular.module('oi.select')
                     listElement         = angular.element(element[0].querySelector('.select-dropdown')),
                     placeholder         = placeholderFn(scope),
                     multiplePlaceholder = multiplePlaceholderFn(scope),
+                    listPlaceholder     = listPlaceholderFn(scope),
                     elementOptions      = optionsFn(scope.$parent) || {},
                     options             = angular.extend({cleanModel: elementOptions.newItem === 'prompt'}, oiSelect.options, elementOptions),
                     editItem            = options.editItem,
@@ -531,10 +535,12 @@ angular.module('oi.select')
                 });
 
                 scope.$watch('query', function(inputValue, oldValue) {
-                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) {
-                        return;
-                    }
+                    //terminated symbol
+                    if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) return;
 
+                    //length less then minlength
+                    if (String(inputValue).length < options.minlength) return;
+                    
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -569,6 +575,12 @@ angular.module('oi.select')
                 scope.$watch('isOpen', function(isOpen) {
                     $animate[isOpen ? 'addClass' : 'removeClass'](element, 'open', !isOldAngular && {
                         tempClasses: 'open-animate'
+                    });
+                });
+
+                scope.$watch('isEmptyList', function(isEmptyList) {
+                    $animate[isEmptyList ? 'addClass' : 'removeClass'](element, 'emptyList', !isOldAngular && {
+                        tempClasses: 'emptyList-animate'
                     });
                 });
 
@@ -766,6 +778,9 @@ angular.module('oi.select')
                 resetMatches();
 
                 element[0].addEventListener('click', click, true); //triggered before add or delete item event
+                scope.$on('$destroy', function() {
+                  element[0].removeEventListener('click', click, true);
+                });
                 element.on('focus', focus);
                 element.on('blur', blur);
 
@@ -791,6 +806,9 @@ angular.module('oi.select')
                 }
 
                 function click(event) {
+                    //query length less then minlength
+                    if (scope.query.length < options.minlength) return;
+                    
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
@@ -844,7 +862,7 @@ angular.module('oi.select')
                         selectedOrder  = triggerName !== 'blur' ? scope.order[scope.selectorPosition] : null, //do not save selected element in dropdown list on blur
                         itemPromise;
 
-                    if (isTriggered && (isNewItem || selectedOrder)) {
+                    if (isTriggered && (isNewItem || selectedOrder && !getDisableWhen(selectedOrder))) {
                         scope.showLoader = true;
                         itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
 
@@ -891,7 +909,7 @@ angular.module('oi.select')
                 }
 
                 function getDisableWhen(item) {
-                    return oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
+                    return scope.isEmptyList || oiUtils.getValue(valueName, item, scope.$parent, disableWhenFn);
                 }
 
                 function getGroupName(option) {
@@ -906,7 +924,7 @@ angular.module('oi.select')
                     value = value instanceof Array ? value : value ? [value]: [];
 
                     return value.filter(function(item) {
-                        return item && (item instanceof Array && item.length || selectAsFn || getLabel(item));
+                        return item !== undefined && (item instanceof Array && item.length || selectAsFn || getLabel(item));
                     });
                 }
 
@@ -915,6 +933,8 @@ angular.module('oi.select')
                 }
 
                 function getMatches(query, selectedAs) {
+                    scope.isEmptyList = false;
+
                     if (timeoutPromise && waitTime) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
                     }
@@ -936,13 +956,43 @@ angular.module('oi.select')
 
                         return $q.when(values.$promise || values)
                             .then(function(values) {
+
                                 scope.groups = {};
+
+                                if (values && keyName) {
+                                    //convert object data sources format to array data sources format
+                                    var arr = [];
+
+                                    angular.forEach(values, function (value, key) {
+                                        if (key.toString().charAt(0) !== '$') {
+                                            var item = {};
+
+                                            item[keyTitle] = key;
+                                            item[valueTitle] = value;
+                                            arr.push(item);
+                                        }
+                                    });
+
+                                    values = arr;
+                                }
 
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(oiUtils.objToArr(values), query, getLabel, listFilterOptionsFn(scope.$parent), element);
+                                    var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
                                     var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
                                     var filteredOutput = filter(withoutIntersection);
+
+                                    //add element with placeholder to empty list
+                                    if (!filteredOutput.length) {
+                                        scope.isEmptyList = true;
+
+                                        if (listPlaceholder) {
+                                            var context = {};
+
+                                            displayFn.assign(context, listPlaceholder);
+                                            filteredOutput = [context[valueName]]
+                                        }
+                                    }
 
                                     scope.groups = group(filteredOutput);
                                 }
@@ -1058,7 +1108,7 @@ angular.module('oi.select')
 
         if (query.length > 0 || angular.isNumber(query)) {
             label = label.toString();
-            query = oiSelectEscape(query.toString());
+            query = oiSelectEscape(query);
 
             html = label.replace(new RegExp(query, 'gi'), '<strong>$&</strong>');
         } else {
@@ -1074,16 +1124,16 @@ angular.module('oi.select')
         var i, j, isFound, output, output1 = [], output2 = [], output3 = [], output4 = [];
 
         if (query) {
-            query = oiSelectEscape(String(query));
+            query = oiSelectEscape(query).toLocaleLowerCase();
 
             for (i = 0, isFound = false; i < input.length; i++) {
-                isFound = getLabel(input[i]).match(new RegExp(query, "i"));
+                isFound = getLabel(input[i]).toLocaleLowerCase().match(new RegExp(query));
 
                 if (!isFound && options && (options.length || options.fields)) {
                     for (j = 0; j < options.length; j++) {
                         if (isFound) break;
 
-                        isFound = String(input[i][options[j]]).match(new RegExp(query, "i"));
+                        isFound = String(input[i][options[j]]).toLocaleLowerCase().match(new RegExp(query));
                     }
                 }
 
@@ -1092,7 +1142,7 @@ angular.module('oi.select')
                 }
             }
             for (i = 0; i < output1.length; i++) {
-                if (getLabel(output1[i]).match(new RegExp('^' + query, "i"))) {
+                if (getLabel(output1[i]).toLocaleLowerCase().match(new RegExp('^' + query))) {
                     output2.push(output1[i]);
                 } else {
                     output3.push(output1[i]);

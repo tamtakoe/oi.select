@@ -1,9 +1,11 @@
 angular.module('selectDemo')
-    .controller('selectMultipleController', function ($scope, ShopArr) {
-
+    .controller('selectMultipleController', function ($scope, ShopArr, ShopObjShort) {
+        
         $scope.shopArr = ShopArr.query();
+        $scope.shopObjShort = ShopObjShort.get();
 
-        $scope.bundle = [{
+        $scope.bundle = ["1"];
+        $scope.bundle2 = [{
             "id": 5,
             "name": "shirt",
             "category": "clothes"
@@ -12,7 +14,5 @@ angular.module('selectDemo')
             "name": "shoes",
             "category": "shoes"
         }];
-
-        $scope.bundle2 = [];
         $scope.bundle3 = [];
     });

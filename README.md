@@ -1,6 +1,6 @@
 #oi.select — AngularJS directive of select element
 
-**[Download 0.2.20](https://github.com/tamtakoe/oi.select/tree/master/dist)**
+**[Download 0.2.21](https://github.com/tamtakoe/oi.select/tree/master/dist)**
 
 ## Features
 
@@ -87,6 +87,9 @@ Use `oi-select` directive:
 * `ng-disabled` — specifies that a drop-down list should be disabled
 * `multiple` — specifies that multiple options can be selected at once
 * `multiple-limit` — maximum number of options that can be selected at once
+* `placeholder` — native placeholder
+* `multiple-placeholder` — placeholder which is shown in multiple mode near chosen options
+* `list-placeholder` — placeholder which is shown in list if no elements found
 * `readonly` — specifies that an input field is read-only
 * `autofocus` — specifies that an input field should automatically get focus when the page loads
 * `oi-select-options` — object with options. You can override them in `oiSelectProvider.options`
@@ -104,6 +107,7 @@ Use `oi-select` directive:
   * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
   * `removeItemFn` — function which get removed item model and return any value or promise. If promise was rejected, item wouldn't removed. F.e. `'removeItem($item)'`
   * `maxlength` — maximum number of characters allowed in the input
+  * `minlength` — minimum number of characters for searching
 
 ### oiSelect service
  * `options` — default options which we can override in `oiSelectProvider.options`
