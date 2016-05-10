@@ -524,7 +524,7 @@ angular.module('oi.select')
                         selectedOrder  = triggerName !== 'blur' ? scope.order[scope.selectorPosition] : null, //do not save selected element in dropdown list on blur
                         itemPromise;
 
-                    if (isTriggered && (isNewItem || selectedOrder)) {
+                    if (isTriggered && (isNewItem || selectedOrder && !getDisableWhen(selectedOrder))) {
                         scope.showLoader = true;
                         itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
 

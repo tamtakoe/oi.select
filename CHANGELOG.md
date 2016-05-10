@@ -1,14 +1,23 @@
 ## 0.2.21
 
-#### Bug Fixes
+#### Features
 
-- **oi-select:**
-    - `select as` works correct with object data source
+- **oi-select-options:**
     - `minlength` is minimum length of query for searching
 
 - **list-placeholder:** placeholder for dropdown list if no items found
 
+#### Bug Fixes
+
+- **oi-options:**
+    - `select as` works correct with object data source
+    - `disable when` items don't add on click `enter`
+
 - **oiSelectAscSort** works correct with different locales (f.e. Turkish)
+
+- **oi-select-options:**
+    - maxlength is maximum number of characters allowed in the input
+    - groupFilter for customizing group header
 
 ## 0.2.20
 
