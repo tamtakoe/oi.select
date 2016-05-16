@@ -540,7 +540,7 @@ angular.module('oi.select')
 
                     //length less then minlength
                     if (String(inputValue).length < options.minlength) return;
-                    
+
                     //We don't get matches if nothing added into matches list
                     if (inputValue !== oldValue && (!scope.oldQuery || inputValue) && !matchesWereReset) {
                         listElement[0].scrollTop = 0;
@@ -777,10 +777,35 @@ angular.module('oi.select')
 
                 resetMatches();
 
-                element[0].addEventListener('click', click, true); //triggered before add or delete item event
+                // //triggered before add or delete item event
+                var eventTriger = '';
+
+                var focusEvent = function(e) {
+                    eventTriger = eventTriger ? eventTriger : 'focus';
+                    click(e);
+                    element[0].addEventListener('click', clickEvent, true);
+                    element[0].addEventListener('blur', blurEvent, true);
+                }
+
+                var clickEvent = function(e) {
+                    eventTriger = eventTriger ? eventTriger : 'click';
+                    click(e);
+                }
+
+                var blurEvent = function () {
+                  eventTriger = ''
+                  element[0].removeEventListener('click', clickEvent, true);
+                  element[0].removeEventListener('blur', blurEvent, true);
+                }
+
+                element[0].addEventListener('focus', focusEvent, true); //triggered before add or delete item event
                 scope.$on('$destroy', function() {
-                  element[0].removeEventListener('click', click, true);
+                  element[0].removeEventListener('click', clickEvent, true);
+                  element[0].removeEventListener('focus', focusEvent, true);
+                  element[0].removeEventListener('blur', blurEvent, true);
                 });
+
+
                 element.on('focus', focus);
                 element.on('blur', blur);
 
@@ -808,7 +833,7 @@ angular.module('oi.select')
                 function click(event) {
                     //query length less then minlength
                     if (scope.query.length < options.minlength) return;
-                    
+
                     //option is disabled
                     if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
@@ -820,8 +845,11 @@ angular.module('oi.select')
                     }
 
                     if (scope.isOpen && options.closeList && (event.target.nodeName !== 'INPUT' || !scope.query.length)) { //do not reset if you are editing the query
-                        resetMatches({query: options.editItem && !editItemIsCorrected});
-                        scope.$evalAsync();
+                        if (event.type == eventTriger) {
+                            resetMatches({query: options.editItem && !editItemIsCorrected});
+                            scope.$evalAsync();
+                            eventTriger = '';
+                        }
                     } else {
                         getMatches(scope.query);
                     }
