@@ -1,1 +1,1 @@
-angular.module('oi.select', []);
+angular.module('oi.select', []);       //  MD version
