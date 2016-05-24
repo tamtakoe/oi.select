@@ -1,4 +1,4 @@
-angular.module('oi.select')
+angular.module('oi.select')      //  MD version
 
 .filter('oiSelectGroup', ['$sce', function($sce) {
     return function(label) {
