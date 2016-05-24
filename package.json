@@ -1,10 +1,10 @@
 {
-    "name":    "oi.select",
+    "name":    "MetaDriver/oi.select",
     "license": "MIT",
     "version": "0.2.20",
     "repository": {
         "type": "git",
-        "url": "git://github.com/tamtakoe/oi.select.git"
+        "url": "git://github.com/MetaDriver/oi.select.git"
     },
     "devDependencies": {
         "gulp": "3.9.0",
