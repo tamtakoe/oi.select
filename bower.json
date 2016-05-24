@@ -1,9 +1,9 @@
 {
     "author": {
-        "name": "https://github.com/tamtakoe"
+        "name": "!!!! https://github.com/tamtakoe"
     },
-    "name": "oi.select",
-    "version": "0.2.21",
+    "name": "MetaDriver/oi.select",
+    "version": "0.2.20",
     "main": ["./dist/select-tpls.min.js", "./dist/select.min.css"],
     "dependencies": {
         "angular": ">=1.2",
