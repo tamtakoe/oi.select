@@ -407,8 +407,6 @@ angular.module('oi.select')
                         return !exists(value)
                     };
 
-                    scope.require = attrs.require;
-
                     var inputElement = element.find('input'),
                         listElement = angular.element(element[0].querySelector('.select-dropdown')),
                         placeholder = placeholderFn(scope),
@@ -465,6 +463,10 @@ angular.module('oi.select')
 
                     if (angular.isDefined(attrs.readonly)) {
                         inputElement.attr('readonly', true)
+                    }
+
+                    if (angular.isDefined(attrs.required)) {
+                        inputElement.attr('required', true)
                     }
 
                     if (angular.isDefined(attrs.tabindex)) {
