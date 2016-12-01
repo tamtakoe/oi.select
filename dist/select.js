@@ -353,9 +353,6 @@ angular.module('oi.select')
                     throw new Error("Expected expression in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'");
                 }
 
-                scope.require = attrs.require;
-                console.log(scope.require);
-
                 var selectAsName = / as /.test(match[0]) && match[1],    //item.modelValue
                     displayName = match[2] || match[1],                 //item.label
                     valueName = match[5] || match[7],                 //item (value)
@@ -409,6 +406,9 @@ angular.module('oi.select')
                     ctrl.$isEmpty = function (value) {
                         return !exists(value)
                     };
+
+                    scope.require = attrs.require;
+                    console.log(scope.require);
 
                     var inputElement = element.find('input'),
                         listElement = angular.element(element[0].querySelector('.select-dropdown')),
