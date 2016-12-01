@@ -72,7 +72,6 @@ angular.module('oi.select')
                     };
 
                     scope.require = attrs.require;
-                    console.log(scope.require);
 
                     var inputElement = element.find('input'),
                         listElement = angular.element(element[0].querySelector('.select-dropdown')),
