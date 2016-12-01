@@ -207,7 +207,7 @@ angular.module('oi.select')
 
                     scope.$watch('query', function (inputValue, oldValue) {
                         //terminated symbol
-                        if (saveOn(inputValue.slice(0, -1), inputValue.slice(-1))) return;
+                        if (inputValue && (saveOn(inputValue.slice(0, -1), inputValue.slice(-1)))) return;
 
                         //length less then minlength
                         if (String(inputValue).length < options.minlength) return;
