@@ -8,9 +8,7 @@ angular.module('oi.select')
             restrict: 'AE',
             templateUrl: 'src/template.html',
             require: 'ngModel',
-            scope: {
-                require: '=?'
-            },
+            scope: {},
             compile: function (element, attrs) {
                 var optionsExp = attrs.oiOptions,
                     match = optionsExp ? optionsExp.match(NG_OPTIONS_REGEXP) : ['', 'i', '', '', '', 'i', '', '', ''];
@@ -18,6 +16,9 @@ angular.module('oi.select')
                 if (!match) {
                     throw new Error("Expected expression in form of '_select_ (as _label_)? for (_key_,)?_value_ in _collection_'");
                 }
+
+                $scope.require = attrs.require;
+                console.log($scope.require);
 
                 var selectAsName = / as /.test(match[0]) && match[1],    //item.modelValue
                     displayName = match[2] || match[1],                 //item.label
