@@ -466,7 +466,7 @@ angular.module('oi.select')
                     }
 
                     if (angular.isDefined(attrs.required)) {
-                        inputElement.attr('required', true)
+                        scope.required = true;
                     }
 
                     if (angular.isDefined(attrs.tabindex)) {
