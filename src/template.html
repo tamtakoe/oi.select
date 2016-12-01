@@ -6,15 +6,18 @@
             ng-class="{focused: backspaceFocus && $last}"
             ng-click="removeItem($index)"
             ng-bind-html="getSearchLabel(item)"></li>
+
         <li class="select-search-list-item select-search-list-item_input"
             ng-class="{'select-search-list-item_hide': inputHide}">
 
             <input autocomplete="off"
                    ng-model="query"
                    ng-keyup="keyUp($event)"
-                   ng-keydown="keyDown($event)"/>
+                   ng-keydown="keyDown($event)"
+                   ng-required="required && output.length < 1"/>
 
         </li>
+
         <li class="select-search-list-item select-search-list-item_loader"
             ng-show="showLoader"></li>
     </ul>
