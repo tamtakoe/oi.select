@@ -604,7 +604,7 @@ angular.module('oi.select')
                         if (multiple && oiUtils.intersection(scope.output, [option], trackBy, trackBy).length) return;
 
                         //limit is reached
-                        if (scope.output.length >= multipleLimit) {
+                        if (scope.output && scope.output.length >= multipleLimit) {
                             blinkClass('limited');
 
                             return;
@@ -680,7 +680,7 @@ angular.module('oi.select')
                     scope.keyUp = function keyUp(event) { //scope.query is actual
                         switch (event.keyCode) {
                             case 8: /* backspace */
-                                if (!scope.query.length && (!multiple || !scope.output.length)) {
+                                if (!scope.query.length && (!multiple || (scope.output && !scope.output.length))) {
                                     resetMatches();
                                 }
                         }
@@ -743,7 +743,7 @@ angular.module('oi.select')
                                     if (!multiple || editItem) {
                                         scope.backspaceFocus = true;
                                     }
-                                    if (scope.backspaceFocus && scope.output && (!multiple || scope.output.length)) { //prevent restoring last deleted option
+                                    if (scope.backspaceFocus && scope.output && (!multiple || (scope.output && scope.output.length))) { //prevent restoring last deleted option
                                         scope.removeItem(scope.output.length - 1);
 
                                         if (editItem) {
@@ -820,7 +820,7 @@ angular.module('oi.select')
                         if (oiUtils.contains(element[0], event.target, 'disabled')) return;
 
                         //limit is reached
-                        if (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown')) return;
+                        if (scope.output && (scope.output.length >= multipleLimit && oiUtils.contains(element[0], event.target, 'select-dropdown'))) return;
 
                         if (scope.inputHide) {
                             scope.removeItem(0); //because click on border (not on chosen item) doesn't remove chosen element
