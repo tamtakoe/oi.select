@@ -271,7 +271,9 @@ angular.module('oi.select')
                     var optionGroup = scope.groups[getGroupName(option)] = scope.groups[getGroupName(option)] || [];
                     var modelOption = selectAsFn ? selectAs(option) : option;
 
-                    optionGroup.splice(optionGroup.indexOf(option), 1);
+                    if (options.removeOnSelect) {
+                        optionGroup.splice(optionGroup.indexOf(option), 1);
+                    }
 
                     if (multiple) {
                         ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
@@ -607,7 +609,9 @@ angular.module('oi.select')
                     timeoutPromise = $timeout(function() {
                         var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '';
 
-                        scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+                        if (options.removeOnSelect) {
+                            scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+                        }
 
                         if (!query && !selectedAs) {
                             scope.oldQuery = null;
@@ -644,8 +648,13 @@ angular.module('oi.select')
                                 if (values && !selectedAs) {
                                     var outputValues = multiple ? scope.output : [];
                                     var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
-                                    var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
-                                    var filteredOutput = filter(withoutIntersection);
+                                    var filteredOutput;
+                                    if (options.removeOnSelect) {
+                                        var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
+                                        filteredOutput = filter(withoutIntersection);
+                                    } else {
+                                        filteredOutput = filter(filteredList);
+                                    }
 
                                     //add element with placeholder to empty list
                                     if (!filteredOutput.length) {
