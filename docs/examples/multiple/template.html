@@ -83,4 +83,37 @@ list-placeholder="not found"
 {{bundle3}}
 </pre></div>
 </div>
+
+<br/>
+
+<p>Use <code>removeOnSelect</code> if you need keep the item on the dropdown list after choosing it item</p>
+<div class="row">
+    <div class="col-md-8">
+        <oi-select
+                oi-options="item.name for item in shopArr track by item.id"
+                ng-model="bundle4"
+                multiple
+                oi-select-options="{
+                    removeOnSelect: false,
+                    closeList: false
+                }"
+                placeholder="Select"
+                ></oi-select>
+    </div>
+</div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle4"
+multiple
+oi-select-options="{
+    removeOnSelect: false,
+    closeList: false
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle4}}
+</pre></div>
+</div>
 </div>
