@@ -102,6 +102,7 @@ Use `oi-select` directive:
   * `saveTrigger` — Trigger on which element is stored in the model. May be `enter`, `blur`, `space`, `tab` and any characters devided by spaces (default: `enter tab blur`)
   * `cleanModel` — Clean model on click for single select.
   * `closeList` — close dropdown list by default after choosing or removing item (default: true)
+  * `removeOnSelect` — remove the item from dropdown list after choosing it (default: true)
   * `newItem` — Mode of adding new items from query (default: false). May be `autocomplete` (priority save matches), `prompt` (priority save new item)
   * `newItemModel` — New items model (default: model = query). `$query` value from model will be changed to query string.
   * `newItemFn` — function which get query and return new item object or promise. F.e. `'addItem($query)'`
