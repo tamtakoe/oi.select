@@ -14,7 +14,7 @@ angular.module('oi.select')
             saveTrigger:            'enter tab blur',
             prependEmptyItem:       false,
             prependSelectAllItem:   false,
-            selectAllItemLabel:     ''
+            selectAllItem:          {}
         },
         version: {
             full: '0.2.20',

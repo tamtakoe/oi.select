@@ -15,7 +15,7 @@ angular.module('oi.select')
             saveTrigger:            'enter tab blur',
             prependEmptyItem:       false,
             prependSelectAllItem:   false,
-            selectAllItemLabel:     ''
+            selectAllItem:          {}
         },
         version: {
             full: '0.2.20',
@@ -605,7 +605,7 @@ angular.module('oi.select')
                     optionGroup.splice(optionGroup.indexOf(option), 1);
 
                     if (multiple) {
-                        if (modelOption === selectAllElement) {
+                        if (options.selectAllItem !== undefined && modelOption === options.selectAllItem) {
                             getMatches(null).then(function(collection) {
                                 for (var i = 0; i < collection.length; i++) {
                                     ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(collection[i]) : [collection[i]]);
@@ -1056,10 +1056,9 @@ angular.module('oi.select')
                     }
 
                     // prepend select all element
-                    if (options.prependSelectAllItem && options.selectAllItemLabel && multiple && scope.query.length === 0 &&
+                    if (options.prependSelectAllItem && options.selectAllItem && multiple && scope.query.length === 0 &&
                         ctrl.$viewValue.length === 0) {
-                        selectAllElement.name = options.selectAllItemLabel;
-                        optionGroup.unshift(selectAllElement);
+                        optionGroup.unshift(options.selectAllItem);
                     }
 
                     return optionGroups;
