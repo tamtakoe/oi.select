@@ -1,0 +1,34 @@
+<div ng-controller="selectMultipleAllController">
+    <h2>Multiple Select all</h2>
+    <p>Specifies that multiple options can be selected at once or with an select all item</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                oi-options="item.name for item in shopArr track by item.id"
+                ng-model="bundle"
+                multiple
+                placeholder="Select"
+                oi-select-options="{
+                    prependSelectAllItem: true,
+                    selectAllItemLabel: 'Alle auswählen'
+                }"
+                ></oi-select>
+        </div>
+    </div>
+
+<div class="row">
+<div hljs class="col-md-8">
+oi-options="item.name for item in shopArr track by item.id"
+ng-model="bundle"
+multiple
+placeholder="Select"
+oi-select-options="{
+    prependSelectAllItem: true,
+    selectAllItemLabel: 'Alle auswählen'
+}"
+</div>
+<div class="col-md-4"><pre>
+{{bundle}}
+</pre></div>
+</div>
+</div>

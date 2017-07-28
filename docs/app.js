@@ -34,6 +34,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext' /*, '
         var menu = [
             {urlName: 'autofocus',       name: 'Autofocus'},
             {urlName: 'multiple',        name: 'Multiple'},
+            {urlName: 'multipleAll',     name: 'Multiple Select All'},
             {urlName: 'single',          name: 'Single'},
             {urlName: 'singleEmpty',     name: 'Single Empty'},
             {urlName: 'grouping',        name: 'Grouping'},

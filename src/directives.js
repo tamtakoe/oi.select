@@ -53,6 +53,8 @@ angular.module('oi.select')
 
             var emptyElement          = {'__empty': true}; // will be added in front of the array
 
+            var selectAllElement      = {id: 9999};
+
             return function(scope, element, attrs, ctrl) {
                 // Override the standard $isEmpty because an empty array means the input is empty.
                 ctrl.$isEmpty = function(value) { return !exists(value) };
@@ -253,7 +255,16 @@ angular.module('oi.select')
                     optionGroup.splice(optionGroup.indexOf(option), 1);
 
                     if (multiple) {
-                        ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
+                        if (modelOption === selectAllElement) {
+                            getMatches(null).then(function(collection) {
+                                for (var i = 0; i < collection.length; i++) {
+                                    ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(collection[i]) : [collection[i]]);
+                                }
+                                resetMatches({query: true});
+                            });
+                        } else {
+                            ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(modelOption) : [modelOption]);
+                        }
                     } else {
                         if(modelOption === emptyElement) {
                             ctrl.$setViewValue(undefined);
@@ -690,8 +701,15 @@ angular.module('oi.select')
                     }
 
                     // prepend empty element
-                    if (options.prependEmptyItem && !multiple && scope.query.length == 0) {
+                    if (options.prependEmptyItem && !multiple && scope.query.length === 0) {
                         optionGroup.unshift(emptyElement);
+                    }
+
+                    // prepend select all element
+                    if (options.prependSelectAllItem && options.selectAllItemLabel && multiple && scope.query.length === 0 &&
+                        ctrl.$viewValue.length === 0) {
+                        selectAllElement.name = options.selectAllItemLabel;
+                        optionGroup.unshift(selectAllElement);
                     }
 
                     return optionGroups;
