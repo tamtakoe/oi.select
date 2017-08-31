@@ -607,6 +607,7 @@ angular.module('oi.select')
                     if (multiple) {
                         if (options.selectAllItem !== undefined && modelOption === options.selectAllItem) {
                             getMatches(null).then(function(collection) {
+                                ctrl.$setViewValue([]);
                                 for (var i = 0; i < collection.length; i++) {
                                     ctrl.$setViewValue(angular.isArray(ctrl.$modelValue) ? ctrl.$modelValue.concat(collection[i]) : [collection[i]]);
                                 }
@@ -1057,7 +1058,7 @@ angular.module('oi.select')
 
                     // prepend select all element
                     if (options.prependSelectAllItem && options.selectAllItem && multiple && scope.query.length === 0 &&
-                        ctrl.$viewValue.length === 0) {
+                        optionGroup !== undefined) {
                         optionGroup.unshift(options.selectAllItem);
                     }
 
