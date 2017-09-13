@@ -125,6 +125,14 @@ angular.module('oi.select')
                     inputElement.attr('maxlength', options.maxlength);
                 }
 
+                // show labelTag
+                if (options.labelTag) {
+                    scope.showLabelTag = true;
+                    scope.labelTag = options.labelTag;
+                } else {
+                    scope.showLabelTag = false;
+                }
+
                 attrs.$observe('disabled', function(value) {
                     inputElement.prop('disabled', value);
 
@@ -594,7 +602,9 @@ angular.module('oi.select')
                     timeoutPromise = $timeout(function() {
                         var values = valuesFn(scope.$parent, {$query: query, $selectedAs: selectedAs}) || '';
 
-                        scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+                        if (options.multiple) {
+                            scope.selectorPosition = options.newItem === 'prompt' ? false : 0;
+                        }
 
                         if (!query && !selectedAs) {
                             scope.oldQuery = null;
@@ -625,7 +635,7 @@ angular.module('oi.select')
                             .finally(function(){
                                 scope.showLoader = false;
 
-                                if (options.closeList && !options.cleanModel) { //case: prompt
+                                if (options.multiple && options.closeList && !options.cleanModel) { //case: prompt
                                     $timeout(function() {
                                         setOption(listElement, 0);
                                     });
@@ -660,6 +670,13 @@ angular.module('oi.select')
                         scope.groupPos[key] = groupCount;
                         groupCount += value.length
                     }
+
+                    // for (i = 0; i < scope.groups[""].length; i++) {
+                    //     var element = scope.groups[""][i];
+                    //     if (element === ctrl.$modelValue) {
+                    //         scope.selectorPosition = i;
+                    //     }
+                    // }
                 }
 
                 function resetMatches(options) {

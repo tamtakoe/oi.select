@@ -1,0 +1,30 @@
+<div ng-controller="selectLabeltagController">
+    <h2>Label Tag</h2>
+    <p>It allows you to render a label tag below the dropdown for styling.</p>
+    <div class="row">
+        <div class="col-md-8">
+            <oi-select
+                    oi-options="item.name for (key, item) in shopObjShort"
+                    ng-model="bundle"
+                    placeholder="Select"
+                    oi-select-options="{
+                                    labelTag: 'Label'
+                                }"
+            ></oi-select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div hljs class="col-md-8">
+            oi-options="item for (key, item) in shopObjShort"
+            ng-model="bundle"
+            placeholder="Select"
+            oi-select-options="{
+                labelTag: 'Label'
+            }"
+        </div>
+        <div class="col-md-4"><pre>
+{{bundle}}
+</pre></div>
+    </div>
+</div>

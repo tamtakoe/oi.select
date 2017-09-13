@@ -39,6 +39,7 @@ angular.module('selectDemo', ['oi.select', 'ngResource', 'hljs', 'gettext' /*, '
             {urlName: 'singleEmpty',     name: 'Single Empty'},
             {urlName: 'grouping',        name: 'Grouping'},
             {urlName: 'filtered',        name: 'Filtered'},
+            {urlName: 'labeltag',        name: 'Label Tag'},
             {urlName: 'lazyloading',     name: 'Lazy loading'},
             {urlName: 'disabled',        name: 'Disabled'},
             {urlName: 'disabledoptions', name: 'Disabled options'},
