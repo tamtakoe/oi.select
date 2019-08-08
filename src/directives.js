@@ -641,11 +641,19 @@ angular.module('oi.select')
                                     values = arr;
                                 }
 
-                                if (values && !selectedAs) {
-                                    var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
-                                    var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
-                                    var filteredOutput = filter(withoutIntersection);
+                                if (values) {
+                                    var withoutIntersection;
+                                    var filteredOutput; 
+                                    
+                                    if (selectedAs) {
+                                        withoutIntersection = oiUtils.intersection(values, selectedAs, selectAs, null, true);
+                                        filteredOutput = filter(withoutIntersection);
+                                    } else {
+                                        var outputValues = multiple && scope.output || [];
+                                        var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
+                                        withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
+                                        filteredOutput = filter(withoutIntersection);
+                                    }
 
                                     //add element with placeholder to empty list
                                     if (!filteredOutput.length) {
