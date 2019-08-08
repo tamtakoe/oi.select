@@ -95,6 +95,7 @@ angular.module('oi.select')
             if (event && event.target.nodeName !== 'INPUT') return; //for IE
 
             isBlur = false;
+            isFocused = false;
 
             if (isMousedown) {
                 isBlur = true;
@@ -514,7 +515,9 @@ angular.module('oi.select')
                     }
 
                     if (selectAsFn && exists(value)) {
-                        promise = getMatches(null, value)
+                        // Ask getMatches not to mutate scope.groups - we just want the values.
+                        // We do this because there is a watcher on scope.groups (responsible for hiding/showing the pop-up)
+                        promise = getMatches(null, value, false)
                             .then(function(collection) {
                                 return oiUtils.intersection(output, collection, null, selectAs);
                             });
@@ -932,8 +935,12 @@ angular.module('oi.select')
                     return !!compact(value).length;
                 }
 
-                function getMatches(query, selectedAs) {
+                function getMatches(query, selectedAs, mutateGroups) {
                     scope.isEmptyList = false;
+
+                    if (mutateGroups === undefined) {
+                        mutateGroups = true;
+                    }
 
                     if (timeoutPromise && waitTime) {
                         $timeout.cancel(timeoutPromise); //cancel previous timeout
@@ -957,7 +964,9 @@ angular.module('oi.select')
                         return $q.when(values.$promise || values)
                             .then(function(values) {
 
-                                scope.groups = {};
+                                if (mutateGroups) {
+                                    scope.groups = {};
+                                }
 
                                 if (values && keyName) {
                                     //convert object data sources format to array data sources format
@@ -976,11 +985,19 @@ angular.module('oi.select')
                                     values = arr;
                                 }
 
-                                if (values && !selectedAs) {
-                                    var outputValues = multiple ? scope.output : [];
-                                    var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
-                                    var withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
-                                    var filteredOutput = filter(withoutIntersection);
+                                if (values) {
+                                    var withoutIntersection;
+                                    var filteredOutput; 
+                                    
+                                    if (selectedAs) {
+                                        withoutIntersection = oiUtils.intersection(values, selectedAs, selectAs, null, true);
+                                        filteredOutput = filter(withoutIntersection);
+                                    } else {
+                                        var outputValues = multiple && scope.output || [];
+                                        var filteredList = listFilter(values, query, getLabel, listFilterOptionsFn(scope.$parent), element);
+                                        withoutIntersection = oiUtils.intersection(filteredList, outputValues, trackBy, trackBy, true);
+                                        filteredOutput = filter(withoutIntersection);
+                                    }
 
                                     //add element with placeholder to empty list
                                     if (!filteredOutput.length) {
@@ -994,7 +1011,9 @@ angular.module('oi.select')
                                         }
                                     }
 
-                                    scope.groups = group(filteredOutput);
+                                    if (mutateGroups) {
+                                        scope.groups = group(filteredOutput);
+                                    }
                                 }
                                 updateGroupPos();
 
