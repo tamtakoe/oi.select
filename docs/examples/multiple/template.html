@@ -29,7 +29,7 @@ multiple
     <div class="row">
         <div class="col-md-8">
             <oi-select
-                    oi-options="item.name for item in shopArr track by item.id"
+                    oi-options="item.id as item.name for item in shopArr"
                     ng-model="bundle2"
                     multiple
                     oi-select-options="{
@@ -42,7 +42,7 @@ multiple
 
 <div class="row">
 <div hljs class="col-md-8">
-oi-options="item.name for item in shopArr track by item.id"
+oi-options="item.id as item.name for item in shopArr"
 ng-model="bundle2"
 multiple
 oi-select-options="{
