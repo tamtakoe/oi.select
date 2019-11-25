@@ -5,7 +5,7 @@
             ng-repeat="item in output track by $index"
             ng-class="{focused: backspaceFocus && $last}"
             ng-click="removeItem($index)"
-            ng-bind="getSearchLabel(item)"></li>
+            ng-bind-html="getSearchLabel(item)"></li>
         <li class="select-search-list-item select-search-list-item_input"
             ng-class="{'select-search-list-item_hide': inputHide}"><input autocomplete="off"
                                                                           ng-model="query"
@@ -26,7 +26,7 @@
             ng-class="{'active': selectorPosition === groupPos[group] + $index, 'disabled': isDisabled, 'ungroup': !group}"
             ng-click="isDisabled || addItem(option)"
             ng-mouseenter="setSelection(groupPos[group] + $index)"
-            ng-bind="getDropdownLabel(option)"></li>
+            ng-bind-html="getDropdownLabel(option)"></li>
     </ul>
 </div>
 <label class="aui-select__label oi-select__label" ng-if="showLabelTag" ng-bind="labelTag"></label>

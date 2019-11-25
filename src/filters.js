@@ -2,7 +2,7 @@ angular.module('oi.select')
 
 .filter('oiSelectGroup', ['$sce', function($sce) {
     return function(label) {
-        return $sce.trustAsHtml(label);
+        return $sce.getTrustedHtml(label);
     };
 }])
 
@@ -10,7 +10,7 @@ angular.module('oi.select')
     return function(label) {
         var closeIcon = '<span class="close select-search-list-item_selection-remove">×</span>';
 
-        return $sce.trustAsHtml(label + closeIcon);
+        return $sce.getTrustedHtml(label + closeIcon);
     };
 }])
 
@@ -27,7 +27,7 @@ angular.module('oi.select')
             html = label;
         }
 
-        return $sce.trustAsHtml(html);
+        return $sce.getTrustedHtml(html);
     };
 }])
 
