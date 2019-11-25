@@ -1,4 +1,5 @@
-angular.module('oi.select', []);
+angular.module('oi.select', ['ngSanitize']);
+
 angular.module('oi.select')
 
 .provider('oiSelect', function() {
@@ -1090,7 +1091,7 @@ angular.module('oi.select')
 
 .filter('oiSelectGroup', ['$sce', function($sce) {
     return function(label) {
-        return $sce.trustAsHtml(label);
+        return $sce.getTrustedHtml(label);
     };
 }])
 
@@ -1098,7 +1099,7 @@ angular.module('oi.select')
     return function(label) {
         var closeIcon = '<span class="close select-search-list-item_selection-remove">×</span>';
 
-        return $sce.trustAsHtml(label + closeIcon);
+        return $sce.getTrustedHtml(label + closeIcon);
     };
 }])
 
@@ -1115,7 +1116,7 @@ angular.module('oi.select')
             html = label;
         }
 
-        return $sce.trustAsHtml(html);
+        return $sce.getTrustedHtml(html);
     };
 }])
 
@@ -1177,4 +1178,4 @@ angular.module('oi.select')
     };
 });
 
-angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=\"getGroupLabel(group, options)\"></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled, \'ungroup\': !group}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind=getDropdownLabel(option)></li></ul></div><label class=\"aui-select__label oi-select__label\" ng-if=showLabelTag ng-bind=labelTag></label>");}]);
+angular.module("oi.select").run(["$templateCache", function($templateCache) {$templateCache.put("src/template.html","<div class=select-search><ul class=select-search-list><li class=\"btn btn-default btn-xs select-search-list-item select-search-list-item_selection\" ng-hide=listItemHide ng-repeat=\"item in output track by $index\" ng-class=\"{focused: backspaceFocus && $last}\" ng-click=removeItem($index) ng-bind-html=getSearchLabel(item)></li><li class=\"select-search-list-item select-search-list-item_input\" ng-class=\"{\'select-search-list-item_hide\': inputHide}\"><input autocomplete=off ng-model=query ng-keyup=keyUp($event) ng-keydown=keyDown($event)></li><li class=\"select-search-list-item select-search-list-item_loader\" ng-show=showLoader></li></ul></div><div class=select-dropdown ng-show=isOpen><ul ng-if=isOpen class=select-dropdown-optgroup ng-repeat=\"(group, options) in groups\"><div class=select-dropdown-optgroup-header ng-if=\"group && options.length\" ng-bind=\"getGroupLabel(group, options)\"></div><li class=select-dropdown-optgroup-option ng-init=\"isDisabled = getDisableWhen(option)\" ng-repeat=\"option in options\" ng-class=\"{\'active\': selectorPosition === groupPos[group] + $index, \'disabled\': isDisabled, \'ungroup\': !group}\" ng-click=\"isDisabled || addItem(option)\" ng-mouseenter=\"setSelection(groupPos[group] + $index)\" ng-bind-html=getDropdownLabel(option)></li></ul></div><label class=\"aui-select__label oi-select__label\" ng-if=showLabelTag ng-bind=labelTag></label>");}]);
