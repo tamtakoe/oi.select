@@ -1,3 +1,9 @@
+## 0.2.22
+
+#### Bug Fixes
+
+- **oi-select** fix `list-placeholder` in the `newItemFn` case
+
 ## 0.2.21
 
 #### Features

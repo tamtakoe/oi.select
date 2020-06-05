@@ -16,10 +16,10 @@ angular.module('oi.select')
             minlength:      0
         },
         version: {
-            full: '0.2.21',
+            full: '0.2.22',
             major: 0,
             minor: 2,
-            dot: 21
+            dot: 22
         },
         $get: function() {
             return {
