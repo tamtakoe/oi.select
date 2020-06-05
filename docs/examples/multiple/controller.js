@@ -15,4 +15,5 @@ angular.module('selectDemo')
             "category": "shoes"
         }];
         $scope.bundle3 = [];
+        $scope.bundle4 = [];
     });
