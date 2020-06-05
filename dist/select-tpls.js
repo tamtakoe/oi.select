@@ -95,6 +95,7 @@ angular.module('oi.select')
             if (event && event.target.nodeName !== 'INPUT') return; //for IE
 
             isBlur = false;
+            isFocused = false;
 
             if (isMousedown) {
                 isBlur = true;
@@ -864,7 +865,7 @@ angular.module('oi.select')
 
                     if (isTriggered && (isNewItem || selectedOrder && !getDisableWhen(selectedOrder))) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
+                        itemPromise = $q.when(!scope.isEmptyList && selectedOrder || newItemFn(scope.$parent, {$query: query}));
 
                         itemPromise
                             .then(function(data) {

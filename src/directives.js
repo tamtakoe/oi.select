@@ -529,7 +529,7 @@ angular.module('oi.select')
 
                     if (isTriggered && (isNewItem || selectedOrder && !getDisableWhen(selectedOrder))) {
                         scope.showLoader = true;
-                        itemPromise = $q.when(selectedOrder || newItemFn(scope.$parent, {$query: query}));
+                        itemPromise = $q.when(!scope.isEmptyList && selectedOrder || newItemFn(scope.$parent, {$query: query}));
 
                         itemPromise
                             .then(function(data) {
